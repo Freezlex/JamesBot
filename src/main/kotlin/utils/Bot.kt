@@ -14,7 +14,7 @@ class Bot (private val token: String, private val listeners: List<Any>){
         builder.addEventListeners(listeners);
         builder.setMemberCachePolicy(MemberCachePolicy.ALL);
         builder.enableCache(CacheFlag.ACTIVITY, CacheFlag.CLIENT_STATUS, CacheFlag.EMOTE, CacheFlag.MEMBER_OVERRIDES, CacheFlag.ROLE_TAGS, CacheFlag.VOICE_STATE)
-        builder.setActivity(Activity.listening("NIQUE TA MERE"))
+        builder.setActivity(Activity.streaming("SUB FDP", "https://twitch.tv/Freezlex_"))
         return builder.build();
     }
 }
