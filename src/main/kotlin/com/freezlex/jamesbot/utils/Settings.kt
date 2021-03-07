@@ -1,4 +1,4 @@
-package utils
+package com.freezlex.jamesbot.utils
 
 object Settings {
     val BOT_TOKEN: String = System.getenv("TOKEN");
