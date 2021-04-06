@@ -1,6 +1,6 @@
 ## questter - JamesBot & Kotlin
 
-This project is an unshared project, please keep it private during the primary development phase. As long as this line appear keep in mind than sharing this project is against our privacy policy.
+UNDER DEVELOPPEMENT
 
 ## Using our code
 
