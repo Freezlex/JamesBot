@@ -1,15 +1,19 @@
-package com.freezlex.jamesbot.managers
+package com.freezlex.jamesbot.internals.event
 
-import com.freezlex.jamesbot.commands.Command
-import com.freezlex.jamesbot.internals.CommandsRegistry
-import com.freezlex.jamesbot.utils.Arguments
-import com.freezlex.jamesbot.utils.CommandEvent
+import com.freezlex.jamesbot.internals.commands.CommandsRegistry
 import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
+/**
+ * The event Manager, were all the event are incoming
+ */
 class EventManagers: ListenerAdapter() {
 
+    /**
+     * Method to manage the event broadcast when the bot is ready
+     * @param e The ready event received
+     */
     override fun onReady(e: ReadyEvent){
         val selfUser = e.jda.selfUser;
 
@@ -25,16 +29,18 @@ class EventManagers: ListenerAdapter() {
 
     }
 
+    /**
+     * Method to manage all the incoming messages (DM, Guilds, ...)
+     * @param event The global message event received.
+     */
     override fun onMessageReceived(event: MessageReceivedEvent) {
 
         println(event)
 
         if(event.author.isBot)return;
 
-        CommandsRegistry.getCommandByName("ping")?.run(listOf<Arguments>(), CommandEvent())
-
         val message = event.message.contentRaw;
-        val command = CommandsRegistry.getCommandByName(message);
+        CommandsRegistry.getCommandByName(message);
 
 
     }
