@@ -1,3 +1,7 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/b44027b9cc04465fbe893e92c7c9164a)](https://www.codacy.com/gh/Freezlex/questter/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Freezlex/questter&amp;utm_campaign=Badge_Grade)
+[![Discord Bots Status](https://top.gg/api/widget/status/425377070525317120.svg)](https://top.gg/bot/425377070525317120)
+[![Discord Bots Owner](https://top.gg/api/widget/owner/425377070525317120.svg)](https://top.gg/bot/425377070525317120)
+
 ## questter - JamesBot & Kotlin
 
 UNDER DEVELOPPEMENT
