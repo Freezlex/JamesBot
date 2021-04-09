@@ -27,6 +27,8 @@ dependencies {
     implementation("org.hibernate.orm", "hibernate-testing", "6.0.0.Alpha6")
     implementation("org.jetbrains.kotlin", "kotlin-stdlib-jdk8", "1.4.10")
     implementation("mysql", "mysql-connector-java", "8.0.23")
+    /** TEST IMPL */
+    testImplementation("com.h2database", "h2", "1.4.200")
 }
 
 tasks.test {
