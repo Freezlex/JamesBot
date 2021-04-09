@@ -50,5 +50,5 @@ gradle-app.setting
 .gradletasknamecache
 
 ### Configuration ###
-hibernate.properties
+./src/main/resources/hibernate.properties
 transaction.log
