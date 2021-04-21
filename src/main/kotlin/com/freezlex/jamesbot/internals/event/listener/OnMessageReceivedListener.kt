@@ -6,14 +6,23 @@ import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
+/**
+ * When a message is received
+ */
 @Component
 class OnMessageReceivedListener @Autowired constructor(): DefaultListener(){
 
+    /**
+     * When a Private guild is received
+     */
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         println(event.toString())
         //TODO : Listener for guilds messages
     }
 
+    /**
+     * When a Private message is received
+     */
     override fun onPrivateMessageReceived(event: PrivateMessageReceivedEvent) {
         // TODO : Listener for private messages
     }

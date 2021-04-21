@@ -17,5 +17,9 @@ interface Command {
     val userPermission : List<Permission>
     val botPermission : List<Permission>
 
+    /**
+     * Runner for the command
+     * @return Any
+     */
     fun run(args : List<Argument>, event: CommandEvent) : Any
 }

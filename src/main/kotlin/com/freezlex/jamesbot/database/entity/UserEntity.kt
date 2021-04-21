@@ -2,6 +2,9 @@ package com.freezlex.jamesbot.database.entity
 
 import javax.persistence.*
 
+/**
+ * User entity for JpaRepository
+ */
 @Entity
 data class UserEntity (
     @Id

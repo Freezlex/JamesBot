@@ -2,6 +2,9 @@ package com.freezlex.jamesbot.database.entity
 
 import javax.persistence.*
 
+/**
+ * Guild entity for JpaRepository
+ */
 @Entity
 class GuildEntity(
     @Id
