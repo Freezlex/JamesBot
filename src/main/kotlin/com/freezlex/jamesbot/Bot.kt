@@ -1,5 +1,7 @@
 package com.freezlex.jamesbot
 
+import com.freezlex.jamesbot.internals.commands.CommandsRegistry
+import com.freezlex.jamesbot.internals.event.EventRegistry
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent
@@ -7,29 +9,40 @@ import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder
 import net.dv8tion.jda.api.sharding.ShardManager
 import net.dv8tion.jda.api.utils.ChunkingFilter
 import net.dv8tion.jda.api.utils.MemberCachePolicy
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 
 /**
  * Default Bot shard builder
- * @param token The bot token to connect to
- * @param listeners The Events listeners for the bot
  */
-class Bot (private val token: String, private val listeners: List<Any>){
+@Component
+class Bot{
+
+    @Autowired
+    lateinit var eventRegistry: EventRegistry
+
+    @Autowired
+    lateinit var commandRegistry: CommandsRegistry
 
     /**
      * @return The sharded bot
      */
     fun start(): ShardManager {
 
+        // Register all events listeners
+        eventRegistry.loadListeners();
+        commandRegistry.loadCommands();
+
         val defaultShardManagerBuilder = DefaultShardManagerBuilder
             .create(GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
-            .setToken(token)
-            .setActivity(Activity.competing("👶🍼 Kotlin ❤"))
-            .setStatus(OnlineStatus.IDLE)
+            .setToken(System.getenv("TOKEN") ?: "default_value")
+            .setActivity(Activity.playing("👶🍼 Kotlin ❤"))
+            .setStatus(OnlineStatus.ONLINE)
             .setAutoReconnect(true)
             .setMemberCachePolicy(MemberCachePolicy.ALL)
             .setChunkingFilter(ChunkingFilter.NONE)
-            .addEventListeners(listeners)
-
-        return defaultShardManagerBuilder.build();
+            .addEventListeners(eventRegistry.build())
+            .build();
+        return defaultShardManagerBuilder;
     }
 }

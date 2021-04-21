@@ -1,8 +1,10 @@
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/b44027b9cc04465fbe893e92c7c9164a)](https://www.codacy.com/gh/Freezlex/questter/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Freezlex/questter&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/b44027b9cc04465fbe893e92c7c9164a)](https://www.codacy.com/gh/Freezlex/JamesBot/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Freezlex/questter&amp;utm_campaign=Badge_Grade)
+[![Java CI with Gradle](https://github.com/Freezlex/JamesBot/actions/workflows/gradle.yml/badge.svg?branch=main)](https://github.com/Freezlex/JamesBot/actions/workflows/gradle.yml)
 [![Discord Bots Status](https://top.gg/api/widget/status/425377070525317120.svg)](https://top.gg/bot/425377070525317120)
 [![Discord Bots Owner](https://top.gg/api/widget/owner/425377070525317120.svg)](https://top.gg/bot/425377070525317120)
 
-## questter - JamesBot & Kotlin
+
+## JamesBot - Kotlin
 
 UNDER DEVELOPPEMENT
 

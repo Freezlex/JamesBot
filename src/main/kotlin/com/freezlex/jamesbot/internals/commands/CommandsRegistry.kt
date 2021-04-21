@@ -1,20 +1,36 @@
 package com.freezlex.jamesbot.internals.commands
 
+import com.freezlex.jamesbot.implementation.commands.PingCommand
 import org.reflections.Reflections
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 
 /**
  * The command registry for the bot.
  * Here we can get/get all/register/register multiple commands
  */
-class CommandsRegistry {
+@Component
+class CommandsRegistry{
+
+    @Autowired
+    lateinit var pingCommand: PingCommand
+
+    val logger: Logger = LoggerFactory.getLogger(this.javaClass)
+
+    init{
+        this.logger.info("Loading automatically all commands");
+    }
 
     /**
      * Let's automatically load all the commands with Reflection from the commands.implementation package
      */
     fun loadCommands() {
-        val reflections: Set<Class<out Command?>> = Reflections("${this.javaClass.packageName.removeSuffix(".internals")}.implementation.commands").getSubTypesOf(
-            Command::class.java)
-        for (commandClass in reflections) commands.add(commandClass.getConstructor().newInstance()!!)
+        commands.addAll(listOf(
+            pingCommand
+        ))
+        this.logger.info("${getCommands().size} commands loaded");
     }
 
     companion object{

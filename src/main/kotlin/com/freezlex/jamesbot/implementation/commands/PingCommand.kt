@@ -3,12 +3,14 @@ package com.freezlex.jamesbot.implementation.commands
 import com.freezlex.jamesbot.internals.commands.Command
 import com.freezlex.jamesbot.internals.arguments.Argument
 import com.freezlex.jamesbot.internals.utils.CommandEvent
+import org.springframework.stereotype.Component
 import java.security.Permission
 
 /**
  * Implementation for PING command
  */
-class Ping : Command {
+@Component
+class PingCommand : Command {
     override val name: String
         get() = "ping"
     override val alias: List<String>

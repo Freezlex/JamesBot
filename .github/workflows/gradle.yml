@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: JamesKotlin build
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
 
 jobs:
 
-  job1:
+  Ubuntu:
 
     runs-on: ubuntu-latest
 
@@ -26,8 +26,8 @@ jobs:
         run: chmod +x gradlew
       - name: Build with Gradle
         run: ./gradlew build
-        
-  job2:
+
+  Windows:
 
     runs-on: windows-latest
 
@@ -42,8 +42,8 @@ jobs:
         run: chmod +x gradlew
       - name: Build with Gradle
         run: ./gradlew build
-        
-  job3:
+
+  MacOS:
 
     runs-on: macos-latest
 
