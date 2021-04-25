@@ -5,7 +5,7 @@ import javax.persistence.*
 /**
  * Guild entity for JpaRepository
  */
-@Entity
+@Entity(name = "guilds")
 class GuildEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

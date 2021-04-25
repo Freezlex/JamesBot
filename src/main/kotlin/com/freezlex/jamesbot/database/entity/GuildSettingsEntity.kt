@@ -5,12 +5,12 @@ import javax.persistence.*
 /**
  * Guild settings entity for JpaRepository
  */
-@Entity
+@Entity(name = "guilds_settings")
 class GuildSettingsEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int,
     @OneToOne
     val guild: GuildEntity,
-    val prefix: String
+    val prefix: String = System.getenv("PREFIX")
 )

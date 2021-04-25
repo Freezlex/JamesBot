@@ -15,5 +15,5 @@ interface UserRepository: JpaRepository<UserEntity, Int>{
      * Get a user by the discord ID
      * @return UserEntity
      */
-    fun findOneByUserId(userId: Long): Optional<UserEntity>
+    fun findOneByUserId(userId: Long): UserEntity?
 }

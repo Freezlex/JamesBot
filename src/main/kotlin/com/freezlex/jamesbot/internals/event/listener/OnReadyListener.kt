@@ -17,7 +17,7 @@ class OnReadyListener: DefaultListener() {
         println("""
         ||-========================================================
         || Started JamesBot 0.0.1-SNAPSHOT
-        || Account Info: ${event.jda.selfUser.name}#${event.jda.selfUser.discriminator} (ID: later bitchies)
+        || Account Info: ${event.jda.selfUser.name}#${event.jda.selfUser.discriminator} (ID: ${event.jda.selfUser.id})
         || Connected to ${event.jda.guilds.size} guilds, ${event.jda.textChannels.size} text channels
         ||-========================================================
         """.trimMargin("|"))

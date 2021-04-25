@@ -5,7 +5,7 @@ import javax.persistence.*
 /**
  * User entity for JpaRepository
  */
-@Entity
+@Entity(name = "users")
 data class UserEntity (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
