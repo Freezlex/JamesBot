@@ -4,13 +4,16 @@ package com.freezlex.jamesbot.internals.arguments
  * Constructor for an argument
  * TODO : Same principe as the command registry
  */
-interface Argument {
+abstract class Argument{
+
+    fun validate(args: String, msg: String){
+        throw Error("Argument must have a run method")
+    }
 
     /**
      * Runner for the custom argument
      */
     fun run(){
-        //TODO : Complete
-        println("UserEntity")
+        throw Error("Argument must have a run method")
     }
 }

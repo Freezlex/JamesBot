@@ -2,10 +2,13 @@ package com.freezlex.jamesbot.internals.event.listener
 
 import com.freezlex.jamesbot.internals.commands.Command
 import com.freezlex.jamesbot.internals.event.DefaultListener
+import com.freezlex.jamesbot.internals.models.GuildCache
 import com.freezlex.jamesbot.internals.models.GuildSettings
 import com.freezlex.jamesbot.internals.utils.Utility
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -14,8 +17,10 @@ import org.springframework.stereotype.Component
  */
 @Component
 class OnMessageReceivedListener @Autowired constructor(
-    val guildSettings: GuildSettings
+    val guildCache: GuildCache
 ): DefaultListener(){
+
+    val logger: Logger = LoggerFactory.getLogger(this.javaClass)
 
     /**
      * When a Private guild is received
@@ -34,17 +39,14 @@ class OnMessageReceivedListener @Autowired constructor(
     }
 
     /**
-     * Build the command pattern to reply to
-     * TODO : Change the GuildMessageReceivedEvent to custom event
+     * Parse the received message
      * @param event The message event to get all the properties from the guild
      * @return String The command pattern
      */
-    private fun parseMessage(event: GuildMessageReceivedEvent): Command?{
-
-        val prefix: String = Utility.escapeRegex(guildSettings.getGuildPrefix(event));
-        val regex = Regex("^(<@!?${event.jda.selfUser.id}>\\s+(?:${prefix}[A-z]*)?|${prefix}([A-Z]|\\s))([^\\s]+)", RegexOption.IGNORE_CASE)
-        println("Regex : $regex, matches : ${regex.containsMatchIn(event.message.contentRaw)}, in : ${event.message.contentRaw}")
-        return null
+    private fun parseMessage(event: GuildMessageReceivedEvent) {
+        val guildSettings: GuildSettings = guildCache.getCachedSettings(event)
+        val parsed = guildSettings.pattern.matchEntire(event.message.contentRaw)
+        println(parsed?.groupValues.toString())
     }
 }
 

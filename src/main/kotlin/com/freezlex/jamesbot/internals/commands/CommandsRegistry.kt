@@ -48,7 +48,7 @@ class CommandsRegistry{
          * @param name The name of the command that we want to find
          * @return The found command or null
          */
-        fun getCommandByName(name: String): Command? = commands.find { it.name == name || name in it.alias}
+        fun getCommandByName(name: String): Command? = commands.find { it.name == name || it.alias?.contains(name) == true }
 
         /**
          * Get all the commands registered in the CommandRegistry
