@@ -17,7 +17,7 @@ interface GuildSettingsRepository: JpaRepository<GuildSettingsEntity, Int>{
      * Get a guild setting by the associated guild
      * @return GuildSettingsEntity
      */
-    fun findByGuild(guild: GuildEntity?): GuildSettingsEntity?
+    fun findByGuild(guild: GuildEntity?): Optional<GuildSettingsEntity>
 
-    fun findByGuild_GuildId(guildId: Long): GuildSettingsEntity?
+    fun findByGuild_GuildId(guildId: Long): Optional<GuildSettingsEntity>
 }

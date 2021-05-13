@@ -3,17 +3,23 @@ package com.freezlex.jamesbot.internals.models
 import com.freezlex.jamesbot.database.entity.GuildEntity
 import com.freezlex.jamesbot.database.entity.GuildSettingsEntity
 import com.freezlex.jamesbot.database.entity.UserEntity
+import com.freezlex.jamesbot.database.repository.GuildRepository
+import com.freezlex.jamesbot.database.repository.GuildSettingsRepository
 import com.freezlex.jamesbot.database.repository.RepositoryManager
+import com.freezlex.jamesbot.database.repository.UserRepository
 import com.freezlex.jamesbot.internals.utils.Utility
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import java.util.*
 
 @Component
 class GuildCache @Autowired constructor(
-    val repositoryManager: RepositoryManager
+    val userRepository: UserRepository,
+    val guildRepository: GuildRepository,
+    val guildSettingsRepository: GuildSettingsRepository
 ){
 
     val logger: Logger = LoggerFactory.getLogger(this.javaClass)
@@ -27,10 +33,9 @@ class GuildCache @Autowired constructor(
     fun getCachedSettings(event: GuildMessageReceivedEvent):GuildSettings {
         logger.info("Trying to find settings into the cache for guild ${event.guild.id} ...")
         var guildSettings: GuildSettings? = settings.find{ settings -> settings.guildId == event.guild.idLong}
-        println(guildSettings?.toString())
         if(guildSettings == null){
             logger.info(" No cache found, now trying to find guild settings into the database ...")
-            val dbFoundSettings = repositoryManager.guildSettingsRepository.findByGuild_GuildId(event.guild.idLong)
+            val dbFoundSettings = guildSettingsRepository.findByGuild_GuildId(event.guild.idLong).orElse(null)
             if(dbFoundSettings == null){
                 logger.info("No database guild settings fount, creating a brand new one ...")
                 guildSettings = GuildSettings(event.guild.idLong, System.getenv("PREFIX"), getCommandPattern(System.getenv("PREFIX"), event))
@@ -51,22 +56,14 @@ class GuildCache @Autowired constructor(
      * @param event The event for being able to find all the information such as guild_id and more
      */
     fun saveCache(guildSettings: GuildSettings, event: GuildMessageReceivedEvent){
-        val guildSettingsEntity = repositoryManager.guildSettingsRepository.findByGuild_GuildId(guildSettings.guildId)
-        var guildEntity: GuildEntity?
-        var userEntity: UserEntity?
-        if(guildSettingsEntity == null){
-            guildEntity = repositoryManager.guildRepository.findOneByGuildId(guildSettings.guildId)
-            if(guildEntity == null){
-                userEntity = repositoryManager.userRepository.findOneByUserId(event.author.idLong)
-                if(userEntity == null){
-                    userEntity = repositoryManager.userRepository.save(UserEntity(event.author.idLong, event.author.name, event.author.asTag))
-                }
-                guildEntity = repositoryManager.guildRepository.save(GuildEntity(event.guild.idLong, userEntity))
-            }
-            repositoryManager.guildSettingsRepository.save(GuildSettingsEntity(guildEntity, guildSettings.prefix))
-        }
-        settings[settings.indexOf(settings.find { it.guildId == guildSettings.guildId })] = guildSettings
-        println(settings[settings.indexOf(settings.find { it.guildId == guildSettings.guildId })].prefix)
+        // TODO : Simplify this method. Duplicate element so we must EDIT instead of SAVE if found !
+        guildSettingsRepository.findByGuild_GuildId(event.guild.idLong)
+            .orElse(guildSettingsRepository.save(GuildSettingsEntity(guildRepository.findOneByGuildId(event.guild.idLong)
+                .orElse(guildRepository.save(GuildEntity(event.guild.idLong, userRepository.findOneByUserId(event.author.idLong)
+                    .orElse(userRepository.save(UserEntity(event.author.idLong, event.author.name, event.author.asTag)))))), guildSettings.prefix)))
+
+        settings.removeAt(settings.indexOf(settings.find { it.guildId == guildSettings.guildId }));
+        this.getCachedSettings(event)
     }
 
     /**

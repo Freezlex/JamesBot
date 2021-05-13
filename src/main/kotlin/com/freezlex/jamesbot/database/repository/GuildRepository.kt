@@ -13,5 +13,5 @@ interface GuildRepository: JpaRepository<GuildEntity, Int>{
      * Get a guild by the discord ID
      * @return GuildEntity
      */
-    fun findOneByGuildId(guildId: Long): GuildEntity?
+    fun findOneByGuildId(guildId: Long): Optional<GuildEntity>
 }
