@@ -14,4 +14,6 @@ class GuildEntity(
     val guildId: Long,
     @ManyToOne
     val owner: UserEntity
-)
+){
+    constructor(guildId: Long, owner: UserEntity): this(0, guildId, owner)
+}

@@ -14,4 +14,6 @@ data class UserEntity (
     val userId: Long,
     val username: String,
     val tag: String
-    )
+    ){
+    constructor(userId: Long, username: String, tag: String): this(0, userId, username, tag)
+}

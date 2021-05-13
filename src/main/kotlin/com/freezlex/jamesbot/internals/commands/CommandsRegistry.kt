@@ -16,15 +16,13 @@ class CommandsRegistry @Autowired constructor(
     repositoryManager: RepositoryManager
 ){
 
-    private final val logger: Logger = LoggerFactory.getLogger(this.javaClass)
+    private val logger: Logger = LoggerFactory.getLogger(this.javaClass)
 
     init{
         this.logger.info("Loading automatically all commands");
     }
 
-    /**
-     * Let's automatically load all the commands with Reflection from the commands.implementation package
-     */
+    /** Let's automatically load all the commands with Reflection from the implementation.commands package */
     fun loadCommands() {
         val reflections: Set<Class<out Command?>> = Reflections("${this.javaClass.packageName.removeSuffix(".internals.commands")}.implementation.commands").getSubTypesOf(
             Command::class.java)

@@ -13,4 +13,6 @@ class GuildSettingsEntity(
     @OneToOne
     val guild: GuildEntity,
     val prefix: String = System.getenv("PREFIX")
-)
+){
+    constructor(guild: GuildEntity, prefix: String): this(0, guild, prefix)
+}

@@ -1,6 +1,5 @@
 package com.freezlex.jamesbot.internals.event.listener
 
-import com.freezlex.jamesbot.implementation.commands.TestCommand
 import com.freezlex.jamesbot.internals.event.DefaultListener
 import net.dv8tion.jda.api.events.ReadyEvent
 import org.springframework.stereotype.Component

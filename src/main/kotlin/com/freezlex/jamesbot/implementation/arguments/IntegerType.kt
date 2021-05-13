@@ -1,9 +1,8 @@
 package com.freezlex.jamesbot.implementation.arguments
 
 import com.freezlex.jamesbot.internals.arguments.Argument
+import com.freezlex.jamesbot.internals.models.ArgumentModel
 import com.freezlex.jamesbot.internals.models.MessageModel
-import net.dv8tion.jda.api.entities.Message
-import java.lang.Error
 import java.lang.Exception
 import kotlin.String
 
@@ -44,7 +43,7 @@ class IntegerType (
      */
     constructor(name: String, maximum: Int?, minimum: Int?, default: Int?): this(name, maximum, minimum, null, default)
 
-    override fun validate(message: MessageModel): MessageModel {
+    override fun validate(message: MessageModel): ArgumentModel {
         val number = message.validateQueue[0].toIntOrNull() ?: throw Exception("The argument ${this.name} must be an a number")
         if(oneOf != null){
             if(!oneOf.contains(number))throw Exception("The argument ${this.name} must be one of `${this.oneOf.joinToString("`, `")}`")
@@ -53,6 +52,6 @@ class IntegerType (
             if(this.minimum != null && this.minimum > number)throw Exception("$number is too low. The argument must be higher than ${this.minimum}")
         }
         message.validateQueue.removeAt(0) // Remove the args from the list for the rest of the checkin
-        return message;
+        return ArgumentModel(number, this);
     }
 }
