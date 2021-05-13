@@ -17,9 +17,9 @@ class TestCommand : Command(
     "test",
     listOf("t"),
     listOf(
-        IntegerType(0, listOf(8, 9), null),
-        StringType(0, null, null),
-        IntegerType(0, listOf(4, 3), null)
+        StringType("First string args" ,0, null, null),
+        IntegerType("First int args", 9, 4, null),
+        IntegerType("Second int args", listOf(8, 10), null),
     ),
     null,
     false,

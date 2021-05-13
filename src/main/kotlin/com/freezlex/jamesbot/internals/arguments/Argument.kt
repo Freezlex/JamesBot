@@ -1,22 +1,28 @@
 package com.freezlex.jamesbot.internals.arguments
 
 import com.freezlex.jamesbot.internals.models.MessageModel
-import net.dv8tion.jda.api.entities.Message
+import java.lang.Exception
 
 /**
  * Constructor for an argument
  * TODO : Same principe as the command registry
  */
 interface Argument{
-    var type: String
-    var length: Int
-    var oneOf: List<Any>?
-    var default: Any?
+    val type: String
+    val name: String
+    val oneOf: List<Any>?
+    val default: Any?
+
+    fun execute(message: MessageModel): MessageModel{
+        if(message.validateQueue.size == 0) throw Exception("Missing argument ${this.name}")
+        this.validate(message)
+        return message;
+    }
 
     /**
      * Validate the argument before running the command to avoid mistake
      */
-    open fun validate(argument: String, type: Argument): Boolean{
+    fun validate(message: MessageModel): MessageModel{
         throw Error("Argument must have a run method")
     }
 

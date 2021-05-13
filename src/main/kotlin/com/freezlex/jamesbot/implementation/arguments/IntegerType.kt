@@ -1,25 +1,58 @@
 package com.freezlex.jamesbot.implementation.arguments
 
 import com.freezlex.jamesbot.internals.arguments.Argument
+import com.freezlex.jamesbot.internals.models.MessageModel
 import net.dv8tion.jda.api.entities.Message
+import java.lang.Error
+import java.lang.Exception
 import kotlin.String
 
 /**
  * Implementation for INTEGER argument
  */
 class IntegerType (
-    override var type: String = "Integer",
-    override var length: Int,
-    override var oneOf: List<Any>?,
-    override var default: Any?
+    override val type: String,
+    override val name: String,
+    override val oneOf: List<Any>?,
+    override val default: Any?,
+    private val maximum: Int?,
+    private val minimum: Int?
 ): Argument{
 
-    constructor(length: Int, oneOf: List<Int>?, default: String?): this("String", length, oneOf, default)
+    constructor(name:String, maximum: Int?, minimum: Int?, oneOf: List<Int>?, default: Int?): this("Integer", name, oneOf, default, maximum, minimum)
 
-    override fun validate(argument: String, type: Argument): Boolean {
-        val number = argument.toIntOrNull() ?: return false
-        if(oneOf?.contains(number) == false)return false;
-        return true;
+    /**
+     * Create the argument by providing a name
+     * @param name Name of the argument
+     */
+    constructor(name: String): this(name, null, null, null, null)
+
+    /**
+     * Create the argument by providing a name, a oneOf list and a default value
+     * @param name Name of the argument
+     * @param oneOf List of possible value for the argument
+     * @param default Default value for the argument
+     */
+    constructor(name: String, oneOf: List<Int>, default: Int?): this(name, null, null, oneOf, default)
+
+    /**
+     * Create the argument by providing a name, a maximum value, a minimum value and a default value
+     * @param name Name of the argument
+     * @param maximum Maximum available value
+     * @param minimum Minimum available value
+     * @param default Default value for the argument
+     */
+    constructor(name: String, maximum: Int?, minimum: Int?, default: Int?): this(name, maximum, minimum, null, default)
+
+    override fun validate(message: MessageModel): MessageModel {
+        val number = message.validateQueue[0].toIntOrNull() ?: throw Exception("The argument ${this.name} must be an a number")
+        if(oneOf != null){
+            if(!oneOf.contains(number))throw Exception("The argument ${this.name} must be one of `${this.oneOf.joinToString("`, `")}`")
+        }else{
+            if(this.maximum != null && this.maximum < number)throw Exception("$number is too high. The argument must be lower than ${this.maximum}")
+            if(this.minimum != null && this.minimum > number)throw Exception("$number is too low. The argument must be higher than ${this.minimum}")
+        }
+        message.validateQueue.removeAt(0) // Remove the args from the list for the rest of the checkin
+        return message;
     }
-
 }
