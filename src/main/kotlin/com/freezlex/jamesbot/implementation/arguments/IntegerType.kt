@@ -44,14 +44,13 @@ class IntegerType (
     constructor(name: String, maximum: Int?, minimum: Int?, default: Int?): this(name, maximum, minimum, null, default)
 
     override fun validate(message: MessageModel): ArgumentModel {
-        val number = message.validateQueue[0].toIntOrNull() ?: throw Exception("The argument ${this.name} must be an a number")
+        val number = message.validateQueue[0].toIntOrNull() ?: throw Exception("The argument ${this.name} must be a number")
         if(oneOf != null){
             if(!oneOf.contains(number))throw Exception("The argument ${this.name} must be one of `${this.oneOf.joinToString("`, `")}`")
         }else{
             if(this.maximum != null && this.maximum < number)throw Exception("$number is too high. The argument must be lower than ${this.maximum}")
             if(this.minimum != null && this.minimum > number)throw Exception("$number is too low. The argument must be higher than ${this.minimum}")
         }
-        message.validateQueue.removeAt(0) // Remove the args from the list for the rest of the checkin
         return ArgumentModel(number, this);
     }
 }

@@ -17,3 +17,18 @@ data class UserEntity (
     ){
     constructor(userId: Long, username: String, tag: String): this(0, userId, username, tag)
 }
+
+/**
+ * User settings for JpaRepository
+ */
+@Entity(name = "users_settings")
+data class UserSettingsEntity(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Int,
+    val language: String,
+    @OneToOne
+    val user: UserEntity
+){
+    constructor(language: String, user: UserEntity): this(0, language, user)
+}

@@ -15,7 +15,6 @@ interface Argument{
     val default: Any?
 
     fun execute(message: MessageModel): MessageModel{
-        if(message.validateQueue.size == 0) throw Exception("Missing argument ${this.name}")
         message.parsed.add(this.validate(message))
         return message;
     }

@@ -13,11 +13,12 @@ import java.lang.Exception
 abstract class Command(
     val name : String,
     val alias: List<String>?,
-    private val arguments: List<Argument>?,
+    private val arguments: MutableList<Argument>?,
     val description : String?,
     private val ownerOnly : Boolean,
     private val userPermission : List<Permission>?,
-    private val botPermission : List<Permission>?
+    private val botPermission : List<Permission>?,
+    private val hidden : Boolean = false
 ){
     /**
      * Runner for the command
@@ -45,11 +46,21 @@ abstract class Command(
         // Validating all the args
         if (this.arguments != null) {
             for(argument in this.arguments){ // Loop to validate all the args passed in the message
+                if(message.validateQueue.size == 0){
+                    if(argument.default != null){
+                        message.validateQueue.add(argument.default.toString())
+                    }else{
+                        throw Exception("Missing argument ${argument.name}")
+                    }
+                }
                 message = argument.execute(message) // Validating all the args
+                message.validateQueue.removeAt(0) // Remove the args from the list for the rest of the checkin
             }
         }
 
         this.run(message, repositoryManager)
         return message;
     }
+
+
 }

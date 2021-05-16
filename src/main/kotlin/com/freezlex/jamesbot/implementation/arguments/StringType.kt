@@ -20,12 +20,12 @@ class StringType(
 
     constructor(name:String, length: Int?, oneOf: List<String>?, default: String?): this("String", name, oneOf, default, length)
 
+    constructor(name: String, default: String?): this("String", name, null, default, null)
+
     constructor(name:String): this("String", name, null, null, null)
 
     override fun validate(message: MessageModel): ArgumentModel {
-        val model = ArgumentModel(message.validateQueue[0], this)
-        message.validateQueue.removeAt(0)
-        return model;
+        return ArgumentModel(message.validateQueue[0], this);
     }
 
 }

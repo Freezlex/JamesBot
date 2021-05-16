@@ -57,11 +57,21 @@ class GuildCache @Autowired constructor(
      */
     fun saveCache(guildSettings: GuildSettings, event: GuildMessageReceivedEvent){
         // TODO : Simplify this method. Duplicate element so we must EDIT instead of SAVE if found !
-        guildSettingsRepository.findByGuild_GuildId(event.guild.idLong)
-            .orElse(guildSettingsRepository.save(GuildSettingsEntity(guildRepository.findOneByGuildId(event.guild.idLong)
-                .orElse(guildRepository.save(GuildEntity(event.guild.idLong, userRepository.findOneByUserId(event.author.idLong)
-                    .orElse(userRepository.save(UserEntity(event.author.idLong, event.author.name, event.author.asTag)))))), guildSettings.prefix)))
 
+        var setting = guildSettingsRepository.findByGuild_GuildId(guildSettings.guildId).orElse(null)
+        if(setting == null){
+            var guild = guildRepository.findOneByGuildId(guildSettings.guildId).orElse(null)
+            if(guild == null){
+                var user = userRepository.findOneByUserId(event.author.idLong).orElse(null)
+                if(user == null){
+                    user = userRepository.save(UserEntity(event.author.idLong, event.author.name, event.author.asTag.split("#")[1]))
+                }
+                guild = guildRepository.save(GuildEntity(event.guild.idLong, user))
+            }
+            guildSettingsRepository.save(GuildSettingsEntity(guild, guildSettings.prefix))
+        }else{
+            guildSettingsRepository.saveGuildSettingsOrUpdateIfNotNull(setting.guild.id, guildSettings.prefix)
+        }
         settings.removeAt(settings.indexOf(settings.find { it.guildId == guildSettings.guildId }));
         this.getCachedSettings(event)
     }

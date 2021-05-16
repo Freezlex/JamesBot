@@ -1,5 +1,6 @@
 package com.freezlex.jamesbot.internals.event.listener
 
+import com.freezlex.jamesbot.database.entity.UserSettingsEntity
 import com.freezlex.jamesbot.database.repository.RepositoryManager
 import com.freezlex.jamesbot.internals.commands.Command
 import com.freezlex.jamesbot.internals.commands.CommandsRegistry
@@ -7,6 +8,7 @@ import com.freezlex.jamesbot.internals.event.DefaultListener
 import com.freezlex.jamesbot.internals.models.GuildCache
 import com.freezlex.jamesbot.internals.models.GuildSettings
 import com.freezlex.jamesbot.internals.models.MessageModel
+import com.freezlex.jamesbot.internals.models.UserCache
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent
 import org.slf4j.Logger
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Component
 @Component
 class OnMessageReceivedListener @Autowired constructor(
     val guildCache: GuildCache,
+    val userCache: UserCache,
     val commandsRegistry: CommandsRegistry,
     val repositoryManager: RepositoryManager
 ): DefaultListener(){
@@ -53,6 +56,12 @@ class OnMessageReceivedListener @Autowired constructor(
      */
     private fun dispatchMessage(event: GuildMessageReceivedEvent): Boolean {
 
+        /*val userCache: UserSettingsEntity? = userCache.getCache(event)
+        if(userCache != null){
+
+        }else {
+
+        }*/
         val guildSettings: GuildSettings = guildCache.getCachedSettings(event)
         val parsed = guildSettings.pattern.find(event.message.contentRaw)
         val command: Command?
@@ -66,9 +75,9 @@ class OnMessageReceivedListener @Autowired constructor(
             try{
                 // TODO : Create parser
                 val parsedString = event.message.contentRaw.removePrefix(parsed.groupValues[0])
-                command.execute(MessageModel(parsed, event, guildCache ,parsedString, parsedString.split(" ").toMutableList()), repositoryManager)
+                command.execute(MessageModel(parsed, event, null, guildCache , null, parsedString, parsedString.split(" ").toMutableList()), repositoryManager)
             }catch (e: Exception){
-                e.message?.let { event.message.reply(it).mentionRepliedUser(false).queue() }
+                e.message?.let { event.message.reply(":x: $it").queue() }
             }
             return true
         }
