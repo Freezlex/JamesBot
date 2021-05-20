@@ -1,6 +1,7 @@
 package com.freezlex.jamesbot.database.repository
 
 import com.freezlex.jamesbot.database.entity.GuildEntity
+import com.freezlex.jamesbot.database.entity.GuildPermissionEntity
 import com.freezlex.jamesbot.database.entity.GuildSettingsEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
@@ -42,4 +43,9 @@ interface GuildSettingsRepository: JpaRepository<GuildSettingsEntity, Int>{
     fun saveGuildSettingsOrUpdateIfNotNull(
         @Param("guildId") guildId: Int,
         @Param("prefix") prefix: String)
+}
+
+@Repository
+interface GuildPermissionsRepository: JpaRepository<GuildPermissionEntity, Int>{
+    fun findByGuild_GuildId(guildId: Long): Optional<GuildPermissionsRepository>
 }

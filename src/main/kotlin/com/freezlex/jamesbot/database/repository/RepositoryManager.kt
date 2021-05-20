@@ -8,4 +8,5 @@ class RepositoryManager{
     @Autowired lateinit var userRepository: UserRepository
     @Autowired lateinit var guildRepository: GuildRepository
     @Autowired lateinit var guildSettingsRepository: GuildSettingsRepository
+    @Autowired lateinit var guildPermissionsRepository: GuildPermissionsRepository
 }

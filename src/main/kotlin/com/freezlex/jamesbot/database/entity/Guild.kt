@@ -1,7 +1,9 @@
 package com.freezlex.jamesbot.database.entity
 
 import com.freezlex.jamesbot.internals.models.GuildSettings
+import org.hibernate.annotations.Type
 import javax.persistence.*
+import kotlin.math.max
 
 /**
  * Guild entity for JpaRepository
@@ -32,6 +34,20 @@ class GuildSettingsEntity(
     var prefix: String = System.getenv("PREFIX")
 ){
     constructor(guild: GuildEntity, prefix: String): this(0, guild, prefix)
-
     constructor(guild: GuildEntity, guildSettings: GuildSettings): this(0, guild, guildSettings.prefix)
 }
+
+
+@Entity(name = "guild_permissions")
+class GuildPermissionEntity(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Int,
+    @OneToOne
+    val guild: GuildEntity,
+    val role: Long,
+    @Column( name = "discord_permission", length = 20)
+    val discordPermission: Int,
+    @Column(name = "level_permission")
+    val levelPermission: Int
+    )

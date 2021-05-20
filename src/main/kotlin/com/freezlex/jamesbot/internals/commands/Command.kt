@@ -17,7 +17,8 @@ abstract class Command(
     val description : String?,
     private val ownerOnly : Boolean,
     private val userPermission : List<Permission>?,
-    private val botPermission : List<Permission>?,
+    private val botLevelPermission : Int?,
+    private val botPermission: List<Permission>?,
     private val hidden : Boolean = false
 ){
     /**
@@ -35,15 +36,24 @@ abstract class Command(
      */
     fun execute(messageModel: MessageModel, repositoryManager: RepositoryManager): MessageModel{
         var message = messageModel
-        if(ownerOnly && message.event.author.id != "306703362261254154") throw Exception("Azi zebi t'es pas l'owner qu'est ce que tu viens essayer de faire cette commande")
-        message.validateQueue.remove("") // removing all empty args
-        //Checking the user permissions
-        if(this.userPermission != null){
-            if(message.event.member?.permissions?.containsAll(this.userPermission) != true) throw Exception("Sorry but you are missing some discord permission to perform this action. Required permissions : `${this.userPermission.joinToString("`, `")}`")
-            if(this.botPermission != null && this.botPermission.let { message.event.guild.selfMember.hasPermission(message.event.channel, it) }) throw Exception("Sorry but I'm missing some discord permission to perform this action. Required permissions : `${this.botPermission?.joinToString("`, `")}`")
+        if(ownerOnly && message.event.author.idLong != 306703362261254154) throw Exception("Bot owner only command ") // Bot owner only
+
+        // gett
+        var permission = repositoryManager.guildPermissionsRepository.findByGuild_GuildId(message.event.guild.idLong).orElse(null)
+        if(permission != null){
+            //Checking the user permissions
+            if(this.userPermission != null){
+                if(message.event.member?.permissions?.containsAll(this.userPermission) != true) throw Exception("Sorry but you are missing some discord permission to perform this action. Required permissions : `${this.userPermission.joinToString("`, `")}`")
+                if(this.botPermission != null && this.botPermission.let { message.event.guild.selfMember.hasPermission(message.event.channel, it) }) throw Exception("Sorry but I'm missing some discord permission to perform this action. Required permissions : `${this.botPermission?.joinToString("`, `")}`")
+            }else if(this.botLevelPermission != null){
+                if(repositoryManager.guildPermissionsRepository)throw Exception("Pas content")
+            }
         }
 
+
+
         // Validating all the args
+        message.validateQueue.remove("") // removing all empty args
         if (this.arguments != null) {
             for(argument in this.arguments){ // Loop to validate all the args passed in the message
                 if(message.validateQueue.size == 0){
