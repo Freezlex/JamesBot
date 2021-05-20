@@ -1,47 +1,31 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+val ktor_version: String by project
+val kotlin_version: String by project
+val logback_version: String by project
+val exposedVersion: String by project
 
 plugins {
-	id("org.springframework.boot") version "2.4.4"
-	id("io.spring.dependency-management") version "1.0.11.RELEASE"
-	kotlin("jvm") version "1.4.31"
-	kotlin("plugin.spring") version "1.4.31"
-	kotlin("plugin.jpa") version "1.4.31"
+    application
+    kotlin("jvm") version "1.5.0"
 }
 
 group = "com.freezlex"
-version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_11
+version = "0.0.1"
+application {
+    mainClass.set("com.freezlex.ApplicationKt")
+}
 
 repositories {
-	mavenCentral()
-	maven {
-		name="m2-dv8tion"
-		url=uri("https://m2.dv8tion.net/releases")
-	}
+    mavenCentral()
 }
 
 dependencies {
-	/** SPRING DATA */
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	/** BOT UTIL */
-	implementation("net.dv8tion:JDA:4.2.1_253")
-	implementation("org.reflections", "reflections", "0.9.10")
-	/** DEV TOOLS */
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	runtimeOnly("mysql:mysql-connector-java")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("com.h2database","h2", "1.4.200")
-}
-
-tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs = listOf("-Xjsr305=strict")
-		jvmTarget = "11"
-	}
-}
-
-tasks.withType<Test> {
-	useJUnitPlatform()
+    implementation("io.ktor:ktor-server-core:$ktor_version")
+    implementation("io.ktor:ktor-jackson:$ktor_version")
+    implementation("io.ktor:ktor-server-netty:$ktor_version")
+    implementation("ch.qos.logback:logback-classic:$logback_version")
+    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    implementation("mysql", "mysql-connector-java", "8.0.25")
 }
