@@ -1,7 +1,8 @@
-package com.freezlex
+package com.freezlex.jamesbot
 
-import com.freezlex.database.Database
-import com.freezlex.database.entities.User
+import com.freezlex.jamesbot.database.Database
+import com.freezlex.jamesbot.database.entities.User
+import com.freezlex.jamesbot.internals.utils.ClientSettings
 import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
@@ -11,7 +12,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
  * Main application launcher
  */
 fun main() {
-    Database.connect
+    val clientSettings = ClientSettings().processByEnv()
+    Database(clientSettings).connect()
 
     val users: Query = transaction {
         User.insert {

@@ -16,6 +16,10 @@ application {
 
 repositories {
     mavenCentral()
+    maven {
+        name="m2-dv8tion"
+        url=uri("https://m2.dv8tion.net/releases")
+    }
 }
 
 dependencies {
@@ -27,5 +31,6 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    implementation("net.dv8tion:JDA:4.2.1_253")
     implementation("mysql", "mysql-connector-java", "8.0.25")
 }

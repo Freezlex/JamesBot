@@ -1,4 +1,4 @@
-package com.freezlex.database.entities
+package com.freezlex.jamesbot.database.entities
 
 import org.jetbrains.exposed.sql.Table
 
