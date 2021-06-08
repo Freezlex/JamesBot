@@ -31,6 +31,9 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
-    implementation("net.dv8tion:JDA:4.2.1_253")
     implementation("mysql", "mysql-connector-java", "8.0.25")
+    implementation("org.reflections:reflections:0.9.12")
+    implementation("net.dv8tion:JDA:4.2.1_253")
+
+
 }

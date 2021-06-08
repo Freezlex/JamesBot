@@ -9,5 +9,6 @@ object User: Table("users") {
     val username = varchar("username", 40)
     val tag = varchar("tag", 4)
 
-    override val primaryKey = PrimaryKey(id, name = "CustomPKConstraintName")
+    // Never forget to override the Primary key !!
+    override val primaryKey = PrimaryKey(this.id, name = "id")
 }
