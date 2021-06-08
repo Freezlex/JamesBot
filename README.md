@@ -8,6 +8,82 @@
 
 UNDER DEVELOPPEMENT
 
+## Commits identity *based on [Emoji-Log](https://github.com/ahmadawais/Emoji-Log)*
+
+For better understanding of development we are using commit identity. In fact all of our commit start with an 
+emoji and a snippet, it help to track the main purpose of a commit.
+
+| Keyword |   Snippet    |
+| ------- | ------------ |
+| `new` | 📦 NEW      |
+| `imp` | 👌 IMPROVE  |
+| `fix` | 🐛 FIX      |
+| `rlz` | 🚀 RELEASE  |
+| `doc` | 📖 DOC      |
+| `tst` | 🤖 TEST     |
+| `brk` | ‼️ BREAKING  |
+
+### How to use :
+
+
+To sign your commit use `git <keyword> "<your message>"`.
+Only use the following Git Commit Messages. A simple and small footprint is critical here.
+
+1. `📦 NEW: IMPERATIVE_MESSAGE_GOES_HERE`
+   > Use when you add something entirely new.
+   > E.g. `📦 NEW: Add Git ignore file`
+
+1. `👌 IMPROVE: IMPERATIVE_MESSAGE_GOES_HERE`
+   > Use when you improve/enhance piece of code like refactoring etc.
+   > E.g. `👌 IMPROVE: Remote IP API Function`
+
+1. `🐛 FIX: IMPERATIVE_MESSAGE_GOES_HERE`
+   > Use when you fix a bug — need I say more?
+   > E.g. `🐛 FIX: Case conversion`
+
+1. `📖 DOC: IMPERATIVE_MESSAGE_GOES_HERE`
+   > Use when you add documentation like `README.md`, or even inline docs.
+   > E.g. `📖 DOC: API Interface Tutorial`
+
+
+1. `🚀 RELEASE: IMPERATIVE_MESSAGE_GOES_HERE`
+   > Use when you release a new version.
+   > E.g. `🚀 RELEASE: Version 2.0.0`
+
+
+1. `🤖 TEST: IMPERATIVE_MESSAGE_GOES_HERE`
+   > Use when it's related to testing.
+   > E.g. `🤖 TEST: Mock User Login/Logout`
+
+
+1. `‼️ BREAKING: IMPERATIVE_MESSAGE_GOES_HERE`
+   > Use when releasing a change that breaks previous versions.
+   > E.g. `‼️ BREAKING: Change authentication protocol`
+
+Add this configuration into your `~/.gitconfig` :
+
+```shell
+# Make sure you're adding under the [alias] block.
+[alias]
+  # Git Commit and Add all — in one step.
+  ca = "!f() { git add .; git commit -m \"$@\"; }; f"
+  # NEW.
+  new = "!f() { git ca \"📦 NEW | $@\"; }; f"
+  # IMPROVE.
+  imp = "!f() { git ca \"👌 IMPROVE | $@\"; }; f"
+  # FIX.
+  fix = "!f() { git ca \"🐛 FIX | $@\"; }; f"
+  # RELEASE.
+  rlz = "!f() { git ca \"🚀 RELEASE | $@\"; }; f"
+  # DOC.
+  doc = "!f() { git ca \"📖 DOC | $@\"; }; f"
+  # TEST.
+  tst = "!f() { git ca \"🤖 TEST | $@\"; }; f"
+  # BREAKING CHANGE.
+  brk = "!f() { git ca \"‼️ BREAKING | $@\"; }; f"
+
+```
+
 ## Using our code
 
 **Give credit where credit is due.** If you wish to use our code in a project, please credit us, and take your time to read our full license. We don't mind you using JamesBot code, as it is open-source for a reason, as long as you don't blatantly copy it or refrain from crediting us. Take special care of following the license aswell.
