@@ -68,20 +68,19 @@ Add this configuration into your `~/.gitconfig` :
   # Git Commit, Add all and Push — in one step.
   ca = "!f() { git add .; git commit -m \"$@\"; }; f"
   # NEW.
-  new = "!f() { git ca \"📦 `NEW`: $@\"; }; f"
+  new = "!f() { git ca \"📦\\`new\\`: $@\"; }; f"
   # IMPROVE.
-  imp = "!f() { git ca \"👌 `IMPROVE`: | $@\"; }; f"
+  imp = "!f() { git ca \"👌\\`improve\\`: | $@\"; }; f"
   # FIX.
-  fix = "!f() { git ca \"🐛 `FIX`: $@\"; }; f"
+  fix = "!f() { git ca \"🐛\\`fix\\`: $@\"; }; f"
   # RELEASE.
-  rlz = "!f() { git ca \"🚀 `RELEASE`: $@\"; }; f"
+  rlz = "!f() { git ca \"🚀\\`release\\`: $@\"; }; f"
   # DOC.
-  doc = "!f() { git ca \"📖 `DOC`: $@\"; }; f"
+  doc = "!f() { git ca \"📖\\`doc\\`: $@\"; }; f"
   # TEST.
-  tst = "!f() { git ca \"🤖 `TEST`: $@\"; }; f"
+  tst = "!f() { git ca \"🤖\\`test\\`: $@\"; }; f"
   # BREAKING CHANGE.
   brk = "!f() { git ca \"‼️ BREAKING | $@\"; }; f"
-
 ```
 
 ## Using our code
