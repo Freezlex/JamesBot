@@ -1,5 +1,6 @@
 package com.freezlex.jamesbot.internals.commands
 
+import com.freezlex.jamesbot.internals.api.Cooldown
 import com.freezlex.jamesbot.internals.api.Executable
 import com.freezlex.jamesbot.internals.arguments.Argument
 import com.freezlex.jamesbot.internals.api.Jar
@@ -10,7 +11,7 @@ class CommandFunction (
     name: String,
     val category: String,
     val jar: Jar?,
-    val properties: Cmd,
+    val cooldown: Cooldown?,
 
     // Executable properties
     method: KFunction<*>,

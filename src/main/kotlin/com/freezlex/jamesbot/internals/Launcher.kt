@@ -26,6 +26,6 @@ class Launcher{
             .setAutoReconnect(true)
             .setMemberCachePolicy(MemberCachePolicy.ALL)
             .setChunkingFilter(ChunkingFilter.NONE)
-            .addEventListeners(ExecutorClient())
+            .addEventListeners(ExecutorClient("com.freezlex.jamesbot.implementation"))
     }
 }
