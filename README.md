@@ -65,20 +65,20 @@ Add this configuration into your `~/.gitconfig` :
 ```shell
 # Make sure you're adding under the [alias] block.
 [alias]
-  # Git Commit and Add all — in one step.
+  # Git Commit, Add all and Push — in one step.
   ca = "!f() { git add .; git commit -m \"$@\"; }; f"
   # NEW.
-  new = "!f() { git ca \"📦 NEW | $@\"; }; f"
+  new = "!f() { git ca \"📦 `NEW`: $@\"; }; f"
   # IMPROVE.
-  imp = "!f() { git ca \"👌 IMPROVE | $@\"; }; f"
+  imp = "!f() { git ca \"👌 `IMPROVE`: | $@\"; }; f"
   # FIX.
-  fix = "!f() { git ca \"🐛 FIX | $@\"; }; f"
+  fix = "!f() { git ca \"🐛 `FIX`: $@\"; }; f"
   # RELEASE.
-  rlz = "!f() { git ca \"🚀 RELEASE | $@\"; }; f"
+  rlz = "!f() { git ca \"🚀 `RELEASE`: $@\"; }; f"
   # DOC.
-  doc = "!f() { git ca \"📖 DOC | $@\"; }; f"
+  doc = "!f() { git ca \"📖 `DOC`: $@\"; }; f"
   # TEST.
-  tst = "!f() { git ca \"🤖 TEST | $@\"; }; f"
+  tst = "!f() { git ca \"🤖 `TEST`: $@\"; }; f"
   # BREAKING CHANGE.
   brk = "!f() { git ca \"‼️ BREAKING | $@\"; }; f"
 
