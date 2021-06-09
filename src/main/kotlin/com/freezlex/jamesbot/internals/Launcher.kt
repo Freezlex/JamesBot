@@ -1,8 +1,8 @@
 package com.freezlex.jamesbot.internals
 
 import com.freezlex.jamesbot.database.Database
-import com.freezlex.jamesbot.internals.api.ExecutorClient
-import com.freezlex.jamesbot.internals.api.ClientSettings
+import com.freezlex.jamesbot.internals.client.ExecutorClient
+import com.freezlex.jamesbot.internals.client.ClientSettings
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.requests.GatewayIntent

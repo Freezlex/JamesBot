@@ -1,8 +1,8 @@
 package com.freezlex.jamesbot.internals.commands
 
-import com.freezlex.jamesbot.internals.api.BucketType
+import com.freezlex.jamesbot.internals.cooldown.BucketType
 import com.freezlex.jamesbot.internals.api.Context
-import com.freezlex.jamesbot.internals.api.Cooldown
+import com.freezlex.jamesbot.internals.cooldown.Cooldown
 import java.security.Permission
 
 interface Cmd {

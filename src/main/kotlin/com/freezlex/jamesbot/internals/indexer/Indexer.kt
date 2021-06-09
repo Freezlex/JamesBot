@@ -1,9 +1,9 @@
-package com.freezlex.jamesbot.internals.api
+package com.freezlex.jamesbot.internals.indexer
 
+import com.freezlex.jamesbot.internals.api.Context
 import com.freezlex.jamesbot.internals.arguments.Argument
 import com.freezlex.jamesbot.internals.commands.Cmd
 import com.freezlex.jamesbot.internals.commands.CommandFunction
-import io.ktor.util.*
 import org.reflections.Reflections
 import org.reflections.scanners.MethodParameterNamesScanner
 import org.reflections.scanners.SubTypesScanner
@@ -11,11 +11,8 @@ import java.io.File
 import java.lang.reflect.Modifier
 import java.net.URL
 import java.net.URLClassLoader
-import java.util.*
 import kotlin.reflect.KFunction
 import kotlin.reflect.KParameter
-import kotlin.reflect.full.findAnnotation
-import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.valueParameters
 import kotlin.reflect.jvm.javaMethod
 import kotlin.reflect.jvm.jvmErasure
@@ -59,10 +56,13 @@ class Indexer {
         return command!!
     }
 
+    /**
+     * @param method The method to execute when we want to launch the command
+     */
     fun loadCommand(method: KFunction<*>, cmd: Cmd): CommandFunction{
         require(method.javaMethod!!.declaringClass == cmd::class.java){ "${method.name} is not from ${cmd::class.simpleName}" }
 
-        val name = cmd.name()?: cmd::class.java.`package`.name.split('.').last().replace('_', ' ').lowercase()
+        val name = cmd.name()?.lowercase() ?: cmd::class.java.`package`.name.split('.').last().replace('_', ' ').lowercase()
         val category = cmd.category()?: "No category"
         val cooldown = cmd.cooldown()
         val ctxParam = method.valueParameters.firstOrNull { it.type.classifier?.equals(Context::class) == true }

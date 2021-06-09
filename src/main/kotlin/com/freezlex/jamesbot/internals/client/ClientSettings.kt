@@ -1,4 +1,4 @@
-package com.freezlex.jamesbot.internals.api
+package com.freezlex.jamesbot.internals.client
 
 object ClientSettings {
     /** Bot config */

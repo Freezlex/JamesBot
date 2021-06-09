@@ -1,9 +1,9 @@
 package com.freezlex.jamesbot.internals.commands
 
-import com.freezlex.jamesbot.internals.api.Cooldown
-import com.freezlex.jamesbot.internals.api.Executable
+import com.freezlex.jamesbot.internals.cooldown.Cooldown
+import com.freezlex.jamesbot.internals.indexer.Executable
 import com.freezlex.jamesbot.internals.arguments.Argument
-import com.freezlex.jamesbot.internals.api.Jar
+import com.freezlex.jamesbot.internals.indexer.Jar
 import kotlin.reflect.KFunction
 import kotlin.reflect.KParameter
 

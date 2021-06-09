@@ -1,6 +1,6 @@
 package com.freezlex.jamesbot.internals.commands
 
-import com.freezlex.jamesbot.internals.api.Indexer
+import com.freezlex.jamesbot.internals.indexer.Indexer
 import java.lang.RuntimeException
 
 class CommandRegistry: HashMap<String, CommandFunction>() {

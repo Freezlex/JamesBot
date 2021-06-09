@@ -1,5 +1,6 @@
 package com.freezlex.jamesbot.internals.api
 
+import com.freezlex.jamesbot.internals.indexer.Executable
 import kotlinx.coroutines.future.await
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA

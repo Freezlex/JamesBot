@@ -1,7 +1,7 @@
 package com.freezlex.jamesbot
 
 import com.freezlex.jamesbot.internals.Launcher
-import com.freezlex.jamesbot.internals.api.ClientSettings
+import com.freezlex.jamesbot.internals.client.ClientSettings
 
 /**
  * Main application launcher

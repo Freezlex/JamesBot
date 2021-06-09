@@ -1,4 +1,4 @@
-package com.freezlex.jamesbot.internals.api
+package com.freezlex.jamesbot.internals.client
 
 import com.freezlex.jamesbot.internals.commands.CommandRegistry
 import com.freezlex.jamesbot.internals.events.OnMessageReceivedEvent
@@ -7,13 +7,12 @@ import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.EventListener
-import java.util.*
 
 class ExecutorClient(
     private val packageName: String
 ): EventListener {
-
-    val commands = CommandRegistry()
+    val commands : CommandRegistry = CommandRegistry()
+    val clientCache : ClientCache = ClientCache()
 
     init {
         println("registering package")
@@ -24,11 +23,11 @@ class ExecutorClient(
     override fun onEvent(event: GenericEvent){
         try{
             when(event){
-                is ReadyEvent -> OnReadyEvent.run(event)
+                is ReadyEvent -> OnReadyEvent.run(this, event)
                 is MessageReceivedEvent -> OnMessageReceivedEvent.run(this, event)
             }
         }catch (e: Throwable){
-
+            throw e
         }
     }
 }

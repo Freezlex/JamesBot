@@ -1,5 +1,6 @@
-package com.freezlex.jamesbot.internals.api
+package com.freezlex.jamesbot.internals.indexer
 
+import com.freezlex.jamesbot.internals.api.Context
 import com.freezlex.jamesbot.internals.arguments.Argument
 import com.freezlex.jamesbot.internals.commands.Cmd
 import kotlinx.coroutines.GlobalScope

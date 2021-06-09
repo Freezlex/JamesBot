@@ -1,4 +1,4 @@
-package com.freezlex.jamesbot.internals.api
+package com.freezlex.jamesbot.internals.cooldown
 
 import java.util.concurrent.TimeUnit
 
