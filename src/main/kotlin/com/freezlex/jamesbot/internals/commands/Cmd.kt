@@ -3,7 +3,7 @@ package com.freezlex.jamesbot.internals.commands
 import com.freezlex.jamesbot.internals.cooldown.BucketType
 import com.freezlex.jamesbot.internals.api.Context
 import com.freezlex.jamesbot.internals.cooldown.Cooldown
-import java.security.Permission
+import net.dv8tion.jda.api.Permission
 
 interface Cmd {
 
@@ -13,8 +13,8 @@ interface Cmd {
     fun description(): String? = "No description available"
     fun cooldown(): Cooldown? = Cooldown(duration = 5, bucket = BucketType.USER)
     fun developerOnly(): Boolean = false
-    fun userPermissions(): MutableList<Permission>? = null;
-    fun botPermissions(): MutableList<Permission>? = null;
+    fun userPermissions(): List<Permission>;
+    fun botPermissions(): List<Permission>;
     fun guildOnly(): Boolean = false
     fun enabled(): Boolean = true
     fun hidden(): Boolean = false

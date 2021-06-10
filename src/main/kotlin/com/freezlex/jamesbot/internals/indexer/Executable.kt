@@ -14,13 +14,13 @@ import kotlin.reflect.full.instanceParameter
 abstract class Executable (
     val name: String,
     val method: KFunction<*>,
-    val cmd: Cmd,
+    val properties: Cmd,
     val arguments: List<Argument>,
     private val contextParameter: KParameter
 ) {
 
     open fun execute(ctx: Context, args: HashMap<KParameter, Any?>, complete: (Boolean, Throwable?) -> Unit, executor: ExecutorService?) {
-        method.instanceParameter?.let { args[it] = cmd }
+        method.instanceParameter?.let { args[it] = properties }
         args[contextParameter] = ctx
 
         if (method.isSuspend) {

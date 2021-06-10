@@ -10,7 +10,7 @@ object ClientSettings {
     lateinit var dbName: String
     lateinit var dbUser: String
     lateinit var dbPassword: String
-    private var owners: MutableList<Long>? = null
+    var owners: MutableList<Long>? = null
 
     fun processByEnv(): ClientSettings {
         prefix = System.getenv("PREFIX")?: prefix

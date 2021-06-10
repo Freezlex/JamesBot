@@ -10,7 +10,7 @@ import java.util.regex.Pattern
 
 class Context (
     event: MessageReceivedEvent,
-    val trigger: String,
+    val trigger: MatchResult?,
     val invokedCommand: Executable
 ) {
     val jda: JDA = event.jda

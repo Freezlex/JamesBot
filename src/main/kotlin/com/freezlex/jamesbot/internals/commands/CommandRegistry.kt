@@ -10,7 +10,7 @@ class CommandRegistry: HashMap<String, CommandFunction>() {
     }
 
     fun findCommandByAlias(alias: String): CommandFunction?{
-        return this.values.firstOrNull { it.cmd.aliases()?.contains(alias) ?: false }
+        return this.values.firstOrNull { it.properties.aliases()?.contains(alias) ?: false }
     }
 
     fun register(packageName: String){
