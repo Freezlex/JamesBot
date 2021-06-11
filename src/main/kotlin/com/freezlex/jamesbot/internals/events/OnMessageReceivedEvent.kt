@@ -49,7 +49,7 @@ class OnMessageReceivedEvent {
 
                 if(entityId != null){
                     if(CooldownProvider.isOnCooldown(entityId, cmd.cooldown.bucket, cmd)){
-                        val time = CooldownProvider.getCooldownTime(entityId, cmd.cooldown.bucket, cmd)
+                        val time = CooldownProvider.getCooldownTime(entityId, cmd.cooldown.bucket, cmd)/1000
                         return executor.dispatchSafely { it.onCommandCooldown(ctx, cmd, time) }
                     }
                 }

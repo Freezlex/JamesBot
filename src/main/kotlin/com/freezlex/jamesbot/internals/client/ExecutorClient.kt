@@ -1,7 +1,7 @@
 package com.freezlex.jamesbot.internals.client
 
+import com.freezlex.jamesbot.internals.api.exceptions.CommandEvent
 import com.freezlex.jamesbot.internals.api.exceptions.CommandEventAdapter
-import com.freezlex.jamesbot.internals.api.exceptions.TestImplement
 import com.freezlex.jamesbot.internals.arguments.ArgParser
 import com.freezlex.jamesbot.internals.arguments.Snowflake
 import com.freezlex.jamesbot.internals.arguments.parser.*
@@ -9,13 +9,15 @@ import com.freezlex.jamesbot.internals.commands.CommandRegistry
 import com.freezlex.jamesbot.internals.entities.Emoji
 import com.freezlex.jamesbot.internals.events.OnMessageReceivedEvent
 import com.freezlex.jamesbot.internals.events.OnReadyEvent
+import com.freezlex.jamesbot.logger
 import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.EventListener
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.net.URL
-import kotlin.reflect.full.memberFunctions
 
 class ExecutorClient(
     packageName: String
@@ -25,11 +27,10 @@ class ExecutorClient(
     private val eventListener: MutableList<CommandEventAdapter> = mutableListOf()
 
     init {
-        println("registering package")
+
         commands.register(packageName)
-        eventListener.add(TestImplement())
+        eventListener.add(CommandEvent())
         this.registerParsers()
-        println("End registering package found ${commands.size} commands")
     }
 
     override fun onEvent(event: GenericEvent){
@@ -45,9 +46,9 @@ class ExecutorClient(
 
     fun dispatchSafely(invoker: (CommandEventAdapter) -> Unit) {
         try {
-            println("Test 1")
-            // TODO : Try to fix the invoker ... Idk how to call it ;-;
+            println("Test")
             eventListener.forEach(invoker)
+            // TODO : Try to fix the invoker ... Idk how to call it ;-;
         } catch (e: Throwable) {
             try {
                 println("Test 2")

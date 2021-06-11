@@ -13,8 +13,8 @@ interface Cmd {
     fun description(): String? = "No description available"
     fun cooldown(): Cooldown? = Cooldown(duration = 5, bucket = BucketType.USER)
     fun developerOnly(): Boolean = false
-    fun userPermissions(): List<Permission>;
-    fun botPermissions(): List<Permission>;
+    fun userPermissions(): List<Permission> = listOf()
+    fun botPermissions(): List<Permission> = listOf()
     fun guildOnly(): Boolean = false
     fun enabled(): Boolean = true
     fun hidden(): Boolean = false
