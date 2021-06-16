@@ -10,7 +10,8 @@ object ClientSettings {
     lateinit var dbName: String
     lateinit var dbUser: String
     lateinit var dbPassword: String
-    var owners: MutableList<Long>? = null
+    private val owners: MutableList<Long> = mutableListOf()
+    private val earlyUsers: MutableList<Long> = mutableListOf()
 
     fun processByEnv(): ClientSettings {
         prefix = System.getenv("PREFIX")?: prefix
@@ -24,11 +25,20 @@ object ClientSettings {
     }
 
     fun defineOwners(owners: MutableList<Long>): ClientSettings {
-        if(ClientSettings.owners != null){
-            ClientSettings.owners!!.addAll(owners)
-        }else{
-            ClientSettings.owners = owners
-        }
-        return this;
+        this.owners.addAll(owners)
+        return this
+    }
+
+    fun getOwners(): List<Long>{
+        return this.owners
+    }
+
+    fun defineEarlyUsers(users: MutableList<Long>): ClientSettings {
+        this.earlyUsers.addAll(users)
+        return this
+    }
+
+    fun getEarlyUsers(): List<Long>{
+        return this.earlyUsers
     }
 }

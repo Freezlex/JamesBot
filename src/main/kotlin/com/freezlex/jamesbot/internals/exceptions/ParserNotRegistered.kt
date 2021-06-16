@@ -1,3 +1,3 @@
-package com.freezlex.jamesbot.internals.api.exceptions
+package com.freezlex.jamesbot.internals.exceptions
 
 class ParserNotRegistered (msg: String) : Throwable(msg)

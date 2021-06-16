@@ -1,36 +1,14 @@
 package com.freezlex.jamesbot.internals.arguments
 
-import kotlin.reflect.KParameter
+import net.dv8tion.jda.api.interactions.commands.OptionType
 
-class Argument (
-    val name: String,
-    val type: Class<*>,
-    val greedy: Boolean,
-    val optional: Boolean, // Denotes that a parameter has a default value.
-    val isNullable: Boolean,
-    val isTentative: Boolean,
-    internal val kparam: KParameter
-        ){
-    fun format(withType: Boolean): String {
-        return buildString {
-            if (optional || isNullable) {
-                append('[')
-            } else {
-                append('<')
-            }
-
-            append(name)
-
-            if (withType) {
-                append(": ")
-                append(type.simpleName)
-            }
-
-            if (optional || isNullable) {
-                append(']')
-            } else {
-                append('>')
-            }
-        }
-    }
-}
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.VALUE_PARAMETER)
+annotation class Argument(
+    val name: String = "",
+    val options: Array<String> = [],
+    val type: OptionType = OptionType.STRING,
+    val greedy: Boolean = false,
+    val tentative: Boolean = false,
+    val description: String = "No description provided"
+)

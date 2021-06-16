@@ -1,7 +1,6 @@
-package com.freezlex.jamesbot.internals.api.exceptions
+package com.freezlex.jamesbot.internals.exceptions
 
 import com.freezlex.jamesbot.internals.api.Context
-import com.freezlex.jamesbot.internals.commands.Cmd
 import com.freezlex.jamesbot.internals.commands.CommandFunction
 import com.freezlex.jamesbot.logger
 import net.dv8tion.jda.api.Permission
@@ -33,7 +32,9 @@ class CommandEvent: CommandEventAdapter {
 
     override fun onUserMissingPermissions(ctx: Context, command: CommandFunction, permissions: List<Permission>) = ctx.message.reply("Uh ... You are missing some permission for this action. Missing permissions : `${permissions.map { it.getName() }.joinToString { "${it}, `" }}`").queue()
 
+    override fun onUserMissingEarlyAccess(ctx: Context, command: CommandFunction) = ctx.message.reply("It seems you're not in the early access program, you aren't allowed to use the `${command.name}` command ! You can still apply to : https://jamesbot.fr/early-access").queue()
+
     override fun onUnknownCommand(event: MessageReceivedEvent, command: String, args: List<String>) = event.message.reply("Hé gros t'as fumé ? Je connais pas la commande  `${command}`").queue()
 
-    override fun onBadArgument(ctx: Context, cmd: CommandFunction, e: Throwable) = ctx.message.reply("Bad argument in `${cmd}`. $e").queue()
+    override fun onBadArgument(ctx: Context, cmd: CommandFunction, e: Throwable) = ctx.message.reply("You provided an invalid argument for the ${cmd.name} command. ${e.message}").queue()
 }

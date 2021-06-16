@@ -2,8 +2,10 @@ package com.freezlex.jamesbot.internals.indexer
 
 import com.freezlex.jamesbot.internals.api.Context
 import com.freezlex.jamesbot.internals.arguments.Argument
+import com.freezlex.jamesbot.internals.arguments.ArgumentEntity
 import com.freezlex.jamesbot.internals.commands.Cmd
 import com.freezlex.jamesbot.internals.commands.CommandFunction
+import net.dv8tion.jda.api.interactions.commands.OptionType
 import org.reflections.Reflections
 import org.reflections.scanners.MethodParameterNamesScanner
 import org.reflections.scanners.SubTypesScanner
@@ -13,6 +15,7 @@ import java.net.URL
 import java.net.URLClassLoader
 import kotlin.reflect.KFunction
 import kotlin.reflect.KParameter
+import kotlin.reflect.full.findAnnotation
 import kotlin.reflect.full.valueParameters
 import kotlin.reflect.jvm.javaMethod
 import kotlin.reflect.jvm.jvmErasure
@@ -63,34 +66,37 @@ class Indexer {
         require(method.javaMethod!!.declaringClass == cmd::class.java){ "${method.name} is not from ${cmd::class.simpleName}" }
 
         val name = cmd.name()?.lowercase() ?: cmd::class.java.`package`.name.split('.').last().replace('_', ' ').lowercase()
-        val category = cmd.category()?: "No category"
+        val pckName = cmd::class.java.name.split('.')
+        val category = cmd.category()?: pckName[pckName.size - 2]
         val cooldown = cmd.cooldown()
         val ctxParam = method.valueParameters.firstOrNull { it.type.classifier?.equals(Context::class) == true }
         require(ctxParam != null) { "${method.name} is missing the Context parameter!" }
         val arguments = loadParameters(method.valueParameters.filterNot { it.type.classifier?.equals(Context::class) == true })
 
+        println(category)
         return CommandFunction(name, category, this.jar, cooldown, method, cmd, arguments, ctxParam);
     }
 
-    private fun loadParameters(parameters: List<KParameter>): List<Argument> {
-        val arguments = mutableListOf<Argument>()
+    private fun loadParameters(parameters: List<KParameter>): List<ArgumentEntity> {
+        val arguments = mutableListOf<ArgumentEntity>()
 
         for (p in parameters) {
-            /** TODO : Implement a Name as annotation [p.findAnnotation<Name>()?.name ?:] */
-            val pName = p.name ?: p.index.toString()
-            val type = p.type.jvmErasure.javaObjectType
-            /** TODO : Implement a Greddy argument as annotation [p.hasAnnotation<Greedy>()]*/
-            val isGreedy = false
-            val isOptional = p.isOptional
-            val isNullable = p.type.isMarkedNullable
-            /** TODO : Implement a Tentative as annotation [p.hasAnnotation<Tentative>()]*/
-            val isTentative = false
 
+            var pName = p.findAnnotation<Argument>()?.name
+            if(pName == null || pName == "")pName = p.name.toString()
+            val type = p.type.jvmErasure.javaObjectType
+            val isGreedy = p.findAnnotation<Argument>()?.greedy?: false
+            val slashType = p.findAnnotation<Argument>()?.type?: OptionType.UNKNOWN
+            val isOptional = p.isOptional
+            val options = p.findAnnotation<Argument>()?.options?: arrayOf()
+            val isNullable = p.type.isMarkedNullable
+            val description = p.findAnnotation<Argument>()?.description?: "No description provided"
+            val isTentative = p.findAnnotation<Argument>()?.tentative?:false
             if (isTentative && !(isNullable || isOptional)) {
                 throw IllegalStateException("${p.name} is marked as tentative, but does not have a default value and is not marked nullable!")
             }
 
-            arguments.add(Argument(pName, type, isGreedy, isOptional, isNullable, isTentative, p))
+            arguments.add(ArgumentEntity(pName, type, isGreedy, isOptional, isNullable, isTentative, slashType, description, options.toMutableList(), p))
         }
 
         return arguments

@@ -1,7 +1,7 @@
 package com.freezlex.jamesbot.internals.client
 
-import com.freezlex.jamesbot.internals.api.exceptions.CommandEvent
-import com.freezlex.jamesbot.internals.api.exceptions.CommandEventAdapter
+import com.freezlex.jamesbot.internals.exceptions.CommandEvent
+import com.freezlex.jamesbot.internals.exceptions.CommandEventAdapter
 import com.freezlex.jamesbot.internals.arguments.ArgParser
 import com.freezlex.jamesbot.internals.arguments.Snowflake
 import com.freezlex.jamesbot.internals.arguments.parser.*
@@ -9,14 +9,14 @@ import com.freezlex.jamesbot.internals.commands.CommandRegistry
 import com.freezlex.jamesbot.internals.entities.Emoji
 import com.freezlex.jamesbot.internals.events.OnMessageReceivedEvent
 import com.freezlex.jamesbot.internals.events.OnReadyEvent
-import com.freezlex.jamesbot.logger
+import com.freezlex.jamesbot.internals.events.OnSlashCommandEvent
+import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.events.ReadyEvent
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.EventListener
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.net.URL
 
 class ExecutorClient(
@@ -27,10 +27,9 @@ class ExecutorClient(
     private val eventListener: MutableList<CommandEventAdapter> = mutableListOf()
 
     init {
-
         commands.register(packageName)
         eventListener.add(CommandEvent())
-        this.registerParsers()
+        ArgParser.init
     }
 
     override fun onEvent(event: GenericEvent){
@@ -38,6 +37,7 @@ class ExecutorClient(
             when(event){
                 is ReadyEvent -> OnReadyEvent.run(this, event)
                 is MessageReceivedEvent -> OnMessageReceivedEvent.run(this, event)
+                is SlashCommandEvent -> OnSlashCommandEvent.run(this, event)
             }
         }catch (e: Throwable){
             throw e
@@ -58,45 +58,5 @@ class ExecutorClient(
                 println(inner)
             }
         }
-    }
-
-    private fun registerParsers() {
-        // Kotlin types and primitives
-        val booleanParser = BooleanParser()
-        ArgParser.parsers[Boolean::class.java] = booleanParser
-        ArgParser.parsers[java.lang.Boolean::class.java] = booleanParser
-
-        val doubleParser = DoubleParser()
-        ArgParser.parsers[Double::class.java] = doubleParser
-        ArgParser.parsers[java.lang.Double::class.java] = doubleParser
-
-        val floatParser = FloatParser()
-        ArgParser.parsers[Float::class.java] = floatParser
-        ArgParser.parsers[java.lang.Float::class.java] = floatParser
-
-        val intParser = IntParser()
-        ArgParser.parsers[Int::class.java] = intParser
-        ArgParser.parsers[java.lang.Integer::class.java] = intParser
-
-        val longParser = LongParser()
-        ArgParser.parsers[Long::class.java] = longParser
-        ArgParser.parsers[java.lang.Long::class.java] = longParser
-
-        // JDA entities
-        val inviteParser = InviteParser()
-        ArgParser.parsers[Invite::class.java] = inviteParser
-        ArgParser.parsers[net.dv8tion.jda.api.entities.Invite::class.java] = inviteParser
-
-        ArgParser.parsers[Member::class.java] = MemberParser()
-        ArgParser.parsers[Role::class.java] = RoleParser()
-        ArgParser.parsers[TextChannel::class.java] = TextChannelParser()
-        ArgParser.parsers[User::class.java] = UserParser()
-        ArgParser.parsers[VoiceChannel::class.java] = VoiceChannelParser()
-
-        // Custom entities
-        ArgParser.parsers[Emoji::class.java] = EmojiParser()
-        ArgParser.parsers[String::class.java] = StringParser()
-        ArgParser.parsers[Snowflake::class.java] = SnowflakeParser()
-        ArgParser.parsers[URL::class.java] = UrlParser()
     }
 }

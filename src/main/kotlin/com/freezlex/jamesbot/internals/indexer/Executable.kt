@@ -1,7 +1,7 @@
 package com.freezlex.jamesbot.internals.indexer
 
 import com.freezlex.jamesbot.internals.api.Context
-import com.freezlex.jamesbot.internals.arguments.Argument
+import com.freezlex.jamesbot.internals.arguments.ArgumentEntity
 import com.freezlex.jamesbot.internals.commands.Cmd
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ abstract class Executable (
     val name: String,
     val method: KFunction<*>,
     val properties: Cmd,
-    val arguments: List<Argument>,
+    val arguments: List<ArgumentEntity>,
     private val contextParameter: KParameter
 ) {
 

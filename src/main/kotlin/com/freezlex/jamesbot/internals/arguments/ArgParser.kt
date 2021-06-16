@@ -1,9 +1,13 @@
 package com.freezlex.jamesbot.internals.arguments
 
 import com.freezlex.jamesbot.internals.api.Context
-import com.freezlex.jamesbot.internals.api.exceptions.BadArgument
-import com.freezlex.jamesbot.internals.api.exceptions.ParserNotRegistered
+import com.freezlex.jamesbot.internals.arguments.parser.*
+import com.freezlex.jamesbot.internals.entities.Emoji
+import com.freezlex.jamesbot.internals.exceptions.BadArgument
+import com.freezlex.jamesbot.internals.exceptions.ParserNotRegistered
 import com.freezlex.jamesbot.internals.indexer.Executable
+import net.dv8tion.jda.api.entities.*
+import java.net.URL
 import java.util.*
 import kotlin.reflect.KParameter
 
@@ -81,7 +85,7 @@ class ArgParser(
         return Pair(unquoted, original)
     }
 
-    fun parse(arg: Argument): Any? {
+    fun parse(arg: ArgumentEntity): Any? {
         val parser = parsers[arg.type]?: throw ParserNotRegistered("No parsers registered for `${arg.type}`")
         val (argument, original) = getNextArgument(arg.greedy)
         val result = if (argument.isEmpty()) {
@@ -115,6 +119,46 @@ class ArgParser(
 
     companion object {
         val parsers = hashMapOf<Class<*>, Parser<*>>()
+
+        val init = fun () {
+            // Kotlin types and primitives
+            val booleanParser = BooleanParser()
+            this.parsers[Boolean::class.java] = booleanParser
+            this.parsers[java.lang.Boolean::class.java] = booleanParser
+
+            val doubleParser = DoubleParser()
+            this.parsers[Double::class.java] = doubleParser
+            this.parsers[java.lang.Double::class.java] = doubleParser
+
+            val floatParser = FloatParser()
+            this.parsers[Float::class.java] = floatParser
+            this.parsers[java.lang.Float::class.java] = floatParser
+
+            val intParser = IntParser()
+            this.parsers[Int::class.java] = intParser
+            this.parsers[java.lang.Integer::class.java] = intParser
+
+            val longParser = LongParser()
+            this.parsers[Long::class.java] = longParser
+            this.parsers[java.lang.Long::class.java] = longParser
+
+            // JDA entities
+            val inviteParser = InviteParser()
+            this.parsers[Invite::class.java] = inviteParser
+            this.parsers[net.dv8tion.jda.api.entities.Invite::class.java] = inviteParser
+
+            this.parsers[Member::class.java] = MemberParser()
+            this.parsers[Role::class.java] = RoleParser()
+            this.parsers[TextChannel::class.java] = TextChannelParser()
+            this.parsers[User::class.java] = UserParser()
+            this.parsers[VoiceChannel::class.java] = VoiceChannelParser()
+
+            // Custom entities
+            this.parsers[Emoji::class.java] = EmojiParser()
+            this.parsers[String::class.java] = StringParser()
+            this.parsers[Snowflake::class.java] = SnowflakeParser()
+            this.parsers[URL::class.java] = UrlParser()
+        }
 
         fun parseArguments(cmd: Executable, ctx: Context, args: List<String>, delimiter: Char): HashMap<KParameter, Any?> {
             if (cmd.arguments.isEmpty()) {

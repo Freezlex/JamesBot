@@ -1,16 +1,13 @@
 package com.freezlex.jamesbot.internals.events
 
 import com.freezlex.jamesbot.internals.api.Context
-import com.freezlex.jamesbot.internals.api.exceptions.BadArgument
+import com.freezlex.jamesbot.internals.exceptions.BadArgument
 import com.freezlex.jamesbot.internals.arguments.ArgParser
 import com.freezlex.jamesbot.internals.client.ClientSettings
 import com.freezlex.jamesbot.internals.client.ExecutorClient
 import com.freezlex.jamesbot.internals.cooldown.BucketType
 import com.freezlex.jamesbot.internals.cooldown.CooldownProvider
-import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
-import java.util.concurrent.Executor
-import java.util.concurrent.ExecutorService
 import kotlin.reflect.KParameter
 
 class OnMessageReceivedEvent {
@@ -40,6 +37,8 @@ class OnMessageReceivedEvent {
 
             val ctx = Context(event, parsed, cmd)
 
+            if(!cmd.properties.isEnabled() && !ClientSettings.getOwners().contains(event.author.idLong))return
+
             if(cmd.cooldown != null){
                 val entityId = when(cmd.cooldown.bucket){
                     BucketType.USER -> ctx.author.idLong
@@ -55,8 +54,9 @@ class OnMessageReceivedEvent {
                 }
             }
 
-            if(cmd.properties.developerOnly() && !ClientSettings.owners?.contains(event.author.idLong)!!)return
-            if(!event.isFromGuild && cmd.properties.guildOnly())return
+            if(cmd.properties.isDeveloperOnly() && !ClientSettings.getOwners().contains(event.author.idLong))return
+            if((cmd.properties.isPreview() && ClientSettings.getEarlyUsers().contains(event.author.idLong)) || !ClientSettings.getOwners().contains(event.author.idLong))return executor.dispatchSafely { it.onUserMissingEarlyAccess(ctx, cmd) }
+            if(!event.isFromGuild && cmd.properties.isGuildOnly())return
 
             if(event.isFromGuild){
                 if(cmd.properties.userPermissions().isNotEmpty()){

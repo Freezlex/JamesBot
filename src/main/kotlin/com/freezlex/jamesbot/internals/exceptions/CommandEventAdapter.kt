@@ -1,4 +1,4 @@
-package com.freezlex.jamesbot.internals.api.exceptions
+package com.freezlex.jamesbot.internals.exceptions
 
 import com.freezlex.jamesbot.internals.api.Context
 import com.freezlex.jamesbot.internals.commands.CommandFunction
@@ -22,6 +22,8 @@ interface CommandEventAdapter {
     fun onBotMissingPermissions(ctx: Context, command: CommandFunction, permissions: List<Permission>)
 
     fun onUserMissingPermissions(ctx: Context, command: CommandFunction, permissions: List<Permission>)
+
+    fun onUserMissingEarlyAccess(ctx: Context, command: CommandFunction)
 
     fun onUnknownCommand(event: MessageReceivedEvent, command: String, args: List<String>)
 
