@@ -2,7 +2,7 @@ package com.freezlex.jamesbot.database.entities
 
 import org.jetbrains.exposed.sql.Table
 
-/** Guild entity for database transactional */
+/** User entity for database transactional */
 object User: Table("users") {
     val user_id =  integer("id").autoIncrement()
     val user_userId = long("user_id").uniqueIndex()

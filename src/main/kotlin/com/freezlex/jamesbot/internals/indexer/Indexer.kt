@@ -1,5 +1,6 @@
 package com.freezlex.jamesbot.internals.indexer
 
+import com.freezlex.jamesbot.internals.api.CommandContext
 import com.freezlex.jamesbot.internals.api.Context
 import com.freezlex.jamesbot.internals.arguments.Argument
 import com.freezlex.jamesbot.internals.arguments.ArgumentEntity
@@ -10,6 +11,7 @@ import org.reflections.Reflections
 import org.reflections.scanners.MethodParameterNamesScanner
 import org.reflections.scanners.SubTypesScanner
 import java.io.File
+import java.lang.Exception
 import java.lang.reflect.Modifier
 import java.net.URL
 import java.net.URLClassLoader
@@ -66,14 +68,13 @@ class Indexer {
         require(method.javaMethod!!.declaringClass == cmd::class.java){ "${method.name} is not from ${cmd::class.simpleName}" }
 
         val name = cmd.name()?.lowercase() ?: cmd::class.java.`package`.name.split('.').last().replace('_', ' ').lowercase()
-        val pckName = cmd::class.java.name.split('.')
-        val category = cmd.category()?: pckName[pckName.size - 2]
+        val category = cmd.category()
         val cooldown = cmd.cooldown()
         val ctxParam = method.valueParameters.firstOrNull { it.type.classifier?.equals(Context::class) == true }
         require(ctxParam != null) { "${method.name} is missing the Context parameter!" }
         val arguments = loadParameters(method.valueParameters.filterNot { it.type.classifier?.equals(Context::class) == true })
+        if(arguments.isEmpty() && cmd.isSlash()) throw Exception("Cannot register ${cmd.name()} as slash command. Slash commands must contain at least 1 argument.")
 
-        println(category)
         return CommandFunction(name, category, this.jar, cooldown, method, cmd, arguments, ctxParam);
     }
 
@@ -86,7 +87,7 @@ class Indexer {
             if(pName == null || pName == "")pName = p.name.toString()
             val type = p.type.jvmErasure.javaObjectType
             val isGreedy = p.findAnnotation<Argument>()?.greedy?: false
-            val slashType = p.findAnnotation<Argument>()?.type?: OptionType.UNKNOWN
+            val slashType = p.findAnnotation<Argument>()?.type?: OptionType.STRING
             val isOptional = p.isOptional
             val options = p.findAnnotation<Argument>()?.options?: arrayOf()
             val isNullable = p.type.isMarkedNullable

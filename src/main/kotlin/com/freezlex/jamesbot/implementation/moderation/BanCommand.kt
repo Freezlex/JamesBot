@@ -7,18 +7,19 @@ import com.freezlex.jamesbot.internals.commands.CommandCategory
 import com.freezlex.jamesbot.internals.cooldown.BucketType
 import com.freezlex.jamesbot.internals.cooldown.Cooldown
 import net.dv8tion.jda.api.Permission
+import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import java.util.concurrent.TimeUnit
 
-class PrefixCommand: Cmd {
-    override fun name(): String = "Prefix"
+class BanCommand: Cmd {
+    override fun name(): String = "Ban"
     override fun category(): CommandCategory = CommandCategory.MODERATION
-    override fun description(): String = "Change the prefix for the bot on this guild"
+    override fun description(): String = "Ban a user from the guild"
     override fun cooldown() = Cooldown(10, TimeUnit.SECONDS, BucketType.GUILD)
-    override fun userPermissions() = listOf(Permission.ADMINISTRATOR)
+    override fun userPermissions() = listOf(Permission.BAN_MEMBERS)
 
-    fun run(ctx: Context, @Argument(type = OptionType.STRING) prefix: String){
+    fun run(ctx: Context, @Argument(type = OptionType.USER) member: Member
+    ) {
 
     }
-
 }

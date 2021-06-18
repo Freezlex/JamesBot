@@ -13,6 +13,7 @@ import com.freezlex.jamesbot.internals.events.OnSlashCommandEvent
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.events.GenericEvent
+import net.dv8tion.jda.api.events.RawGatewayEvent
 import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
@@ -46,15 +47,12 @@ class ExecutorClient(
 
     fun dispatchSafely(invoker: (CommandEventAdapter) -> Unit) {
         try {
-            println("Test")
             eventListener.forEach(invoker)
             // TODO : Try to fix the invoker ... Idk how to call it ;-;
         } catch (e: Throwable) {
             try {
-                println("Test 2")
                 eventListener.forEach { it.onInternalError(e)}
             } catch (inner: Throwable) {
-                println("Test 3")
                 println(inner)
             }
         }

@@ -1,14 +1,25 @@
 package com.freezlex.jamesbot.internals.arguments.parser
 
+import com.freezlex.jamesbot.internals.api.CommandContext
 import com.freezlex.jamesbot.internals.api.Context
 import com.freezlex.jamesbot.internals.arguments.Parser
 import net.dv8tion.jda.api.entities.User
 import java.util.*
 
+/**
+ * The custom parser for the Boolean type
+ */
 class UserParser : Parser<User> {
 
     // TODO: Check ctx.message.mentionedUsers
-    override fun parse(ctx: Context, param: String): Optional<User> {
+    /**
+     * Parse the argument
+     * @param ctx
+     *          The context of the event
+     * @param param
+     *          The params to parse
+     */
+    override fun parse(ctx: CommandContext, param: String): Optional<User> {
         val snowflake = snowflakeParser.parse(ctx, param)
 
         val user = if (snowflake.isPresent) {

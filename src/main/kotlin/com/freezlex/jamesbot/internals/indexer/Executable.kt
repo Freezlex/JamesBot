@@ -12,7 +12,7 @@ import kotlin.reflect.full.callSuspendBy
 import kotlin.reflect.full.instanceParameter
 
 abstract class Executable (
-    val name: String,
+    var name: String,
     val method: KFunction<*>,
     val properties: Cmd,
     val arguments: List<ArgumentEntity>,

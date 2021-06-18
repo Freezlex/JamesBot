@@ -9,13 +9,13 @@ import kotlin.reflect.KParameter
 
 class CommandFunction (
     name: String,
-    val category: String,
+    val category: CommandCategory,
     val jar: Jar?,
     val cooldown: Cooldown?,
 
     // Executable properties
     method: KFunction<*>,
-    cmd: Cmd,
+    val cmd: Cmd,
     arguments: List<ArgumentEntity>,
     contextParameter: KParameter
 ) : Executable(name, method, cmd, arguments, contextParameter)

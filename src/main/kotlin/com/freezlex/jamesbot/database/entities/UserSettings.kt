@@ -3,6 +3,7 @@ package com.freezlex.jamesbot.database.entities
 import com.freezlex.jamesbot.database.entities.Guild.uniqueIndex
 import org.jetbrains.exposed.sql.Table
 
+/** User Settings entity for database transactional */
 object UserSettings: Table("users_settings") {
     val settings_id = integer("id").autoIncrement()
     val settings_lang = varchar("regional_code", 10)

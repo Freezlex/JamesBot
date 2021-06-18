@@ -20,6 +20,9 @@ class Database (private var clientSettings: ClientSettings){
         initTables()
     }
 
+    /**
+     * Connect the database
+     */
     private fun connect(){
         Database.connect(
             "jdbc:mysql://${clientSettings.dbHost}:${clientSettings.dbPort}/${clientSettings.dbName}",
@@ -28,6 +31,9 @@ class Database (private var clientSettings: ClientSettings){
             clientSettings.dbPassword)
     }
 
+    /**
+     * Initialize all the table provided
+     */
     private fun initTables(){
         for(table in tables){
             transaction {

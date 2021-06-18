@@ -1,5 +1,6 @@
 package com.freezlex.jamesbot.internals.arguments
 
+import com.freezlex.jamesbot.internals.api.CommandContext
 import com.freezlex.jamesbot.internals.api.Context
 import com.freezlex.jamesbot.internals.arguments.parser.*
 import com.freezlex.jamesbot.internals.entities.Emoji
@@ -7,10 +8,20 @@ import com.freezlex.jamesbot.internals.exceptions.BadArgument
 import com.freezlex.jamesbot.internals.exceptions.ParserNotRegistered
 import com.freezlex.jamesbot.internals.indexer.Executable
 import net.dv8tion.jda.api.entities.*
+import net.dv8tion.jda.api.interactions.commands.Command
 import java.net.URL
 import java.util.*
 import kotlin.reflect.KParameter
 
+/**
+ * The parser for the args
+ * @param ctx
+ *          The context of the event
+ * @param delimiter
+ *          The args delimiter char
+ * @param commandArgs
+ *          The args from the command
+ */
 class ArgParser(
     private val ctx: Context,
     private val delimiter: Char,
@@ -85,14 +96,23 @@ class ArgParser(
         return Pair(unquoted, original)
     }
 
+    /**
+     * Provide the parser for the arguments
+     * @param arg
+     *          The argument entity from the argument message
+     */
     fun parse(arg: ArgumentEntity): Any? {
         val parser = parsers[arg.type]?: throw ParserNotRegistered("No parsers registered for `${arg.type}`")
         val (argument, original) = getNextArgument(arg.greedy)
-        val result = if (argument.isEmpty()) {
+        val result: Optional<out Any> = if (argument.isEmpty()) {
             Optional.empty()
         } else {
             try {
-                parser.parse(ctx, argument)
+                if(ctx.slashContext != null){
+                    if(arg.slashType.name == parser::class.java.simpleName) Optional.ofNullable(original)
+                    else parser.parse(ctx.slashContext, argument)
+                }
+                else parser.parse(ctx.commandContext!!, argument)
             } catch (e: Exception) {
                 throw BadArgument(arg, argument, e)
             }
@@ -160,6 +180,17 @@ class ArgParser(
             this.parsers[URL::class.java] = UrlParser()
         }
 
+        /**
+         * Parse the argument from the message argument provided
+         * @param cmd
+         *          The invoked command
+         * @param ctx
+         *          The context of the incoming event
+         * @param args
+         *          The provided args in the command
+         * @param delimiter
+         *          The char delimiter for the command
+         */
         fun parseArguments(cmd: Executable, ctx: Context, args: List<String>, delimiter: Char): HashMap<KParameter, Any?> {
             if (cmd.arguments.isEmpty()) {
                 return hashMapOf()
@@ -184,5 +215,41 @@ class ArgParser(
 
             return resolvedArgs
         }
+    }
+
+    /**
+     * Parse the argument from the message argument provided
+     * @param cmd
+     *          The invoked command
+     * @param ctx
+     *          The context of the incoming event
+     * @param args
+     *          The provided args in the command
+     * @param delimiter
+     *          The char delimiter for the command
+     */
+    fun parseSlashArguments(cmd: Executable, ctx: Context, args: List<String>, delimiter: Char): HashMap<KParameter, Any?> {
+        if (cmd.arguments.isEmpty()) {
+            return hashMapOf()
+        }
+
+        val commandArgs = if (delimiter == ' ') args else args.joinToString(" ").split(delimiter).toMutableList()
+        val parser = ArgParser(ctx, delimiter, commandArgs)
+        val resolvedArgs = hashMapOf<KParameter, Any?>()
+
+        for (arg in cmd.arguments) {
+            val res = parser.parse(arg)
+            val useValue = res != null || (arg.isNullable && !arg.optional) || (arg.isTentative && arg.isNullable)
+
+            if (useValue) {
+                //This will only place the argument into the map if the value is null,
+                // or if the parameter requires a value (i.e. marked nullable).
+                //Commands marked optional already have a parameter so they don't need user-provided values
+                // unless the argument was successfully resolved for that parameter.
+                resolvedArgs[arg.kparam] = res
+            }
+        }
+
+        return resolvedArgs
     }
 }

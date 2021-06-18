@@ -1,5 +1,6 @@
 package com.freezlex.jamesbot.internals.events
 
+import com.freezlex.jamesbot.internals.api.CommandContext
 import com.freezlex.jamesbot.internals.api.Context
 import com.freezlex.jamesbot.internals.exceptions.BadArgument
 import com.freezlex.jamesbot.internals.arguments.ArgParser
@@ -10,104 +11,112 @@ import com.freezlex.jamesbot.internals.cooldown.CooldownProvider
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import kotlin.reflect.KParameter
 
-class OnMessageReceivedEvent {
-    companion object{
-        fun run(executor: ExecutorClient, event: MessageReceivedEvent){
-            if(event.author.isBot || event.isWebhookMessage)return
+object OnMessageReceivedEvent {
 
-            val parsed: MatchResult?;
-            val args: MutableList<String>
-            val command: String
-            if(event.isFromGuild){
-                parsed = executor.clientCache.getPrefixPattern(event.message).find(event.message.contentRaw) ?: return
-                command = parsed.groupValues[2]
-                args = event.message.contentRaw.removePrefix(parsed.groupValues[0]).split(" +".toRegex()).toMutableList()
-                args.removeIf{ it == "" }
-            }else{
-                parsed = null
-                val trigger = event.message.contentRaw.split(" +".toRegex()).toMutableList()
-                trigger.removeIf { it == "" }
-                command = trigger.removeAt(0)
-                args = trigger
-            }
+    private fun nonCommandEvent(executor: ExecutorClient, event: MessageReceivedEvent){
+        if(!event.isFromGuild)return
+        val xpCmd = executor.commands.findCommandByName("experience")
+            ?: return executor.dispatchSafely { it.onInternalError(Exception("Cannot find the experience command")) }
+        if(xpCmd.cmd.isEnabled()){}
+    }
 
-            val cmd = executor.commands[command]
-                ?: executor.commands.findCommandByAlias(command)
-                ?: return executor.dispatchSafely { it.onUnknownCommand(event, command, args) }
+    fun run(executor: ExecutorClient, event: MessageReceivedEvent){
+        if(event.author.isBot || event.isWebhookMessage)return
 
-            val ctx = Context(event, parsed, cmd)
-
-            if(!cmd.properties.isEnabled() && !ClientSettings.getOwners().contains(event.author.idLong))return
-
-            if(cmd.cooldown != null){
-                val entityId = when(cmd.cooldown.bucket){
-                    BucketType.USER -> ctx.author.idLong
-                    BucketType.GUILD -> ctx.guild?.idLong
-                    BucketType.GLOBAL -> 1
-                }
-
-                if(entityId != null){
-                    if(CooldownProvider.isOnCooldown(entityId, cmd.cooldown.bucket, cmd)){
-                        val time = CooldownProvider.getCooldownTime(entityId, cmd.cooldown.bucket, cmd)/1000
-                        return executor.dispatchSafely { it.onCommandCooldown(ctx, cmd, time) }
-                    }
-                }
-            }
-
-            if(cmd.properties.isDeveloperOnly() && !ClientSettings.getOwners().contains(event.author.idLong))return
-            if((cmd.properties.isPreview() && ClientSettings.getEarlyUsers().contains(event.author.idLong)) || !ClientSettings.getOwners().contains(event.author.idLong))return executor.dispatchSafely { it.onUserMissingEarlyAccess(ctx, cmd) }
-            if(!event.isFromGuild && cmd.properties.isGuildOnly())return
-
-            if(event.isFromGuild){
-                if(cmd.properties.userPermissions().isNotEmpty()){
-                    val userCheck = cmd.properties.userPermissions().filterNot { event.member?.hasPermission(event.textChannel, it)?: true }
-                    if(userCheck.isNotEmpty()){
-                        return executor.dispatchSafely { it.onUserMissingPermissions(ctx, cmd, userCheck) }
-                    }
-                }
-                if(cmd.properties.botPermissions().isNotEmpty()){
-                    val botCheck = cmd.properties.botPermissions().filterNot { event.guild.selfMember.hasPermission(event.textChannel, it) }
-                    if(botCheck.isNotEmpty()){
-                        return executor.dispatchSafely { it.onBotMissingPermissions(ctx, cmd, botCheck) }
-                    }
-                }
-            }
-            val arguments: HashMap<KParameter, Any?>
-
-            try{
-                arguments = ArgParser.parseArguments(cmd, ctx, args, ' ')
-            }catch (e: BadArgument){
-                return executor.dispatchSafely { it.onBadArgument(ctx, cmd, e) }
-            }catch (e: Throwable){
-                return executor.dispatchSafely { it.onParseError(ctx, cmd, e) }
-            }
-
-            val cb = { success: Boolean, err: Throwable? ->
-                if (err != null) {
-                    val handled = cmd.properties.onCommandError(ctx, cmd, err)
-
-                    if (!handled) {
-                        executor.dispatchSafely { it.onCommandError(ctx, cmd, err) }
-                    }
-                }
-
-                executor.dispatchSafely { it.onCommandPostInvoke(ctx, cmd, !success) }
-            }
-
-            if (cmd.cooldown != null && cmd.cooldown.duration > 0) {
-                val entityId = when (cmd.cooldown.bucket) {
-                    BucketType.USER -> ctx.author.idLong
-                    BucketType.GUILD -> ctx.guild?.idLong
-                    BucketType.GLOBAL -> -1
-                }
-
-                if (entityId != null) {
-                    val time = cmd.cooldown.timeUnit.toMillis(cmd.cooldown.duration)
-                    CooldownProvider.setCooldown(entityId, cmd.cooldown.bucket, time, cmd)
-                }
-            }
-
-            cmd.execute(ctx, arguments, cb, null)
+        val parsed: MatchResult?
+        val args: MutableList<String>
+        val command: String
+        if(event.isFromGuild){
+            parsed = executor.clientCache.getPrefixPattern(event.message).find(event.message.contentRaw) ?: return
+            command = parsed.groupValues[2]
+            args = event.message.contentRaw.removePrefix(parsed.groupValues[0]).split(" +".toRegex()).toMutableList()
+            args.removeIf{ it == "" }
+        }else{
+            parsed = null
+            val trigger = event.message.contentRaw.split(" +".toRegex()).toMutableList()
+            trigger.removeIf { it == "" }
+            command = trigger.removeAt(0)
+            args = trigger
         }
+
+        // if(parsed == null)return nonCommandEvent(executor, event)
+
+        val cmd = executor.commands[command]
+            ?: executor.commands.findCommandByAlias(command)
+            ?: return executor.dispatchSafely { it.onUnknownCommand(event, command, args) }
+
+        val context = Context(CommandContext(event, parsed), null, cmd)
+
+        if(!cmd.properties.isEnabled() && !ClientSettings.getOwners().contains(event.author.idLong))return
+
+        if(cmd.cooldown != null){
+            val entityId = when(cmd.cooldown.bucket){
+                BucketType.USER -> context.commandContext!!.author.idLong
+                BucketType.GUILD -> context.commandContext!!.guild?.idLong
+                BucketType.GLOBAL -> 1
+            }
+
+            if(entityId != null){
+                if(CooldownProvider.isOnCooldown(entityId, cmd.cooldown.bucket, cmd)){
+                    val time = CooldownProvider.getCooldownTime(entityId, cmd.cooldown.bucket, cmd)/1000
+                    return executor.dispatchSafely { it.onCommandCooldown(context.commandContext!!, cmd, time) }
+                }
+            }
+        }
+
+        if(cmd.properties.isDeveloperOnly() && !ClientSettings.getOwners().contains(event.author.idLong))return
+        if((cmd.properties.isPreview() && ClientSettings.getEarlyUsers().contains(event.author.idLong)) || !ClientSettings.getOwners().contains(event.author.idLong))return executor.dispatchSafely { it.onUserMissingEarlyAccess(context.commandContext!!, cmd) }
+        if(!event.isFromGuild && cmd.properties.isGuildOnly())return
+
+        if(event.isFromGuild){
+            if(cmd.properties.userPermissions().isNotEmpty()){
+                val userCheck = cmd.properties.userPermissions().filterNot { event.member?.hasPermission(event.textChannel, it)?: true }
+                if(userCheck.isNotEmpty()){
+                    return executor.dispatchSafely { it.onUserMissingPermissions(context.commandContext!!, cmd, userCheck) }
+                }
+            }
+            if(cmd.properties.botPermissions().isNotEmpty()){
+                val botCheck = cmd.properties.botPermissions().filterNot { event.guild.selfMember.hasPermission(event.textChannel, it) }
+                if(botCheck.isNotEmpty()){
+                    return executor.dispatchSafely { it.onBotMissingPermissions(context.commandContext!!, cmd, botCheck) }
+                }
+            }
+        }
+        val arguments: HashMap<KParameter, Any?>
+
+        try{
+            arguments = ArgParser.parseArguments(cmd, context, args, ' ')
+        }catch (e: BadArgument){
+            return executor.dispatchSafely { it.onBadArgument(context.commandContext!!, cmd, e) }
+        }catch (e: Throwable){
+            return executor.dispatchSafely { it.onParseError(context.commandContext!!, cmd, e) }
+        }
+
+        val cb = { success: Boolean, err: Throwable? ->
+            if (err != null) {
+                val handled = cmd.properties.onCommandError(context.commandContext!!, cmd, err)
+
+                if (!handled) {
+                    executor.dispatchSafely { it.onCommandError(context.commandContext, cmd, err) }
+                }
+            }
+
+            executor.dispatchSafely { it.onCommandPostInvoke(context.commandContext!!, cmd, !success) }
+        }
+
+        if (cmd.cooldown != null && cmd.cooldown.duration > 0) {
+            val entityId = when (cmd.cooldown.bucket) {
+                BucketType.USER -> context.commandContext!!.author.idLong
+                BucketType.GUILD -> context.commandContext!!.guild?.idLong
+                BucketType.GLOBAL -> -1
+            }
+
+            if (entityId != null) {
+                val time = cmd.cooldown.timeUnit.toMillis(cmd.cooldown.duration)
+                CooldownProvider.setCooldown(entityId, cmd.cooldown.bucket, time, cmd)
+            }
+        }
+
+        cmd.execute(context, arguments, cb, null)
     }
 }
