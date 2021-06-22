@@ -1,6 +1,5 @@
 package com.freezlex.jamesbot.internals.commands
 
-import com.freezlex.jamesbot.internals.api.CommandContext
 import com.freezlex.jamesbot.internals.cooldown.BucketType
 import com.freezlex.jamesbot.internals.api.Context
 import com.freezlex.jamesbot.internals.cooldown.Cooldown
@@ -22,7 +21,7 @@ interface Cmd {
     fun isEnabled(): Boolean = true
     fun isHidden(): Boolean = false
 
-    fun onCommandError(ctx: CommandContext, command: CommandFunction, error: Throwable): Boolean = false
+    fun onCommandError(ctx: Context, command: CommandFunction, error: Throwable): Boolean = false
 
     fun localCheck(ctx: Context, command: CommandFunction): Boolean = true
 

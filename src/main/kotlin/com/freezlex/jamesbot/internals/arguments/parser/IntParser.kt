@@ -1,8 +1,6 @@
 package com.freezlex.jamesbot.internals.arguments.parser
 
-import com.freezlex.jamesbot.internals.api.CommandContext
 import com.freezlex.jamesbot.internals.api.Context
-import com.freezlex.jamesbot.internals.api.SlashContext
 import com.freezlex.jamesbot.internals.arguments.Parser
 import java.util.*
 
@@ -18,18 +16,7 @@ class IntParser : Parser<Int> {
      * @param param
      *          The params to parse
      */
-    override fun parse(ctx: CommandContext, param: String): Optional<Int> {
-        return Optional.ofNullable(param.toIntOrNull())
-    }
-
-    /**
-     * Parse the argument
-     * @param ctx
-     *          The SlashContext context of the event
-     * @param param
-     *          The params to parse
-     */
-    override fun parse(ctx: SlashContext, param: String): Optional<Int> {
+    override fun parse(ctx: Context, param: String): Optional<Int> {
         return Optional.ofNullable(param.toIntOrNull())
     }
 }

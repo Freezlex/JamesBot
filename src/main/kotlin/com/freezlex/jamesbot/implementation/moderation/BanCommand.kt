@@ -17,9 +17,10 @@ class BanCommand: Cmd {
     override fun description(): String = "Ban a user from the guild"
     override fun cooldown() = Cooldown(10, TimeUnit.SECONDS, BucketType.GUILD)
     override fun userPermissions() = listOf(Permission.BAN_MEMBERS)
+    override fun isGuildOnly() = true
 
     fun run(ctx: Context, @Argument(type = OptionType.USER) member: Member
     ) {
-
+        ctx.reply("You are about to ban ${member.user.name}")
     }
 }

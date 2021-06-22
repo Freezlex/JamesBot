@@ -1,6 +1,5 @@
 package com.freezlex.jamesbot.internals.arguments.parser
 
-import com.freezlex.jamesbot.internals.api.CommandContext
 import com.freezlex.jamesbot.internals.api.Context
 import com.freezlex.jamesbot.internals.arguments.Parser
 import java.net.URL
@@ -18,7 +17,7 @@ class UrlParser : Parser<URL> {
      * @param param
      *          The params to parse
      */
-    override fun parse(ctx: CommandContext, param: String): Optional<URL> {
+    override fun parse(ctx: Context, param: String): Optional<URL> {
         return try {
             Optional.of(URL(param))
         } catch (e: Throwable) {

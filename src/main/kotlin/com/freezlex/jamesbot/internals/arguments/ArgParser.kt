@@ -1,6 +1,5 @@
 package com.freezlex.jamesbot.internals.arguments
 
-import com.freezlex.jamesbot.internals.api.CommandContext
 import com.freezlex.jamesbot.internals.api.Context
 import com.freezlex.jamesbot.internals.arguments.parser.*
 import com.freezlex.jamesbot.internals.entities.Emoji
@@ -8,7 +7,7 @@ import com.freezlex.jamesbot.internals.exceptions.BadArgument
 import com.freezlex.jamesbot.internals.exceptions.ParserNotRegistered
 import com.freezlex.jamesbot.internals.indexer.Executable
 import net.dv8tion.jda.api.entities.*
-import net.dv8tion.jda.api.interactions.commands.Command
+import net.dv8tion.jda.api.interactions.commands.OptionMapping
 import java.net.URL
 import java.util.*
 import kotlin.reflect.KParameter
@@ -102,17 +101,14 @@ class ArgParser(
      *          The argument entity from the argument message
      */
     fun parse(arg: ArgumentEntity): Any? {
+
         val parser = parsers[arg.type]?: throw ParserNotRegistered("No parsers registered for `${arg.type}`")
         val (argument, original) = getNextArgument(arg.greedy)
         val result: Optional<out Any> = if (argument.isEmpty()) {
             Optional.empty()
         } else {
             try {
-                if(ctx.slashContext != null){
-                    if(arg.slashType.name == parser::class.java.simpleName) Optional.ofNullable(original)
-                    else parser.parse(ctx.slashContext, argument)
-                }
-                else parser.parse(ctx.commandContext!!, argument)
+                parser.parse(ctx, argument)
             } catch (e: Exception) {
                 throw BadArgument(arg, argument, e)
             }
@@ -140,7 +136,10 @@ class ArgParser(
     companion object {
         val parsers = hashMapOf<Class<*>, Parser<*>>()
 
-        val init = fun () {
+        // TODO : Convert this to automatic loading
+
+        fun init() {
+            println("Register all parsers")
             // Kotlin types and primitives
             val booleanParser = BooleanParser()
             this.parsers[Boolean::class.java] = booleanParser
@@ -215,41 +214,21 @@ class ArgParser(
 
             return resolvedArgs
         }
-    }
 
-    /**
-     * Parse the argument from the message argument provided
-     * @param cmd
-     *          The invoked command
-     * @param ctx
-     *          The context of the incoming event
-     * @param args
-     *          The provided args in the command
-     * @param delimiter
-     *          The char delimiter for the command
-     */
-    fun parseSlashArguments(cmd: Executable, ctx: Context, args: List<String>, delimiter: Char): HashMap<KParameter, Any?> {
-        if (cmd.arguments.isEmpty()) {
-            return hashMapOf()
+        /**
+         * Parse the argument from the message argument provided
+         * @param cmd
+         *          The invoked command
+         * @param ctx
+         *          The context of the incoming event
+         * @param args
+         *          The provided args in the command
+         * @param delimiter
+         *          The char delimiter for the command
+         */
+        fun parseSlashArguments(cmd: Executable, ctx: Context, args: List<OptionMapping>?): HashMap<KParameter, Any?> {
+            if(args == null)return hashMapOf();
+            return parseArguments(cmd, ctx, args.map { it.asString }, ' ')
         }
-
-        val commandArgs = if (delimiter == ' ') args else args.joinToString(" ").split(delimiter).toMutableList()
-        val parser = ArgParser(ctx, delimiter, commandArgs)
-        val resolvedArgs = hashMapOf<KParameter, Any?>()
-
-        for (arg in cmd.arguments) {
-            val res = parser.parse(arg)
-            val useValue = res != null || (arg.isNullable && !arg.optional) || (arg.isTentative && arg.isNullable)
-
-            if (useValue) {
-                //This will only place the argument into the map if the value is null,
-                // or if the parameter requires a value (i.e. marked nullable).
-                //Commands marked optional already have a parameter so they don't need user-provided values
-                // unless the argument was successfully resolved for that parameter.
-                resolvedArgs[arg.kparam] = res
-            }
-        }
-
-        return resolvedArgs
     }
 }

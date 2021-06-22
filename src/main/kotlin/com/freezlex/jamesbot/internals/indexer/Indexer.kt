@@ -1,6 +1,5 @@
 package com.freezlex.jamesbot.internals.indexer
 
-import com.freezlex.jamesbot.internals.api.CommandContext
 import com.freezlex.jamesbot.internals.api.Context
 import com.freezlex.jamesbot.internals.arguments.Argument
 import com.freezlex.jamesbot.internals.arguments.ArgumentEntity
@@ -11,7 +10,6 @@ import org.reflections.Reflections
 import org.reflections.scanners.MethodParameterNamesScanner
 import org.reflections.scanners.SubTypesScanner
 import java.io.File
-import java.lang.Exception
 import java.lang.reflect.Modifier
 import java.net.URL
 import java.net.URLClassLoader
@@ -73,7 +71,7 @@ class Indexer {
         val ctxParam = method.valueParameters.firstOrNull { it.type.classifier?.equals(Context::class) == true }
         require(ctxParam != null) { "${method.name} is missing the Context parameter!" }
         val arguments = loadParameters(method.valueParameters.filterNot { it.type.classifier?.equals(Context::class) == true })
-        if(arguments.isEmpty() && cmd.isSlash()) throw Exception("Cannot register ${cmd.name()} as slash command. Slash commands must contain at least 1 argument.")
+        // if(arguments.isEmpty() && cmd.isSlash()) throw Exception("Cannot register ${cmd.name()} as slash command. Slash commands must contain at least 1 argument.")
 
         return CommandFunction(name, category, this.jar, cooldown, method, cmd, arguments, ctxParam);
     }

@@ -1,6 +1,5 @@
 package com.freezlex.jamesbot.internals.arguments.parser
 
-import com.freezlex.jamesbot.internals.api.CommandContext
 import com.freezlex.jamesbot.internals.api.Context
 import com.freezlex.jamesbot.internals.arguments.Parser
 import net.dv8tion.jda.api.entities.VoiceChannel
@@ -18,12 +17,14 @@ class VoiceChannelParser : Parser<VoiceChannel> {
      * @param param
      *          The params to parse
      */
-    override fun parse(ctx: CommandContext, param: String): Optional<VoiceChannel> {
+    override fun parse(ctx: Context, param: String): Optional<VoiceChannel> {
         val snowflake = snowflakeParser.parse(ctx, param)
         val channel: VoiceChannel? = if (snowflake.isPresent) {
-            ctx.guild?.getVoiceChannelById(snowflake.get().resolved)
+            if(ctx.isSlash()) ctx.slashContext!!.guild?.getVoiceChannelById(snowflake.get().resolved)
+            else ctx.messageContext!!.guild?.getVoiceChannelById(snowflake.get().resolved)
         } else {
-            ctx.guild?.voiceChannels?.firstOrNull { it.name == param }
+            if(ctx.isSlash()) ctx.slashContext!!.guild?.voiceChannels?.firstOrNull { it.name == param }
+            else ctx.messageContext!!.guild?.voiceChannels?.firstOrNull { it.name == param }
         }
 
         return Optional.ofNullable(channel)

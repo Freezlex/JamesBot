@@ -106,20 +106,27 @@ class CommandRegistry: HashMap<String, CommandFunction>() {
 
     // Create a group of command slash commands
     private fun createGroupedSlashCommands(category: CommandCategory,commands: MutableList<CommandFunction>): CommandData{
-        return CommandData(category.category, category.description)
-            .addSubcommands(commands.map { cmd -> SubcommandData(cmd.cmd.name()!!.lowercase(), cmd.cmd.description())
-                    .addOptions(cmd.arguments.filter{ arg -> arg.options.size > 0}.map {arg -> OptionData(arg.slashType, arg.name.lowercase(), arg.description, !arg.isNullable)
-                        .addChoices(arg.options.map { opt -> Command.Choice(opt.lowercase(), opt) })})
-                    .addOptions(cmd.arguments.filter { arg -> arg.options.size == 0} .map { arg -> OptionData(arg.slashType, arg.name.lowercase(), arg.description, !arg.isNullable) })})
+        val tempCmd = CommandData(category.category, category.description)
+        commands.map { cmd ->
+            val tempSub = SubcommandData(cmd.cmd.name()!!.lowercase(), cmd.cmd.description())
+            if(cmd.arguments.size > 0) tempSub.addOptions(cmd.arguments.filter{ arg -> arg.options.size > 0}.map {arg -> OptionData(arg.slashType, arg.name.lowercase(), arg.description, !arg.isNullable)
+                .addChoices(arg.options.map { opt -> Command.Choice(opt.lowercase(), opt) })})
+                .addOptions(cmd.arguments.filter { arg -> arg.options.size == 0} .map { arg -> OptionData(arg.slashType, arg.name.lowercase(), arg.description, !arg.isNullable) })
+            tempCmd.addSubcommands(tempSub)
+        }
+        return tempCmd
     }
 
     // Create individual slash commands
     private fun createNonGroupedSlashCommands(commands: MutableList<CommandFunction>): MutableList<CommandData>{
-        val temp = mutableListOf<CommandData>()
-        commands.forEach { temp.add(CommandData(it.cmd.name()!!.lowercase(), it.properties.description())
-            .addOptions(it.arguments.filter{ arg -> arg.options.size > 0}.map {arg -> OptionData(arg.slashType, arg.name.lowercase(), arg.description, !arg.isNullable)
+        val tempCmds = mutableListOf<CommandData>()
+        commands.forEach {
+            val tempCmd = CommandData(it.cmd.name()!!.lowercase(), it.properties.description())
+            if(it.arguments.isNotEmpty()) tempCmd.addOptions(it.arguments.filter{ arg -> arg.options.size > 0}.map { arg -> OptionData(arg.slashType, arg.name.lowercase(), arg.description, !arg.isNullable)
                 .addChoices(arg.options.map { opt -> Command.Choice(opt.lowercase(), opt) })})
-            .addOptions(it.arguments.filter { arg -> arg.options.size == 0} .map { arg -> OptionData(arg.slashType, arg.name.lowercase(), arg.description, !arg.isNullable) })) }
-        return temp;
+                .addOptions(it.arguments.filter { arg -> arg.options.size == 0} .map { arg -> OptionData(arg.slashType, arg.name.lowercase(), arg.description, !arg.isNullable) })
+            tempCmds.add(tempCmd)
+        }
+        return tempCmds;
     }
 }

@@ -1,6 +1,5 @@
 package com.freezlex.jamesbot.internals.arguments.parser
 
-import com.freezlex.jamesbot.internals.api.CommandContext
 import com.freezlex.jamesbot.internals.api.Context
 import com.freezlex.jamesbot.internals.arguments.Parser
 import com.freezlex.jamesbot.internals.arguments.Snowflake
@@ -19,7 +18,7 @@ class SnowflakeParser : Parser<Snowflake> {
      * @param param
      *          The params to parse
      */
-    override fun parse(ctx: CommandContext, param: String): Optional<Snowflake> {
+    override fun parse(ctx: Context, param: String): Optional<Snowflake> {
         val match = snowflakeMatch.matcher(param)
 
         if (match.matches()) {

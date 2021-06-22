@@ -24,13 +24,13 @@ class ExecutorClient(
     packageName: String
 ): EventListener {
     val commands : CommandRegistry = CommandRegistry()
-    val clientCache : ClientCache = ClientCache()
     private val eventListener: MutableList<CommandEventAdapter> = mutableListOf()
 
     init {
         commands.register(packageName)
         eventListener.add(CommandEvent())
-        ArgParser.init
+        ArgParser.init()
+        println(ArgParser.parsers.size)
     }
 
     override fun onEvent(event: GenericEvent){

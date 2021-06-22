@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import java.util.regex.Pattern
 
-class CommandContext(
+class MessageContext(
     val event: MessageReceivedEvent,
     val trigger: MatchResult?
 ){

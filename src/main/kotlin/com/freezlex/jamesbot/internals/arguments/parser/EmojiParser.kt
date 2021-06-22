@@ -1,8 +1,6 @@
 package com.freezlex.jamesbot.internals.arguments.parser
 
-import com.freezlex.jamesbot.internals.api.CommandContext
 import com.freezlex.jamesbot.internals.api.Context
-import com.freezlex.jamesbot.internals.api.SlashContext
 import com.freezlex.jamesbot.internals.arguments.Parser
 import com.freezlex.jamesbot.internals.entities.Emoji
 import java.util.*
@@ -21,18 +19,7 @@ class EmojiParser : Parser<Emoji> {
      * @param param
      *          The params to parse
      */
-    override fun parse(ctx: CommandContext, param: String): Optional<Emoji> {
-        return parseEmoji(param)
-    }
-
-    /**
-     * Parse the argument
-     * @param ctx
-     *          The SlashContext context of the event
-     * @param param
-     *          The params to parse
-     */
-    override fun parse(ctx: SlashContext, param: String): Optional<Emoji> {
+    override fun parse(ctx: Context, param: String): Optional<Emoji> {
         return parseEmoji(param)
     }
 

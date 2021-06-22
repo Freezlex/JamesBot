@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import java.lang.RuntimeException
 
-class ClientCache {
+object ClientCache {
     private val guildCache: MutableList<GuildSettings> = mutableListOf()
     private val userCache: MutableList<UserSettings> = mutableListOf()
 

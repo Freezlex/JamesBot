@@ -27,17 +27,17 @@ class CommandEvent: CommandEventAdapter {
         error.printStackTrace()
     }
 
-    override fun onCommandCooldown(ctx: Context, command: CommandFunction, cooldown: Long) = ctx.message.reply("The command `${command.name}` is under cooldown. Please wait `$cooldown seconds` before trying again.").queue()
+    override fun onCommandCooldown(ctx: Context, command: CommandFunction, cooldown: Long) = ctx.reply("The command `${command.name}` is under cooldown. Please wait `$cooldown seconds` before trying again.")
 
-    override fun onBotMissingPermissions(ctx: Context, command: CommandFunction, permissions: List<Permission>) = ctx.message?.message?.reply("Uh ... I'm missing some permission for this action. Missing permissions : `${permissions.map { it.getName() }.joinToString { "${it}, `" }}`").queue()
+    override fun onBotMissingPermissions(ctx: Context, command: CommandFunction, permissions: List<Permission>) = ctx.reply("Uh ... I'm missing some permission for this action. Missing permissions : `${permissions.map { it.getName() }.joinToString { "${it}, `" }}`")
 
-    override fun onUserMissingPermissions(ctx: Context, command: CommandFunction, permissions: List<Permission>) = ctx.message.reply("Uh ... You are missing some permission for this action. Missing permissions : `${permissions.map { it.getName() }.joinToString { "${it}, `" }}`").queue()
+    override fun onUserMissingPermissions(ctx: Context, command: CommandFunction, permissions: List<Permission>) = ctx.reply("Uh ... You are missing some permission for this action. Missing permissions : `${permissions.map { it.getName() }.joinToString { "${it}, `" }}`")
 
-    override fun onUserMissingEarlyAccess(ctx: Context, command: CommandFunction) = ctx.message.reply("It seems you're not in the early access program, you aren't allowed to use the `${command.name}` command ! You can still apply to : https://jamesbot.fr/early-access").queue()
+    override fun onUserMissingEarlyAccess(ctx: Context, command: CommandFunction) = ctx.reply("It seems you're not in the early access program, you aren't allowed to use the `${command.name}` command ! You can still apply to : https://jamesbot.fr/early-access")
 
-    override fun onUnknownCommand(event: MessageReceivedEvent, command: String, args: List<String>) = event.message.reply("Hé gros t'as fumé ? Je connais pas la commande  `${command}`").queue()
+    override fun onBadArgument(ctx: Context, cmd: CommandFunction, e: Throwable) = ctx.reply("You provided an invalid argument for the ${cmd.name} command. ${e.message}")
 
-    override fun onBadArgument(ctx: Context, cmd: CommandFunction, e: Throwable) = ctx.message.reply("You provided an invalid argument for the ${cmd.name} command. ${e.message}").queue()
+    override fun onUnknownMessageCommand(event: MessageReceivedEvent, command: String, bestMatches: List<String>) = event.message.reply("Unknown command `${command}`. Did you mean `${bestMatches.joinToString("`, `")}` ?").queue()
 
-    override fun onUnknownSlashCommand(event: SlashCommandEvent, command: String) = event.reply("Hé gros t'as fumé ? Je connais pas la commande  `${command}`").queue()
+    override fun onUnknownSlashCommand(event: SlashCommandEvent, command: String, bestMatches: List<String>) = event.reply("Unknown command `${command}`").queue()
 }

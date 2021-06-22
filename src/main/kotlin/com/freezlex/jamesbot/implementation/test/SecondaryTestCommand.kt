@@ -16,6 +16,6 @@ class SecondaryTestCommand: Cmd {
     override fun category(): CommandCategory  = CommandCategory.UNCATEGORIZED
 
     fun run(ctx: Context, @Argument(type = OptionType.STRING) string: String){
-        ctx.message.reply("You sent the argument $string of type : `${string::class.simpleName}`.").queue()
+        ctx.reply("You sent the argument $string of type : `${string::class.simpleName}`.")
     }
 }
