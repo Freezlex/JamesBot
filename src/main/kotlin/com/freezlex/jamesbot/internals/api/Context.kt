@@ -1,5 +1,10 @@
 package com.freezlex.jamesbot.internals.api
 
+import com.freezlex.jamesbot.internals.client.ClientCache
+import com.freezlex.jamesbot.internals.client.ClientSettings
+import com.freezlex.jamesbot.internals.i18n.LanguageList
+import com.freezlex.jamesbot.internals.i18n.LanguageModel
+import com.freezlex.jamesbot.internals.i18n.Languages
 import com.freezlex.jamesbot.internals.indexer.Executable
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.*
@@ -20,18 +25,17 @@ class Context(val messageContext: MessageContext?,
     constructor(ctx: MessageContext, invoked: Executable): this(ctx, null, invoked)
     constructor(ctx: SlashContext, invoked: Executable): this(null, ctx, invoked)
 
+    val language: LanguageModel
+
     init {
         if(messageContext == null && slashContext == null)throw RuntimeException("The context must contain at least one SubContext")
+        val regCde: LanguageList = ClientCache.getLanguage(messageContext?.event?.author?: slashContext!!.event.user, messageContext?.guild?: slashContext?.guild)
+        language = Languages[regCde]?: Languages[ClientSettings.language]!!
     }
 
     fun reply(content: String) {
         if(messageContext != null)messageContext.event.message.reply(content).queue()
         else slashContext?.event?.reply(content)?.queue()
-    }
-
-    fun reply(content: MessageEmbed){
-        if(messageContext != null)messageContext.event.message.reply(content).queue()
-        else slashContext?.event?.channel?.sendMessage(content)?.queue()
     }
 
     fun getJda(): JDA {

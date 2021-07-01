@@ -14,7 +14,7 @@ class CommandEvent: CommandEventAdapter {
     }
 
     override fun onCommandPostInvoke(ctx: Context, command: CommandFunction, failed: Boolean) {
-        logger.error("Failed to execute command")
+        if(failed) logger.error("Failed to execute command")
     }
 
     override fun onCommandPreInvoke(ctx: Context, command: CommandFunction) = true
@@ -31,11 +31,11 @@ class CommandEvent: CommandEventAdapter {
 
     override fun onBotMissingPermissions(ctx: Context, command: CommandFunction, permissions: List<Permission>) = ctx.reply("Uh ... I'm missing some permission for this action. Missing permissions : `${permissions.map { it.getName() }.joinToString { "${it}, `" }}`")
 
-    override fun onUserMissingPermissions(ctx: Context, command: CommandFunction, permissions: List<Permission>) = ctx.reply("Uh ... You are missing some permission for this action. Missing permissions : `${permissions.map { it.getName() }.joinToString { "${it}, `" }}`")
+    override fun onUserMissingPermissions(ctx: Context, command: CommandFunction, permissions: List<Permission>) = ctx.reply("Uh ... You are missing some permission for this action. ${if(permissions.isNotEmpty())  "Missing permissions : `${permissions.map { it.getName() }.joinToString { ", `" }}`" else ""}")
 
     override fun onUserMissingEarlyAccess(ctx: Context, command: CommandFunction) = ctx.reply("It seems you're not in the early access program, you aren't allowed to use the `${command.name}` command ! You can still apply to : https://jamesbot.fr/early-access")
 
-    override fun onBadArgument(ctx: Context, cmd: CommandFunction, e: Throwable) = ctx.reply("You provided an invalid argument for the ${cmd.name} command. ${e.message}")
+    override fun onBadArgument(ctx: Context, cmd: CommandFunction, e: Throwable) = ctx.reply(ctx.language.exception.onBadArgument.format(cmd.name, e.message))
 
     override fun onUnknownMessageCommand(event: MessageReceivedEvent, command: String, bestMatches: List<String>) = event.message.reply("Unknown command `${command}`. Did you mean `${bestMatches.joinToString("`, `")}` ?").queue()
 

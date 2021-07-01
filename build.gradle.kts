@@ -5,7 +5,6 @@ val exposedVersion: String by project
 val reflectionsVersion: String by project
 val jdaVersion: String by project
 val mysqlVersion: String by project
-val kJsonSerializationVersion: String by project
 
 plugins {
     application
@@ -35,10 +34,8 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kJsonSerializationVersion")
     implementation("org.reflections:reflections:$reflectionsVersion")
     implementation("mysql:mysql-connector-java:$mysqlVersion")
+    implementation("com.google.code.gson:gson:2.8.6")
     implementation("net.dv8tion:JDA:$jdaVersion")
-
-
 }

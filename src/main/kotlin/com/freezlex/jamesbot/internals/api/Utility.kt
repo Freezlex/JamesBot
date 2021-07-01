@@ -1,5 +1,7 @@
 package com.freezlex.jamesbot.internals.api
 
+import java.text.Normalizer
+
 /**
  * Utility tools
  */
@@ -52,5 +54,53 @@ object Utility {
         }
 
         return temp.filter { it.value == temp.values.maxOrNull() }.map { it.key }
+    }
+
+    fun convertText(s: String): String {
+        var finalString = ""
+        val accents = "éàèùâêîôû0123456789 "
+        var t = s
+        t = Normalizer.normalize(t, Normalizer.Form.NFC)
+        t = Normalizer.normalize(t, Normalizer.Form.NFD)
+        t = Normalizer.normalize(t, Normalizer.Form.NFKC)
+        t = Normalizer.normalize(t, Normalizer.Form.NFKD)
+        t.forEach {
+            finalString += if (accents.contains(it)) it else convertChar(it)
+        }
+        return finalString.replace("\u200B", "")
+    }
+    fun convertChar(c: Char): Char {
+        val list: List<String> = listOf(
+            "\uDD1E\uDD1F\uDD20\uDD21\uDD22\uDD23\uDD24\uDD25\uDD26\uDD27\uDD28\uDD29\uDD2A\uDD2B\uDD2C\uDD2D\uDD2E\uDD2F\uDD30\uDD31\uDD32\uDD33\uDD34\uDD35\uDD36\uDD37",
+            "\uDD86\uDD87\uDD88\uDD89\uDD8A\uDD8B\uDD8C\uDD8D\uDD8E\uDD8F\uDD90\uDD91\uDD92\uDD93\uDD94\uDD95\uDD96\uDD97\uDD98\uDD99\uDD9A\uDD9B\uDD9C\uDD9D\uDD9E\uDD9F",
+            "\uDCEA\uDCEB\uDCEC\uDCED\uDCEE\uDCEF\uDCF0\uDCF1\uDCF2\uDCF3\uDCF4\uDCF5\uDCF6\uDCF7\uDCF8\uDCF9\uDCFA\uDCFB\uDCFC\uDCFD\uDCFE\uDCFF\uDD00\uDD01\uDD02\uDD03",
+            "\uDCB6\uDCB7\uDCB8\uDCB9\uDC52\uDCBB\uDC54\uDCBD\uDCBE\uDCBF\uDCC0\uDCC1\uDCC2\uDCC3\uDC5C\uDCC5\uDCC6\uDCC7\uDCC8\uDCC9\uDCCA\uDCCB\uDCCC\uDCCD\uDCCE\uDCCF",
+            "\uDD52\uDD53\uDD54\uDD55\uDD56\uDD57\uDD58\uDD59\uDD5A\uDD5B\uDD5C\uDD5D\uDD5E\uDD5F\uDD60\uDD61\uDD62\uDD63\uDD64\uDD65\uDD66\uDD67\uDD68\uDD69\uDD6A\uDD6B",
+            "\uDD30\uDD31\uDD32\uDD33\uDD34\uDD35\uDD36\uDD37\uDD38\uDD39\uDD3A\uDD3B\uDD3C\uDD3D\uDD3E\uDD3F\uDD40\uDD41\uDD42\uDD43\uDD44\uDD45\uDD46\uDD47\uDD48\uDD49",
+            "\uDD70\uDD71\uDD72\uDD73\uDD74\uDD75\uDD76\uDD77\uDD78\uDD79\uDD7A\uDD7B\uDD7C\uDD7D\uDD7E\uDD7F\uDD80\uDD81\uDD82\uDD83\uDD84\uDD85\uDD86\uDD87\uDD88\uDD89",
+            "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ",
+            "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘQʀꜱᴛᴜᴠᴡxʏᴢ",
+            "zʎxʍʌnʇsɹbdouɯlʞɾıɥɓɟǝpɔqɐ",
+            "ɐqɔpǝɟɓɥıɾʞlɯuodbɹsʇnʌʍxʎz",
+            "ₐbcdₑfgₕᵢⱼₖₗₘₙₒₚqᵣₛₜᵤᵥwₓyz",
+            "ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖqʳˢᵗᵘᵛʷˣʸᶻ",
+            "ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ",
+            "ค๒ς๔єŦﻮђเןкɭ๓ภ๏קợгรՇยשฬאץչ",
+            "αႦƈԃҽϝɠԋιʝƙʅɱɳσρϙɾʂƚυʋɯxყȥ",
+            "ǟɮƈɖɛʄɢɦɨʝӄʟʍռօքզʀֆȶʊʋաӼʏʐ",
+            "ᏗᏰፈᎴᏋᎦᎶᏂᎥᏠᏦᏝᎷᏁᎧᎮᎤᏒᏕᏖᏬᏉᏇጀᎩፚ",
+            "ąცƈɖɛʄɠɧıʝƙƖɱŋơ℘զཞʂɬų۷ῳҳყʑ",
+            "ค๖¢໓ēfງhiวkl๓ຖ໐p๑rŞtนงຟxฯຊ",
+            "a҉b҉c҉d҉e҉f҉g҉h҉i҉j҉k҉l҉m҉n҉o҉p҉q҉r҉s҉t҉u҉v҉w҉x҉y҉z҉",
+            "丹书匚刀巳下呂廾工丿片乚爪冂口尸Q尺丂丁凵V山乂Y乙",
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        )
+        val alphabet = "abcdefghijklmnopqrstuvwxyz"
+        val majAlphabet = alphabet.uppercase()
+        var returned = '\u200B'
+        list.forEach {
+            if (it.contains(c))returned = if (c.isUpperCase()) majAlphabet[it.indexOf(c)%26] else alphabet[it.indexOf(c)%26]
+        }
+        return returned
     }
 }

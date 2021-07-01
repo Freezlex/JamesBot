@@ -1,5 +1,7 @@
 package com.freezlex.jamesbot.internals.client
 
+import com.freezlex.jamesbot.internals.i18n.LanguageList
+
 object ClientSettings {
     /** Bot config */
     var prefix: String = ".."
@@ -7,6 +9,7 @@ object ClientSettings {
     /** Database config */
     var dbHost: String = "localhost"
     var dbPort: String = "3306"
+    val language: LanguageList = LanguageList.en_EN
     lateinit var dbName: String
     lateinit var dbUser: String
     lateinit var dbPassword: String

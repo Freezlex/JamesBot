@@ -46,16 +46,16 @@ class CommandRegistry: HashMap<String, CommandFunction>() {
         // Command iterator to find any duplicated command
         for(cmd in idx.getCmds()){
             val command = idx.loadCommand(idx.getCommand(cmd), cmd);
-            if(duplicate.containsKey(command.name.lowercase())){
-                duplicate[command.name.lowercase()]!!.add(command)
-            } else if(this.containsKey(command.name.lowercase())){
-                val temp = duplicate.getOrDefault(command.name.lowercase(), mutableListOf())
-                temp.add(command)
-                temp.add(this[command.name.lowercase()]!!)
-                this.remove(command.name.lowercase())
-                duplicate[command.name.lowercase()] = temp
-            }else{
-                this[command.name.lowercase()] = command
+            when{
+                duplicate.containsKey(command.name.lowercase())->duplicate[command.name.lowercase()]!!.add(command)
+                this.containsKey(command.name.lowercase()) -> {
+                    val temp = duplicate.getOrDefault(command.name.lowercase(), mutableListOf())
+                    temp.add(command)
+                    temp.add(this[command.name.lowercase()]!!)
+                    this.remove(command.name.lowercase())
+                    duplicate[command.name.lowercase()] = temp
+                }
+                else -> this[command.name.lowercase()] = command
             }
         }
 

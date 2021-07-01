@@ -11,6 +11,6 @@ class TestModerationCommand: Cmd {
     override fun category() = CommandCategory.MODERATION
 
     fun run(ctx: Context, @Argument(type = OptionType.STRING) prefix: String){
-        print("test")
+        println("test")
     }
 }

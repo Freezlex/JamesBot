@@ -41,7 +41,7 @@ class ExecutorClient(
                 is SlashCommandEvent -> OnSlashCommandEvent.run(this, event)
             }
         }catch (e: Throwable){
-            throw e
+            throw Throwable(e)
         }
     }
 

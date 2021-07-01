@@ -1,0 +1,24 @@
+{
+  "code": "en_EN",
+  "common": {
+    "private": "TEST"
+  },
+  "category":{
+    "moderation": {
+      "ban": {
+        "description": "TEST",
+        "cannotBan": "TEST",
+        "hasBeenBanned": "TEST",
+        "arguments": [
+          {
+            "name": "Membre",
+            "prompt": "The member that you want to ban"
+          }
+        ]
+      }
+    }
+  },
+  "exception": {
+    "onBadArgument": "You provided an invalid argument for the %1$s command. %2$s"
+  }
+}
