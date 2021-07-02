@@ -86,6 +86,7 @@ object ClientCache {
         var cache = this.userCache[entity.idLong]
         if(cache == null){
             cache = UsersSettings.findOrNull(entity)
+            if(cache != null) this.userCache[entity.idLong] = cache
         }
         return cache
     }
@@ -112,10 +113,12 @@ object ClientCache {
      * @param jda The incoming JDA client
      * @return The build Regex pattern
      */
-    private fun genPattern(jda: JDA, prefix: String): Regex{
+    private fun genPattern(jda: JDA, prefix: String): Regex {
         val escapedPrefix: String = Utility.escapeRegex(prefix);
-        val pattern = Regex("^(<@!?${jda.selfUser.id}>\\s+(?:${escapedPrefix}\\s*)?|${escapedPrefix})([A-z][^\\s]+)", RegexOption.IGNORE_CASE)
-        return pattern
+        return Regex(
+            "^(<@!?${jda.selfUser.id}>\\s+(?:${escapedPrefix}\\s*)?|${escapedPrefix})([A-z][^\\s]+)",
+            RegexOption.IGNORE_CASE
+        )
     }
 
     fun refreshCache(){
