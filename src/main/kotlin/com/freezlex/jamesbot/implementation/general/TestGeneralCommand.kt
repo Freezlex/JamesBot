@@ -16,7 +16,6 @@ class TestGeneralCommand: Cmd {
     override fun category() = CommandCategory.UTILITY
     override fun cooldown() = Cooldown(10, TimeUnit.SECONDS, BucketType.GUILD)
     override fun description() = "Une commande pour avoir le ping du bot"
-    override fun isPreview(): Boolean = true
 
     fun run(ctx: Context){
         if(ctx.isSlash())this.slash(ctx.slashContext!!)

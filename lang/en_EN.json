@@ -19,6 +19,7 @@
     }
   },
   "exception": {
-    "onBadArgument": "You provided an invalid argument for the %1$s command. %2$s"
+    "onBadArgument": "You provided an invalid argument for the %1$s command. %2$s",
+    "onUserMissingEarlyAccess": "It seems you're not in the early access program, you aren't allowed to use the %$s command ! You can still apply to : https://jamesbot.fr/early-access"
   }
 }

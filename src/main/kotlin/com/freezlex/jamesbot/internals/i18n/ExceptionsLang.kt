@@ -6,4 +6,5 @@ data class ExceptionsLang (
     val onUserMissingPermission: String,
     val onBadArgument: String,
     val onUnknownMessageCommand: String,
-    val onUnknownSlashCommand: String)
+    val onUnknownSlashCommand: String,
+    val onUserMissingEarlyAccess: String)

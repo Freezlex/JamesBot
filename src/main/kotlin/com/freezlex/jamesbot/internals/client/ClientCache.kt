@@ -1,13 +1,16 @@
 package com.freezlex.jamesbot.internals.client
 
 import com.freezlex.jamesbot.database.entities.*
+import com.freezlex.jamesbot.internals.api.Subscription
 import com.freezlex.jamesbot.internals.i18n.LanguageList
 import com.freezlex.jamesbot.internals.api.Utility
 import com.freezlex.jamesbot.internals.indexer.Executable
 import net.dv8tion.jda.api.JDA
+import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.GuildChannel
 import net.dv8tion.jda.api.entities.User
+import java.time.Instant
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -45,6 +48,20 @@ object ClientCache {
         if(permission != null) return permission.isAuthorised
 
     return if(refresh) refreshPermissionCache(invoked, author, channel) else true
+    }
+
+    fun checkSubscription(invoked: Executable, author: User, refresh: Boolean = false): Boolean {
+        val subscription: UserSubscription? = this.subscriptionCache[author.idLong]
+        if(subscription != null && invoked.properties.subscription().ordinal < subscription.subscription){
+            return if(subscription.endDate != null && subscription.endDate!! < Instant.now().epochSecond) if(refresh) refreshSubscriptionCache(invoked, author) else false
+            else false
+        }
+        return invoked.properties.subscription() <= Subscription.USER
+    }
+
+    private fun refreshSubscriptionCache(invoked: Executable, author: User): Boolean{
+        // TODO : Create a refresh for the subscription cache
+        return checkSubscription(invoked, author, false)
     }
 
     private fun refreshPermissionCache(invoked: Executable, author: User, channel: GuildChannel): Boolean{

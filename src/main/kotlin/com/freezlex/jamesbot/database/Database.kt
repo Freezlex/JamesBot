@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 /** Database class */
 class Database (private var clientSettings: ClientSettings){
 
-    private val tables: List<Table> = listOf(UserEntities, UsersSettings, GuildEntities, GuildsSettings, CommandsPermissions)
+    private val tables: List<Table> = listOf(UserEntities, UsersSettings, GuildEntities, GuildsSettings, CommandsPermissions, UsersSubscriptions)
 
     init{
         connect()

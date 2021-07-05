@@ -13,6 +13,10 @@ object CommandsPermissions: IntIdTable("commands_permissions") {
     val isAuthorised = bool("is_authorized") // isAuthorised
 }
 
+/**
+ * Data class for the CommandsPermissions table
+ * @param id The row ID
+ */
 class CommandPermission(id: EntityID<Int>): IntEntity(id) {
     companion object : IntEntityClass<CommandPermission>(CommandsPermissions)
     var reference by CommandsPermissions.reference

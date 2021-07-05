@@ -33,7 +33,7 @@ class CommandEvent: CommandEventAdapter {
 
     override fun onUserMissingPermissions(ctx: Context, command: CommandFunction, permissions: List<Permission>) = ctx.reply("Uh ... You are missing some permission for this action. ${if(permissions.isNotEmpty())  "Missing permissions : `${permissions.map { it.getName() }.joinToString { ", `" }}`" else ""}")
 
-    override fun onUserMissingEarlyAccess(ctx: Context, command: CommandFunction) = ctx.reply("It seems you're not in the early access program, you aren't allowed to use the `${command.name}` command ! You can still apply to : https://jamesbot.fr/early-access")
+    override fun onUserMissingEarlyAccess(ctx: Context, command: CommandFunction) = ctx.reply(ctx.language.exception.onUserMissingEarlyAccess.format(command.name))
 
     override fun onBadArgument(ctx: Context, cmd: CommandFunction, e: Throwable) = ctx.reply(ctx.language.exception.onBadArgument.format(cmd.name, e.message))
 

@@ -3,6 +3,7 @@ package com.freezlex.jamesbot.implementation.general
 import com.freezlex.jamesbot.internals.api.MessageContext
 import com.freezlex.jamesbot.internals.api.Context
 import com.freezlex.jamesbot.internals.api.SlashContext
+import com.freezlex.jamesbot.internals.api.Subscription
 import com.freezlex.jamesbot.internals.commands.Cmd
 import com.freezlex.jamesbot.internals.commands.CommandCategory
 import com.freezlex.jamesbot.internals.cooldown.BucketType
@@ -14,7 +15,7 @@ class PingCommand: Cmd {
     override fun category() = CommandCategory.UTILITY
     override fun cooldown() = Cooldown(10, TimeUnit.SECONDS, BucketType.GUILD)
     override fun description() = "Une commande pour avoir le ping du bot"
-    override fun isPreview(): Boolean = true
+    override fun subscription() = Subscription.EARLY_ACCESS
 
     fun run(ctx: Context){
         if(ctx.isSlash())this.slash(ctx.slashContext!!)

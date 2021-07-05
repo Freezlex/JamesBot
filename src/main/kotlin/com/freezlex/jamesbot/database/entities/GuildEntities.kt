@@ -26,6 +26,10 @@ object GuildEntities: IntIdTable("guilds") {
     }
 }
 
+/**
+ * Data class for the GuildEntity table
+ * @param id The row ID
+ */
 class GuildEntity(id: EntityID<Int>): IntEntity(id) {
     companion object : IntEntityClass<GuildEntity>(GuildEntities)
     var guildId by GuildEntities.guildId

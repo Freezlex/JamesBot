@@ -5,12 +5,9 @@ import com.freezlex.jamesbot.internals.api.SlashContext
 import com.freezlex.jamesbot.internals.api.Utility.findBestMatch
 import com.freezlex.jamesbot.internals.arguments.ArgParser
 import com.freezlex.jamesbot.internals.client.ClientCache
-import com.freezlex.jamesbot.internals.client.ClientSettings
 import com.freezlex.jamesbot.internals.client.ExecutorClient
 import com.freezlex.jamesbot.internals.commands.CommandExecutor
 import com.freezlex.jamesbot.internals.commands.CommandFunction
-import com.freezlex.jamesbot.internals.cooldown.BucketType
-import com.freezlex.jamesbot.internals.cooldown.CooldownProvider
 import com.freezlex.jamesbot.internals.exceptions.BadArgument
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import kotlin.reflect.KParameter
@@ -32,10 +29,8 @@ object OnSlashCommandEvent {
 
         // Create the context for the command
         val context = Context(SlashContext(event), cmd)
-        println(!ClientSettings.getEarlyUsers().contains(event.user.idLong))
-        println(!ClientSettings.getEarlyUsers().contains(event.guild?.ownerIdLong))
 
-        if(!ClientSettings.getEarlyUsers().contains(event.user.idLong) && !ClientSettings.getEarlyUsers().contains(event.guild?.ownerIdLong)) return executor.dispatchSafely { it.onUserMissingEarlyAccess(context, cmd) }
+        if(!ClientCache.checkSubscription(cmd, event.user)) return executor.dispatchSafely { it.onUserMissingEarlyAccess(context, cmd) }
 
         // Parse the arguments
         val arguments: HashMap<KParameter, Any?>

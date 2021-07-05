@@ -50,8 +50,6 @@ class CommandExecutor(
             }
         }
 
-        if(cmd.properties.isDeveloperOnly() && !ClientSettings.getOwners().contains(context.messageContext?.author?.idLong ?: context.slashContext?.author?.idLong))return
-
         if(isFromGuild){
             if(!ClientCache.hasPermission(context.invoked, context.messageContext?.author?: context.slashContext!!.author,
                     context.messageContext?.event?.textChannel?: context.slashContext!!.event.textChannel)) return executor.dispatchSafely { it.onUserMissingPermissions(context, cmd, listOf()) }
