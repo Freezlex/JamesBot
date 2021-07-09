@@ -1,25 +1,36 @@
 {
   "code": "en_EN",
   "common": {
-    "private": "TEST"
+    "prefix": ""
   },
   "category":{
     "moderation": {
       "ban": {
-        "description": "TEST",
-        "cannotBan": "TEST",
-        "hasBeenBanned": "TEST",
+        "description": "",
+        "cannotBan": "",
+        "cannotSelfBan": "",
+        "hasBeenBanned": "",
         "arguments": [
           {
-            "name": "Membre",
-            "prompt": "The member that you want to ban"
+            "name": "",
+            "prompt": ""
           }
         ]
       }
     }
   },
   "exception": {
-    "onBadArgument": "You provided an invalid argument for the %1$s command. %2$s",
-    "onUserMissingEarlyAccess": "It seems you're not in the early access program, you aren't allowed to use the %$s command ! You can still apply to : https://jamesbot.fr/early-access"
+    "onCommandError": "",
+    "onCommandPostInvoke": "",
+    "onCommandPreInvoke": "",
+    "onParseError": "",
+    "onInternalError": "",
+    "onCommandCooldown": "The command `%1$s` is under cooldown. Please wait `%2$d seconds` before trying again.",
+    "onBotMissingPermission": "Uh ... I'm missing some permission for this action. Missing permissions : `%1$s`",
+    "onUserMissingPermission": "Uh ... You are missing some permission for this action.%1$s",
+    "onUserMissingEarlyAccess": "It seems you're not in the early access program, you aren't allowed to use the `%1$s` command !",
+    "onBadArgument": "You provided an invalid argument for the %1$s command.%2$s",
+    "onUnknownMessageCommand": "Unknown command `%1$s`. Did you mean `%2$s` ?",
+    "onUnknownSlashCommand": "Unknown interaction `%1$s`. Did you mean `%2$s` ?"
   }
 }

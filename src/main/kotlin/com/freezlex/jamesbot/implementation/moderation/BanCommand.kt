@@ -1,6 +1,8 @@
 package com.freezlex.jamesbot.implementation.moderation
 
 import com.freezlex.jamesbot.internals.api.Context
+import com.freezlex.jamesbot.internals.api.MessageContext
+import com.freezlex.jamesbot.internals.api.SlashContext
 import com.freezlex.jamesbot.internals.arguments.Argument
 import com.freezlex.jamesbot.internals.commands.Cmd
 import com.freezlex.jamesbot.internals.commands.CommandCategory
@@ -19,8 +21,17 @@ class BanCommand: Cmd {
     override fun userPermissions() = listOf(Permission.BAN_MEMBERS)
     override fun isGuildOnly() = true
 
-    fun run(ctx: Context, @Argument(type = OptionType.USER) member: Member
-    ) {
-        ctx.reply("You are about to ban ${member.user.name}")
+    fun run(ctx: Context, @Argument(type = OptionType.USER) member: Member) {
+        if(member == ctx.messageContext?.author?: ctx.slashContext!!.author) return ctx.reply(ctx.language.category.moderation.ban.cannotSelfBan)
+        if(ctx.isSlash()) slash(ctx.slashContext!!, member)
+        else message(ctx.messageContext!!, member)
+    }
+
+    private fun slash(ctx: SlashContext, member: Member){
+
+    }
+
+    private fun message(ctx: MessageContext, member: Member){
+
     }
 }

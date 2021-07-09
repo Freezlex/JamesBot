@@ -1,3 +1,5 @@
 package com.freezlex.jamesbot.internals.i18n
 
-data class CommonLang (val private: String)
+data class CommonLang (
+    val prefix: String
+        )

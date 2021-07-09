@@ -1,0 +1,36 @@
+{
+  "code": "MODEL",
+  "common": {
+    "prefix": ""
+  },
+  "category":{
+    "moderation": {
+      "ban": {
+        "description": "",
+        "cannotBan": "",
+        "cannotSelfBan": "",
+        "hasBeenBanned": "",
+        "arguments": [
+          {
+            "name": "",
+            "prompt": ""
+          }
+        ]
+      }
+    }
+  },
+  "exception": {
+    "onCommandError": "",
+    "onCommandPostInvoke": "",
+    "onCommandPreInvoke": "",
+    "onParseError": "",
+    "onInternalError": "",
+    "onCommandCooldown": "",
+    "onBotMissingPermission": "",
+    "onUserMissingPermission": "",
+    "onUserMissingEarlyAccess": "%s",
+    "onBadArgument": "",
+    "onUnknownMessageCommand": "",
+    "onUnknownSlashCommand": ""
+  }
+}

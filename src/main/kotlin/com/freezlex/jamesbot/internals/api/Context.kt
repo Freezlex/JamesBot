@@ -6,6 +6,7 @@ import com.freezlex.jamesbot.internals.i18n.LanguageList
 import com.freezlex.jamesbot.internals.i18n.LanguageModel
 import com.freezlex.jamesbot.internals.i18n.Languages
 import com.freezlex.jamesbot.internals.indexer.Executable
+import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.*
 import java.lang.RuntimeException
@@ -33,9 +34,14 @@ class Context(val messageContext: MessageContext?,
         language = Languages[regCde]?: Languages[ClientSettings.language]!!
     }
 
-    fun reply(content: String) {
+    fun reply(content: String, ephemeral: Boolean = false) {
         if(messageContext != null)messageContext.event.message.reply(content).queue()
-        else slashContext?.event?.reply(content)?.queue()
+        else slashContext!!.event.reply(content).setEphemeral(ephemeral).queue()
+    }
+
+    fun reply(content: String, embed: MessageEmbed, ephemeral: Boolean = false){
+        if(messageContext != null)messageContext.event.message.reply(content).embed(embed).queue()
+        else slashContext!!.event.reply(content).addEmbeds(embed).setEphemeral(ephemeral).queue()
     }
 
     fun getJda(): JDA {
@@ -46,5 +52,9 @@ class Context(val messageContext: MessageContext?,
     fun isSlash(): Boolean{
         if(slashContext != null) return true
         return false
+    }
+
+    fun isFromGuild(): Boolean{
+        return if(isSlash()) slashContext!!.event.isFromGuild else messageContext!!.event.isFromGuild
     }
 }

@@ -1,24 +1,36 @@
 {
   "code": "fr_FR",
   "common": {
-    "private": "TEST"
+    "prefix": ""
   },
   "category":{
     "moderation": {
       "ban": {
-        "description": "TEST",
-        "cannotBan": "TEST",
-        "hasBeenBanned": "TEST",
+        "description": "",
+        "cannotBan": "",
+        "cannotSelfBan": "",
+        "hasBeenBanned": "",
         "arguments": [
           {
-            "name": "Membre",
-            "prompt": "Le membre que vous souhaitez bannir"
+            "name": "",
+            "prompt": ""
           }
         ]
       }
     }
   },
   "exception": {
-    "onBadArgument": "L'argument fournis est invalide pour la commande %1$s. %2$s"
+    "onCommandError": "",
+    "onCommandPostInvoke": "",
+    "onCommandPreInvoke": "",
+    "onParseError": "",
+    "onInternalError": "",
+    "onCommandCooldown": "La commande `%1$s` est en cooldown. Merci de patienter `%2$s secondes` avant de réessayer",
+    "onBotMissingPermission": "Uh ... Il me manque des permissions pour effectuer cette action. Permissions manquantes : `%1$s`",
+    "onUserMissingPermission": "Uh ... Il te manque quelques permissions pour effectuer cette action.%1$s",
+    "onUserMissingEarlyAccess": "Il semblerait que vous ne soyez pas dans le programme d'accès anticipé, vous ne pouvez par conséquent pas utiliser la commande `%s` !",
+    "onBadArgument": "L'argument fournit pour la commande `%1$s` est invalide.%2$s",
+    "onUnknownMessageCommand": "Commande `%1$s` inconnue. Vouliez-vous dire `%2$s` ?",
+    "onUnknownSlashCommand": "Interaction `%1$s` inconnue."
   }
 }

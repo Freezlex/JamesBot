@@ -20,7 +20,9 @@ object Languages: HashMap<LanguageList, LanguageModel>() {
 
     private fun addLang(data: String){
         val model = Gson().fromJson(data, LanguageModel::class.java)
-        this[LanguageList.valueOf(model.code)] = model
-        logger.debug("Translation file ${model.code} registered.")
+        if(model.code != "MODEL"){
+            this[LanguageList.valueOf(model.code)] = model
+            logger.debug("Translation file ${model.code} registered.")
+        }
     }
 }
