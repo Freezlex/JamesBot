@@ -1,7 +1,12 @@
 {
   "code": "MODEL",
+  "name": "MODEL",
   "common": {
-    "prefix": ""
+    "prefix": "",
+    "lang_code": {
+      "fr_FR": "",
+      "en_EN": ""
+    }
   },
   "category":{
     "moderation": {
@@ -17,6 +22,30 @@
           }
         ]
       }
+    },
+    "settings": {
+      "language": {
+        "description": "",
+        "isIdentical": "",
+        "hasBeenSet": "",
+        "error": "",
+        "embed": {
+          "title": "",
+          "description": "",
+          "color": 11736650,
+          "fields": [
+            {
+              "name": "",
+              "value": "",
+              "inline": false
+            },
+            {
+              "name": "",
+              "value": "",
+              "inline": false
+            }]
+        }
+      }
     }
   },
   "exception": {
@@ -28,7 +57,7 @@
     "onCommandCooldown": "",
     "onBotMissingPermission": "",
     "onUserMissingPermission": "",
-    "onUserMissingEarlyAccess": "%s",
+    "onUserMissingEarlyAccess": "",
     "onBadArgument": "",
     "onUnknownMessageCommand": "",
     "onUnknownSlashCommand": ""

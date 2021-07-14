@@ -26,12 +26,11 @@ class Context(val messageContext: MessageContext?,
     constructor(ctx: MessageContext, invoked: Executable): this(ctx, null, invoked)
     constructor(ctx: SlashContext, invoked: Executable): this(null, ctx, invoked)
 
-    val language: LanguageModel
+    var language: LanguageModel
 
     init {
         if(messageContext == null && slashContext == null)throw RuntimeException("The context must contain at least one SubContext")
-        val regCde: LanguageList = ClientCache.getLanguage(messageContext?.event?.author?: slashContext!!.event.user, messageContext?.guild?: slashContext?.guild)
-        language = Languages[regCde]?: Languages[ClientSettings.language]!!
+        language = ClientCache.resolveLanguage(messageContext?.event?.author?: slashContext!!.event.user, messageContext?.guild?: slashContext?.guild)
     }
 
     fun reply(content: String, ephemeral: Boolean = false) {

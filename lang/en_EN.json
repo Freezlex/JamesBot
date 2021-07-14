@@ -1,7 +1,11 @@
 {
   "code": "en_EN",
   "common": {
-    "prefix": ""
+    "prefix": "",
+    "lang_code": {
+      "fr_FR": "French",
+      "en_EN": "English"
+    }
   },
   "category":{
     "moderation": {
@@ -16,6 +20,28 @@
             "prompt": ""
           }
         ]
+      }
+    },
+    "settings": {
+      "language": {
+        "description": "Set the language for the guild or for the user",
+        "isIdentical": "",
+        "embed": {
+          "title": "💬 | Bot language settings",
+          "description": "You can edit the language of the bot by using `%1$s` or with `%2$s`.",
+          "color": 11736650,
+          "fields": [
+            {
+              "name": "👤 | Paramètres linguistiques personnels",
+              "value": "I'm speaking %2$s with **%1$s** according to its personal settings.",
+              "inline": false
+            },
+            {
+              "name": "👥 | Paramètres linguistiques du serveur",
+              "value": "I'm speaking %2$s on the guild **%1$s** according to the guild's settings.",
+              "inline": false
+            }]
+        }
       }
     }
   },

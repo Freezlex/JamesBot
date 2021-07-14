@@ -9,7 +9,7 @@ object ClientSettings {
     /** Database config */
     var dbHost: String = "localhost"
     var dbPort: String = "3306"
-    val language: LanguageList = LanguageList.en_EN
+    const val language: String = "en_EN"
     lateinit var dbName: String
     lateinit var dbUser: String
     lateinit var dbPassword: String

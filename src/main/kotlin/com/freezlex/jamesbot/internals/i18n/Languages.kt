@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Path
 
-object Languages: HashMap<LanguageList, LanguageModel>() {
+object Languages: HashMap<String, LanguageModel>() {
 
 
     fun loadLanguage(pckg: String){
@@ -21,7 +21,7 @@ object Languages: HashMap<LanguageList, LanguageModel>() {
     private fun addLang(data: String){
         val model = Gson().fromJson(data, LanguageModel::class.java)
         if(model.code != "MODEL"){
-            this[LanguageList.valueOf(model.code)] = model
+            this[model.code] = model
             logger.debug("Translation file ${model.code} registered.")
         }
     }

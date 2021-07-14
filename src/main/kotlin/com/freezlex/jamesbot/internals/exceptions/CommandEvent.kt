@@ -5,6 +5,7 @@ import com.freezlex.jamesbot.internals.client.ClientCache
 import com.freezlex.jamesbot.internals.client.ClientSettings
 import com.freezlex.jamesbot.internals.commands.CommandFunction
 import com.freezlex.jamesbot.internals.i18n.LanguageList
+import com.freezlex.jamesbot.internals.i18n.LanguageModel
 import com.freezlex.jamesbot.internals.i18n.Languages
 import com.freezlex.jamesbot.logger
 import net.dv8tion.jda.api.Permission
@@ -34,14 +35,12 @@ class CommandEvent: CommandEventAdapter {
     override fun onBadArgument(ctx: Context, cmd: CommandFunction, e: Throwable) = ctx.reply(ctx.language.exception.onBadArgument.format(cmd.name, e.message))
 
     override fun onUnknownMessageCommand(event: MessageReceivedEvent, command: String, bestMatches: List<String>) {
-        val regCde: LanguageList = ClientCache.getLanguage(event.author, event.guild)
-        val language = Languages[regCde]?: Languages[ClientSettings.language]!!
+        val language: LanguageModel = ClientCache.resolveLanguage(event.author, event.guild)
         event.message.reply(language.exception.onUnknownMessageCommand.format(command, bestMatches.joinToString("`, `"))).queue()
     }
 
     override fun onUnknownSlashCommand(event: SlashCommandEvent, command: String, bestMatches: List<String>) {
-        val regCde: LanguageList = ClientCache.getLanguage(event.user, event.guild)
-        val language = Languages[regCde]?: Languages[ClientSettings.language]!!
+        val language: LanguageModel = ClientCache.resolveLanguage(event.user, event.guild)
         event.reply(language.exception.onUnknownSlashCommand.format(command, bestMatches.joinToString("`, `"))).queue()
     }
 }

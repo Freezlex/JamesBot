@@ -4,6 +4,8 @@ import com.freezlex.jamesbot.database.entities.*
 import com.freezlex.jamesbot.internals.api.Subscription
 import com.freezlex.jamesbot.internals.i18n.LanguageList
 import com.freezlex.jamesbot.internals.api.Utility
+import com.freezlex.jamesbot.internals.i18n.LanguageModel
+import com.freezlex.jamesbot.internals.i18n.Languages
 import com.freezlex.jamesbot.internals.indexer.Executable
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.Permission
@@ -73,7 +75,7 @@ object ClientCache {
      * Find the settings of a guild
      * @param guild The guild to find the cache or fetch the DB
      */
-    private fun getCachedGuildSettings(guild: Guild) : GuildSettings{
+    fun getGuildSettingsOrCreate(guild: Guild) : GuildSettings{
         var cache = this.guildCache[guild.idLong]
         if(cache == null) {
             cache = GuildsSettings.findOrCreate(guild)
@@ -113,16 +115,21 @@ object ClientCache {
      * @param guild The guild where the event is coming from
      */
     fun getPrefix(jda: JDA, guild: Guild): Regex{
-        return genPattern(jda, getCachedGuildSettings(guild).prefix)
+        return genPattern(jda, getGuildSettingsOrCreate(guild).prefix)
     }
 
-    fun getLanguage(user: User, guild: Guild?): LanguageList {
+    fun getLanguage(user: User, guild: Guild?): String {
         val us = getUserSettings(user)
         return when{
-            us != null -> LanguageList.valueOf(us.regCde)
-            guild != null -> LanguageList.valueOf(getCachedGuildSettings(guild).regCde)
+            us != null -> us.regCde
+            guild != null -> getGuildSettingsOrCreate(guild).regCde
             else -> ClientSettings.language
         }
+    }
+
+    fun resolveLanguage(user: User, guild: Guild?): LanguageModel {
+        val lg = getLanguage(user, guild)
+        return Languages[lg]?: Languages[ClientSettings.language]!!
     }
 
     /**

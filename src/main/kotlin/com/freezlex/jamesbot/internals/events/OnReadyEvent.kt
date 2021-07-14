@@ -18,9 +18,9 @@ object OnReadyEvent {
 
         transaction {
             val permission = CommandPermission.find { CommandsPermissions.reference eq 836318164517519401 }.firstOrNull()?: CommandPermission.new {
-                reference = 836318164517519401
-                command = "test"
-                category = "utility"
+                reference = 563712774044123158
+                command = "language"
+                category = "settings"
                 isAuthorised = false
             }
 

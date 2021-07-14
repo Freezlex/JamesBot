@@ -1,6 +1,10 @@
-package com.freezlex.jamesbot.internals.i18n.category.moderation
+package com.freezlex.jamesbot.internals.i18n.category
 
 import com.freezlex.jamesbot.internals.i18n.ArgumentLang
+
+data class ModerationLang(
+    val ban: BanLang
+)
 
 data class BanLang(
     val description: String,
