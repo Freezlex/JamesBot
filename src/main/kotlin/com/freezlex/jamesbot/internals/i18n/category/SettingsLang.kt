@@ -9,8 +9,8 @@ data class SettingsLang(
 
 data class LanguageLang(
     val description: String,
-    val language: String,
     val isIdentical: String,
+    val hasBeenSet: String,
     val error: String,
     val embed: MessageEmbed,
     val guildEmbed: MessageEmbed,

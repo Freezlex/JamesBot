@@ -22,7 +22,7 @@ object GuildsSettings: IntIdTable("guilds_settings") {
             GuildSettings.new {
                 guild = result
                 prefix = ClientSettings.prefix
-                regCde = ClientSettings.language.name
+                regCde = ClientSettings.language
             }
         }
     }

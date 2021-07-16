@@ -1,5 +1,6 @@
 {
   "code": "fr_FR",
+  "name": "Français",
   "common": {
     "prefix": "",
     "lang_code": {
@@ -25,19 +26,22 @@
     "settings": {
       "language": {
         "description": "Définir ou consulter la langue du bot pour un utilisateur ou sur un serveur",
-        "userEmbed": {
-          "title": "💬 | Paramètre de langue du bot",
-          "description": "Vous pouvez éditer les paramètres linguistiques du bot en utilisant `%1$s` ou avec `%2$s`.",
+        "isIdentical": "Les paramètres restent inchangés la langue reste définie en `%1$s`.",
+        "hasBeenSet": "La langue du bot à bien été définie en %2$s pour **%1$s**",
+        "error": "Une erreur est survenue, impossible de définir la langue en $1%s",
+        "embed": {
+          "title": "📖 | __Paramètres linguistiques__",
+          "description": "Vous pouvez définir les paramètres linguistiques du bot en utilisant la commande `%1$s` ou avec `%2$s`.",
           "color": 11736650,
           "fields": [
             {
               "name": "👤 | Paramètres linguistiques personnels",
-              "value": "Je parles en `%2$s` avec **%1$s**.",
+              "value": "Je parle en **%1$s** avec **%2$s** selon ses paramètres personnels.",
               "inline": false
             },
             {
               "name": "👥 | Paramètres linguistiques du serveur",
-              "value": "Je parles en `%2$s` sur le serveur **%1$s**.",
+              "value": "Je parle en **%1$s** avec les membres du serveur **%2$s** en accord avec les paramètre de la guild.",
               "inline": false
             }]
         }

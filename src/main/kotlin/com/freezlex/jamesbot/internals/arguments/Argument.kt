@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType
 @Target(AnnotationTarget.VALUE_PARAMETER)
 annotation class Argument(
     val name: String = "",
-    val options: Array<String>,
+    val options: Array<String> = [],
     val type: OptionType = OptionType.STRING,
     val greedy: Boolean = false,
     val tentative: Boolean = false,

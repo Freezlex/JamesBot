@@ -8,8 +8,9 @@ import com.freezlex.jamesbot.internals.client.ClientCache
 import com.freezlex.jamesbot.internals.commands.Cmd
 import com.freezlex.jamesbot.internals.i18n.LanguageModel
 import com.freezlex.jamesbot.internals.i18n.Languages
+import com.freezlex.jamesbot.logger
+import io.ktor.util.*
 import net.dv8tion.jda.api.EmbedBuilder
-import net.dv8tion.jda.api.entities.User
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class LanguageCommand: Cmd {
@@ -18,7 +19,7 @@ class LanguageCommand: Cmd {
     override fun aliases() = mutableListOf("lang")
     override fun description(): String = "Edit the language of the bot for the guild or for the user"
 
-    fun run(ctx: Context, @Argument(options = ["Français", "English"]) language: String?){
+    fun run(ctx: Context, @Argument(options = ["français", "english"]) language: String?){
         if(language != null) setLanguageSettings(ctx, language)
         else showLanguageSettings(ctx)
     }
@@ -36,11 +37,12 @@ class LanguageCommand: Cmd {
 
         if(userSettings != null){
             val user = ctx.messageContext?.author?: ctx.slashContext!!.author
+
             settingsEmbed.addField(
                 userField.name!!,
                 userField.value!!.format(
-                    user.name,
-                    ctx.language.common.langCde[userSettings.regCde]!!.lowercase()),
+                    ctx.language.common.langCde[userSettings.regCde]!!.lowercase(),
+                    user.name),
                 userField.isInline)
         }
 
@@ -49,12 +51,12 @@ class LanguageCommand: Cmd {
             settingsEmbed.addField(
                 guildField.name,
                 guildField.value!!.format(
-                    ctx.messageContext?.guild?.name?: ctx.slashContext!!.guild?.name,
-                    ctx.language.common.langCde[ClientCache.getGuildSettingsOrCreate(guild!!).regCde]!!.lowercase()),
+                    ctx.language.common.langCde[ClientCache.getGuildSettingsOrCreate(guild!!).regCde]!!.lowercase(),
+                    ctx.messageContext?.guild?.name?: ctx.slashContext!!.guild?.name),
                 guildField.isInline)
         }
 
-        ctx.reply("", settingsEmbed.build())
+        ctx.reply("🌍", settingsEmbed.build())
     }
 
     /**
@@ -66,7 +68,7 @@ class LanguageCommand: Cmd {
         val lang = resolveLanguage(language)
 
         val author = ctx.messageContext?.author?: ctx.slashContext!!.author
-        var userSettings = ClientCache.getUserSettings(author)
+        val userSettings = ClientCache.getUserSettings(author)
 
         ctx.language = resolveLanguage(language)
 
@@ -74,37 +76,37 @@ class LanguageCommand: Cmd {
             val guild = ctx.messageContext?.guild?: ctx.slashContext!!.guild!!
             if(guild.owner == author){
                 val setting = ClientCache.getGuildSettingsOrCreate(guild)
+                if(language == setting.regCde) return ctx.reply(ctx.language.category.settings.language.isIdentical.format(setting.regCde), true)
                 try{
                     transaction { setting.regCde = lang.code }
-                    if(language == setting.regCde) return ctx.reply(ctx.language.category.settings.language.isIdentical.format(setting.regCde), true)
+                    ctx.reply(ctx.language.category.settings.language.hasBeenSet.format(guild.name, setting.regCde))
                 }catch(e: Exception){
-                    return ctx.reply(ctx.language.category.settings.language.error.format(setting.regCde, , e.message), true)
+                    logger.error(e)
+                    return ctx.reply(ctx.language.category.settings.language.error.format(setting.regCde), true)
                 }
             }else{
-                if(userSettings == null)userSettings = ClientCache.getUserSettingsOrCreate(author)
-                try{
-                    transaction { userSettings.regCde = lang.code }
-                    if(language == userSettings.regCde){
-                        return ctx.reply(ctx.language.category.settings.language.isIdentical.format(userSettings.regCde), true)
-                    }
-                }catch (e: Exception){
-                    return ctx.reply(ctx.language.category.settings.language.error.format(userSettings.regCde, author, e.message), true)
-                }
+                setUserLang(userSettings, ctx)
             }
         }else{
-
+            setUserLang(userSettings, ctx)
         }
     }
 
-    private fun setUserLang(st: UserSettings?, lg: String, ctx: Context){
-        var set = st
-        if(set == null)set = ClientCache.getUserSettingsOrCreate(ctx.)
+    private fun setUserLang(setting: UserSettings?, ctx: Context){
+        var st = setting
+        if(st == null)st = ClientCache.getUserSettingsOrCreate(ctx.messageContext?.author?: ctx.slashContext!!.author)
+        if(ctx.language.code == st.regCde) return ctx.reply(ctx.language.category.settings.language.isIdentical.format(st.regCde), true)
         try{
-            transaction { set.regCde = lg }
+            transaction { st.regCde = ctx.language.code }
+            ctx.reply(ctx.language.category.settings.language.hasBeenSet.format(ctx.messageContext?.author?.name?: ctx.slashContext!!.author.name, st.regCde))
         }catch (e: Exception){
-            ctx.reply(ctx.language.category.settings.language.error.format())
+            logger.error(e)
+            return ctx.reply(ctx.language.category.settings.language.error.format(ctx.language.code))
         }
     }
 
-    private fun resolveLanguage(language: String): LanguageModel = Languages.filter { it.value.name == language }.values.first()
+    private fun resolveLanguage(language: String): LanguageModel {
+        val res = Languages.filter { it.value.name.lowercase() == language.lowercase() }
+        return res.values.first()
+    }
 }

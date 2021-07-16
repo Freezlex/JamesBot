@@ -26,9 +26,9 @@
     "settings": {
       "language": {
         "description": "",
-        "isIdentical": "",
-        "hasBeenSet": "",
-        "error": "",
+        "isIdentical": "[%1$s - Language]",
+        "hasBeenSet": "[%1$s - User/Guild] [%2$s - Language]",
+        "error": "[%1$s - Language]",
         "embed": {
           "title": "",
           "description": "",
@@ -36,12 +36,12 @@
           "fields": [
             {
               "name": "",
-              "value": "",
+              "value": "[%1$s - User] [%2$s - Language]",
               "inline": false
             },
             {
               "name": "",
-              "value": "",
+              "value": "[%1$s - Guild] [%2$s - Language]",
               "inline": false
             }]
         }

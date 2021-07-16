@@ -16,7 +16,7 @@ object OnReadyEvent {
         executor.commands.createSlash(event.jda, true)
         logger.info("${event.jda.selfUser.name} is ready (id: ${event.jda.selfUser.id})")
 
-        transaction {
+        /**transaction {
             val permission = CommandPermission.find { CommandsPermissions.reference eq 836318164517519401 }.firstOrNull()?: CommandPermission.new {
                 reference = 563712774044123158
                 command = "language"
@@ -25,7 +25,7 @@ object OnReadyEvent {
             }
 
             ClientCache.permissionCache.add(permission)
-        }
+        }*/
 
         ClientSettings.defineEarlyUsers(mutableListOf(306703362261254154))
     }
