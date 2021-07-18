@@ -29,6 +29,7 @@
         "isIdentical": "Les paramètres restent inchangés la langue reste définie en `%1$s`.",
         "hasBeenSet": "La langue du bot à bien été définie en %2$s pour **%1$s**",
         "error": "Une erreur est survenue, impossible de définir la langue en $1%s",
+        "wrongArg": "L'argument %1$s n'est pas valide, il ne doit correspondre qu'à l'une des entrée suivantes : [%2$s]",
         "embed": {
           "title": "📖 | __Paramètres linguistiques__",
           "description": "Vous pouvez définir les paramètres linguistiques du bot en utilisant la commande `%1$s` ou avec `%2$s`.",

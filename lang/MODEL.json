@@ -29,6 +29,7 @@
         "isIdentical": "[%1$s - Language]",
         "hasBeenSet": "[%1$s - User/Guild] [%2$s - Language]",
         "error": "[%1$s - Language]",
+        "wrongArg": "[%1$s - language] [%2$s - available language]",
         "embed": {
           "title": "",
           "description": "",

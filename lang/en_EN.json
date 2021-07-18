@@ -29,6 +29,7 @@
         "isIdentical": "Settings still unchanged, bot language still defined at `%1$s`.",
         "hasBeenSet": "Bot language has been defined as %2$s for **%1$s**",
         "error": "An error occurred, cannot set language to $1%s",
+        "wrongArg": "The argument %1$s isn't valid, he must only correspond to one of these entries :  [%2$s]",
         "embed": {
           "title": "💬 | Bot language settings",
           "description": "You can edit the language of the bot by using `%1$s` or with `%2$s`.",

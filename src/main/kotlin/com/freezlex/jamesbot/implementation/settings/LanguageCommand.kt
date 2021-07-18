@@ -33,11 +33,10 @@ class LanguageCommand: Cmd {
         val settingsEmbed = EmbedBuilder(ctx.language.category.settings.language.embed)
         val userField = settingsEmbed.fields[0]
         val guildField = settingsEmbed.fields[1]
-        settingsEmbed.clearFields()
+        settingsEmbed.setDescription(ctx.language.category.settings.language.embed.description!!.format(ClientCache.getPattern(ctx).first, ClientCache.getPattern(ctx).second)).clearFields()
 
         if(userSettings != null){
             val user = ctx.messageContext?.author?: ctx.slashContext!!.author
-
             settingsEmbed.addField(
                 userField.name!!,
                 userField.value!!.format(
@@ -56,7 +55,7 @@ class LanguageCommand: Cmd {
                 guildField.isInline)
         }
 
-        ctx.reply("🌍", settingsEmbed.build())
+        ctx.reply(settingsEmbed.build())
     }
 
     /**
@@ -65,6 +64,9 @@ class LanguageCommand: Cmd {
      * @param language The desired language
      */
     private fun setLanguageSettings(ctx: Context, language: String){
+
+        // TODO : The arg parser doesn't seems to check the default value so right now we are checking inside the command but we have to export this check outside of the command module
+        if(!listOf("français", "english").contains(language.lowercase())) return ctx.reply(ctx.language.category.settings.language.wrongArg.format(language.lowercase(), listOf("fraçais", "english").joinToString(", ")), ephemeral = true)
         val lang = resolveLanguage(language)
 
         val author = ctx.messageContext?.author?: ctx.slashContext!!.author
@@ -74,12 +76,12 @@ class LanguageCommand: Cmd {
 
         if(ctx.isFromGuild()){
             val guild = ctx.messageContext?.guild?: ctx.slashContext!!.guild!!
-            if(guild.owner == author){
+            if(guild.owner!!.idLong == author.idLong){
                 val setting = ClientCache.getGuildSettingsOrCreate(guild)
                 if(language == setting.regCde) return ctx.reply(ctx.language.category.settings.language.isIdentical.format(setting.regCde), true)
                 try{
                     transaction { setting.regCde = lang.code }
-                    ctx.reply(ctx.language.category.settings.language.hasBeenSet.format(guild.name, setting.regCde))
+                    ctx.reply(ctx.language.category.settings.language.hasBeenSet.format(guild.name, ctx.language.common.langCde[setting.regCde]))
                 }catch(e: Exception){
                     logger.error(e)
                     return ctx.reply(ctx.language.category.settings.language.error.format(setting.regCde), true)
@@ -98,7 +100,7 @@ class LanguageCommand: Cmd {
         if(ctx.language.code == st.regCde) return ctx.reply(ctx.language.category.settings.language.isIdentical.format(st.regCde), true)
         try{
             transaction { st.regCde = ctx.language.code }
-            ctx.reply(ctx.language.category.settings.language.hasBeenSet.format(ctx.messageContext?.author?.name?: ctx.slashContext!!.author.name, st.regCde))
+            ctx.reply(ctx.language.category.settings.language.hasBeenSet.format(ctx.messageContext?.author?.name?: ctx.slashContext!!.author.name, ctx.language.common.langCde[st.regCde]))
         }catch (e: Exception){
             logger.error(e)
             return ctx.reply(ctx.language.category.settings.language.error.format(ctx.language.code))

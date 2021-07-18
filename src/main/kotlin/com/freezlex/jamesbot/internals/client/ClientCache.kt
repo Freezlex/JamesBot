@@ -1,6 +1,7 @@
 package com.freezlex.jamesbot.internals.client
 
 import com.freezlex.jamesbot.database.entities.*
+import com.freezlex.jamesbot.internals.api.Context
 import com.freezlex.jamesbot.internals.api.Subscription
 import com.freezlex.jamesbot.internals.i18n.LanguageList
 import com.freezlex.jamesbot.internals.api.Utility
@@ -12,6 +13,7 @@ import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.GuildChannel
 import net.dv8tion.jda.api.entities.User
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.Instant
 import java.util.*
 import kotlin.collections.HashMap
@@ -52,18 +54,28 @@ object ClientCache {
     return if(refresh) refreshPermissionCache(invoked, author, channel) else true
     }
 
-    fun checkSubscription(invoked: Executable, author: User, refresh: Boolean = false): Boolean {
-        val subscription: UserSubscription? = this.subscriptionCache[author.idLong]
-        if(subscription != null && invoked.properties.subscription().ordinal < subscription.subscription){
-            return if(subscription.endDate != null && subscription.endDate!! < Instant.now().epochSecond) if(refresh) refreshSubscriptionCache(invoked, author) else false
-            else false
+    fun checkSubscription(invoked: Executable, author: User, guild: Guild? ,refresh: Boolean = false): Boolean {
+        var subscription: UserSubscription? = this.subscriptionCache[author.idLong]
+        if(subscription == null)subscription = this.subscriptionCache[guild!!.ownerIdLong]
+        if(subscription != null && invoked.properties.subscription().ordinal <= subscription.subscription){
+            if(subscription.endDate != null && subscription.endDate!! < Instant.now().epochSecond) return if(refresh) refreshSubscriptionCache(invoked, author, guild) else false
+            else invoked.properties.subscription().ordinal <= subscription.subscription
         }
-        return invoked.properties.subscription() <= Subscription.USER
+        else if(){
+
+        }
+        return if(refresh) refreshSubscriptionCache(invoked, author, guild) else invoked.properties.subscription() <= Subscription.USER
     }
 
-    private fun refreshSubscriptionCache(invoked: Executable, author: User): Boolean{
+    private fun refreshSubscriptionCache(invoked: Executable, author: User, guild: Guild?): Boolean{
         // TODO : Create a refresh for the subscription cache
-        return checkSubscription(invoked, author, false)
+        var result = UsersSubscriptions.findOrNull(author)
+        if(result != null)this.subscriptionCache[transaction { result!!.user.userId  }] = result
+        if(guild != null){
+            result = UsersSubscriptions.findOrNull(guild.owner!!.user)
+            if(result != null)this.subscriptionCache[transaction { result.user.userId  }] = result
+        }
+        return checkSubscription(invoked, author, guild, refresh = false)
     }
 
     private fun refreshPermissionCache(invoked: Executable, author: User, channel: GuildChannel): Boolean{
@@ -143,6 +155,16 @@ object ClientCache {
             "^(<@!?${jda.selfUser.id}>\\s+(?:${escapedPrefix}\\s*)?|${escapedPrefix})([A-z][^\\s]+)",
             RegexOption.IGNORE_CASE
         )
+    }
+
+    fun getPattern(ctx: Context): Pair<String, String>{
+        val jda = ctx.messageContext?.jda?: ctx.slashContext!!.jda
+        if(ctx.isFromGuild()){
+            val settings = getGuildSettingsOrCreate(ctx.messageContext?.guild?: ctx.slashContext!!.guild!!)
+            return Pair(settings.prefix, "<@!?${jda.selfUser.id}>")
+        } else {
+            return Pair(ClientSettings.prefix, "<@!?${jda.selfUser.id}>")
+        }
     }
 
     fun refreshCache(){

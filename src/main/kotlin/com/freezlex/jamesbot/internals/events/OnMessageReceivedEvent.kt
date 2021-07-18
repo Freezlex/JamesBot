@@ -50,6 +50,7 @@ object OnMessageReceivedEvent {
 
         val context = Context(MessageContext(event, parsed), null, cmd)
 
+        if(!ClientCache.checkSubscription(cmd, event.author, event.guild, true)) return executor.dispatchSafely { it.onUserMissingEarlyAccess(context, cmd) }
 
         val arguments: HashMap<KParameter, Any?>
 

@@ -11,6 +11,7 @@ data class LanguageLang(
     val description: String,
     val isIdentical: String,
     val hasBeenSet: String,
+    val wrongArg: String,
     val error: String,
     val embed: MessageEmbed,
     val guildEmbed: MessageEmbed,

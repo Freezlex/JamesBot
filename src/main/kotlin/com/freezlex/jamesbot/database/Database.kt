@@ -21,6 +21,7 @@ class Database (private var clientSettings: ClientSettings){
      * Connect the database
      */
     private fun connect(){
+        println("jdbc:mysql://${clientSettings.dbHost}:${clientSettings.dbPort}/${clientSettings.dbName} | user : ${clientSettings.dbUser} | psw : ${clientSettings.dbPassword}")
         Database.connect(
             "jdbc:mysql://${clientSettings.dbHost}:${clientSettings.dbPort}/${clientSettings.dbName}",
             "com.mysql.cj.jdbc.Driver",

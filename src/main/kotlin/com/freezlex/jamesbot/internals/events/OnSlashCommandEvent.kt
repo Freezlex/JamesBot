@@ -15,8 +15,6 @@ import kotlin.reflect.KParameter
 object OnSlashCommandEvent {
     fun run(executor: ExecutorClient, event: SlashCommandEvent){
 
-
-
         // Find the command in the command registry
         val cmd: CommandFunction = if(event.subcommandName != null) {
             executor.commands.filter { it.value.cmd.name().equals(event.subcommandName, true) && it.value.category.category.lowercase() == event.name}.values.firstOrNull()?:
@@ -30,7 +28,7 @@ object OnSlashCommandEvent {
         // Create the context for the command
         val context = Context(SlashContext(event), cmd)
 
-        if(!ClientCache.checkSubscription(cmd, event.user)) return executor.dispatchSafely { it.onUserMissingEarlyAccess(context, cmd) }
+        if(!ClientCache.checkSubscription(cmd, event.user, event.guild, true)) return executor.dispatchSafely { it.onUserMissingEarlyAccess(context, cmd) }
 
         // Parse the arguments
         val arguments: HashMap<KParameter, Any?>

@@ -7,7 +7,7 @@ object ClientSettings {
     var prefix: String = ".."
     lateinit var botToken: String
     /** Database config */
-    var dbHost: String = "localhost"
+    var dbHost: String = "127.0.0.1"
     var dbPort: String = "3306"
     const val language: String = "en_EN"
     lateinit var dbName: String

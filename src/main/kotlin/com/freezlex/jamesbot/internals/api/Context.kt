@@ -33,14 +33,19 @@ class Context(val messageContext: MessageContext?,
         language = ClientCache.resolveLanguage(messageContext?.event?.author?: slashContext!!.event.user, messageContext?.guild?: slashContext?.guild)
     }
 
-    fun reply(content: String, ephemeral: Boolean = false) {
-        if(messageContext != null)messageContext.event.message.reply(content).queue()
-        else slashContext!!.event.reply(content).setEphemeral(ephemeral).queue()
+    fun reply(content: String, ephemeral: Boolean = false, mention: Boolean = false) {
+        if(messageContext != null)messageContext.event.message.reply(content).mentionRepliedUser(mention).queue()
+        else slashContext!!.event.reply(content).setEphemeral(ephemeral).mentionRepliedUser(mention).queue()
     }
 
-    fun reply(content: String, embed: MessageEmbed, ephemeral: Boolean = false){
-        if(messageContext != null)messageContext.event.message.reply(content).embed(embed).queue()
-        else slashContext!!.event.reply(content).addEmbeds(embed).setEphemeral(ephemeral).queue()
+    fun reply(content: String, embed: MessageEmbed, ephemeral: Boolean = false, mention: Boolean = false){
+        if(messageContext != null)messageContext.event.message.reply(content).mentionRepliedUser(mention).embed(embed).queue()
+        else slashContext!!.event.reply(content).addEmbeds(embed).mentionRepliedUser(mention).setEphemeral(ephemeral).queue()
+    }
+
+    fun reply(embed: MessageEmbed, ephemeral: Boolean = false, mention: Boolean = false){
+        if(messageContext != null)messageContext.event.message.reply(embed).mentionRepliedUser(mention).queue()
+        else slashContext!!.event.replyEmbeds(embed).setEphemeral(ephemeral).mentionRepliedUser(mention).queue()
     }
 
     fun getJda(): JDA {
