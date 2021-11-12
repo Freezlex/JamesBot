@@ -4,6 +4,7 @@ val logbackVersion: String by project
 val exposedVersion: String by project
 val reflectionsVersion: String by project
 val jdaVersion: String by project
+val jdaKtxVersion: String by project
 val mysqlVersion: String by project
 
 plugins {
@@ -19,10 +20,8 @@ application {
 
 repositories {
     mavenCentral()
-    maven {
-        name="m2-dv8tion"
-        url=uri("https://m2.dv8tion.net/releases")
-    }
+    maven("https://m2.dv8tion.net/releases")
+    maven("https://jitpack.io/")
 }
 
 dependencies {
@@ -38,4 +37,5 @@ dependencies {
     implementation("mysql:mysql-connector-java:$mysqlVersion")
     implementation("com.google.code.gson:gson:2.8.6")
     implementation("net.dv8tion:JDA:$jdaVersion")
+    implementation("com.github.minndevelopment:jda-ktx:$jdaKtxVersion")
 }
