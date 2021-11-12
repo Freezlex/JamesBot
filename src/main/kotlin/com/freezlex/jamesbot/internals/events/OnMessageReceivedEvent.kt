@@ -7,6 +7,7 @@ import com.freezlex.jamesbot.internals.arguments.ArgParser
 import com.freezlex.jamesbot.internals.client.ClientCache
 import com.freezlex.jamesbot.internals.client.ExecutorClient
 import com.freezlex.jamesbot.internals.commands.CommandExecutor
+import com.freezlex.jamesbot.internals.commands.CommandRegistry
 import com.freezlex.jamesbot.internals.exceptions.BadArgument
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -16,7 +17,7 @@ object OnMessageReceivedEvent {
 
     private fun nonCommandEvent(executor: ExecutorClient, event: MessageReceivedEvent){
         if(!event.isFromGuild)return
-        val xpCmd = executor.commands.findCommandByName("experience")
+        val xpCmd = CommandRegistry.findCommandByName("experience")
             ?: return executor.dispatchSafely { it.onInternalError(Exception("Cannot find the experience command")) }
         if(xpCmd.cmd.isEnabled()){}
     }
@@ -44,13 +45,13 @@ object OnMessageReceivedEvent {
 
         // if(parsed == null)return nonCommandEvent(executor, event)
 
-        val cmd = executor.commands[command]
-            ?: executor.commands.findCommandByAlias(command)
-            ?: return executor.dispatchSafely { it.onUnknownMessageCommand(event, command, findBestMatch(executor.commands.getCommands().map { s ->  s.key }, command)) }
+        val cmd = CommandRegistry[command]
+            ?: CommandRegistry.findCommandByAlias(command)
+            ?: return executor.dispatchSafely { it.onUnknownMessageCommand(event, command, findBestMatch(CommandRegistry.getCommands().map { s ->  s.key }, command)) }
 
         val context = Context(MessageContext(event, parsed), null, cmd)
 
-        if(!ClientCache.checkSubscription(cmd, event.author, event.guild, true)) return executor.dispatchSafely { it.onUserMissingEarlyAccess(context, cmd) }
+        if(!ClientCache.checkSubscriptionByCommand(cmd, event.author, event.guild, true)) return executor.dispatchSafely { it.onUserMissingEarlyAccess(context, cmd) }
 
         val arguments: HashMap<KParameter, Any?>
 

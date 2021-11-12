@@ -8,6 +8,7 @@ import com.freezlex.jamesbot.internals.client.ClientCache
 import com.freezlex.jamesbot.internals.client.ExecutorClient
 import com.freezlex.jamesbot.internals.commands.CommandExecutor
 import com.freezlex.jamesbot.internals.commands.CommandFunction
+import com.freezlex.jamesbot.internals.commands.CommandRegistry
 import com.freezlex.jamesbot.internals.exceptions.BadArgument
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import kotlin.reflect.KParameter
@@ -17,18 +18,18 @@ object OnSlashCommandEvent {
 
         // Find the command in the command registry
         val cmd: CommandFunction = if(event.subcommandName != null) {
-            executor.commands.filter { it.value.cmd.name().equals(event.subcommandName, true) && it.value.category.category.lowercase() == event.name}.values.firstOrNull()?:
+            CommandRegistry.filter { it.value.cmd.name().equals(event.subcommandName, true) && it.value.category.category.lowercase() == event.name}.values.firstOrNull()?:
             return executor.dispatchSafely { it.onUnknownSlashCommand(event, event.subcommandName!!,
-                findBestMatch(executor.commands.getCommands().map { s -> s.key }, event.subcommandName!!)) }
+                findBestMatch(CommandRegistry.getCommands().map { s -> s.key }, event.subcommandName!!)) }
         }
         else{
-            executor.commands[event.name]?: return executor.dispatchSafely { it.onUnknownSlashCommand(event, event.name,  findBestMatch(executor.commands.getCommands().map { s -> s.key }, event.name)) }
+            CommandRegistry[event.name]?: return executor.dispatchSafely { it.onUnknownSlashCommand(event, event.name,  findBestMatch(CommandRegistry.getCommands().map { s -> s.key }, event.name)) }
         }
 
         // Create the context for the command
         val context = Context(SlashContext(event), cmd)
 
-        if(!ClientCache.checkSubscription(cmd, event.user, event.guild, true)) return executor.dispatchSafely { it.onUserMissingEarlyAccess(context, cmd) }
+        if(!ClientCache.checkSubscriptionByCommand(cmd, event.user, event.guild, true)) return executor.dispatchSafely { it.onUserMissingEarlyAccess(context, cmd) }
 
         // Parse the arguments
         val arguments: HashMap<KParameter, Any?>

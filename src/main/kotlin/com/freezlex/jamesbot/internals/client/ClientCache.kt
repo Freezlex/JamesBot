@@ -16,6 +16,7 @@ import net.dv8tion.jda.api.entities.User
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.Instant
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 object ClientCache {
@@ -54,28 +55,33 @@ object ClientCache {
     return if(refresh) refreshPermissionCache(invoked, author, channel) else true
     }
 
-    fun checkSubscription(invoked: Executable, author: User, guild: Guild? ,refresh: Boolean = false): Boolean {
-        var subscription: UserSubscription? = this.subscriptionCache[author.idLong]
-        if(subscription == null)subscription = this.subscriptionCache[guild!!.ownerIdLong]
-        if(subscription != null && invoked.properties.subscription().ordinal <= subscription.subscription){
-            if(subscription.endDate != null && subscription.endDate!! < Instant.now().epochSecond) return if(refresh) refreshSubscriptionCache(invoked, author, guild) else false
-            else invoked.properties.subscription().ordinal <= subscription.subscription
-        }
-        else if(){
-
-        }
-        return if(refresh) refreshSubscriptionCache(invoked, author, guild) else invoked.properties.subscription() <= Subscription.USER
+    fun checkSubscriptionByCommand(invoked: Executable, author: User, guild: Guild? ,refresh: Boolean = false): Boolean {
+        return checkSubscription(invoked.properties.subscription().ordinal, author, guild, refresh)
     }
 
-    private fun refreshSubscriptionCache(invoked: Executable, author: User, guild: Guild?): Boolean{
-        // TODO : Create a refresh for the subscription cache
+    fun checkSubscriptionLevel(levels: List<Subscription>, author: User, guild: Guild? ,refresh: Boolean = false): Boolean {
+        val lvl = levels.map{ it.ordinal }.maxOrNull()?: 0
+        return checkSubscription(lvl, author, guild, refresh)
+    }
+
+    private fun checkSubscription(level: Int, author: User, guild: Guild? ,refresh: Boolean = false): Boolean{
+        var subscription: UserSubscription? = this.subscriptionCache[author.idLong]
+        if(subscription == null)subscription = this.subscriptionCache[guild!!.ownerIdLong]
+        if(subscription != null && level <= subscription.subscription){
+            return if(subscription.endDate != null && subscription.endDate!! < Instant.now().epochSecond) if(refresh) refreshSubscriptionCache(level, author, guild) else false
+            else level <= subscription.subscription
+        }
+        return if(refresh) refreshSubscriptionCache(level, author, guild) else level <= Subscription.USER.ordinal
+    }
+
+    private fun refreshSubscriptionCache(level: Int, author: User, guild: Guild?): Boolean{
         var result = UsersSubscriptions.findOrNull(author)
         if(result != null)this.subscriptionCache[transaction { result!!.user.userId  }] = result
         if(guild != null){
             result = UsersSubscriptions.findOrNull(guild.owner!!.user)
             if(result != null)this.subscriptionCache[transaction { result.user.userId  }] = result
         }
-        return checkSubscription(invoked, author, guild, refresh = false)
+        return checkSubscription(level, author, guild, refresh = false)
     }
 
     private fun refreshPermissionCache(invoked: Executable, author: User, channel: GuildChannel): Boolean{

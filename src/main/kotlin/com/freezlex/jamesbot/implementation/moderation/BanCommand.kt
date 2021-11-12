@@ -21,17 +21,17 @@ class BanCommand: Cmd {
     override fun userPermissions() = listOf(Permission.BAN_MEMBERS)
     override fun isGuildOnly() = true
 
-    fun run(ctx: Context, @Argument(type = OptionType.USER) member: Member) {
-        if(member == ctx.messageContext?.author?: ctx.slashContext!!.author) return ctx.reply(ctx.language.category.moderation.ban.cannotSelfBan)
-        if(ctx.isSlash()) slash(ctx.slashContext!!, member)
-        else message(ctx.messageContext!!, member)
+    fun run(ctx: Context, @Argument(type = OptionType.USER) member: Member, reason: String?, duration: Int?) {
+        if(member == (ctx.messageContext?.author ?: ctx.slashContext!!.author)) return ctx.reply(ctx.language.category.moderation.ban.cannotSelfBan)
+        if(ctx.isSlash()) slash(ctx.slashContext!!, member, reason, duration)
+        else message(ctx.messageContext!!, member, reason, duration)
     }
 
-    private fun slash(ctx: SlashContext, member: Member){
-
+    private fun slash(ctx: SlashContext, member: Member, reason: String?, duration: Int?){
+        ctx.event.reply("You are about to ban ${member.nickname}").mentionRepliedUser(true).queue()
     }
 
-    private fun message(ctx: MessageContext, member: Member){
-
+    private fun message(ctx: MessageContext, member: Member, reason: String?, duration: Int?){
+        ctx.event.message.reply("You are about to ban ${member.nickname}").mentionRepliedUser(true).queue()
     }
 }

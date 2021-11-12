@@ -6,7 +6,9 @@
     "lang_code": {
       "fr_FR": "Français",
       "en_EN": "Anglais"
-    }
+    },
+    "help_non_mentionable": "Vous pouvez utiliser `%1$shelp $2$s` ou `%3$s help %2$s` pour afficher plus d'aide.",
+    "help_mentionable": "Vous pouvez utiliser `%1$shelp $2$s` pour afficher plus d'aide."
   },
   "category":{
     "moderation": {

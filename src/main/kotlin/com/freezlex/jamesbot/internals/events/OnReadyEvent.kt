@@ -13,7 +13,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object OnReadyEvent {
     fun run(executor: ExecutorClient, event: ReadyEvent){
-        executor.commands.createSlash(event.jda, true)
+        CommandRegistry.createSlash(event.jda, true)
         logger.info("${event.jda.selfUser.name} is ready (id: ${event.jda.selfUser.id})")
 
         /**transaction {

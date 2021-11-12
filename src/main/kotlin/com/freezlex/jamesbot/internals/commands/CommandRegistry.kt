@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData
 import java.lang.RuntimeException
 
-class CommandRegistry: HashMap<String, CommandFunction>() {
+object CommandRegistry: HashMap<String, CommandFunction>() {
 
     /**
      * Get all the commands for the command registry

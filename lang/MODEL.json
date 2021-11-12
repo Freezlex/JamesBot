@@ -6,7 +6,9 @@
     "lang_code": {
       "fr_FR": "",
       "en_EN": ""
-    }
+    },
+    "help_non_mentionable": "",
+    "help_mentionable": ""
   },
   "category":{
     "moderation": {
