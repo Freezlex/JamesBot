@@ -1,18 +1,26 @@
 package com.freezlex.jamesbot
 
 import dev.minn.jda.ktx.*
+import dev.minn.jda.ktx.messages.Embeds
+import dev.minn.jda.ktx.messages.send
 import kotlinx.coroutines.withTimeoutOrNull
+import net.dv8tion.jda.api.entities.IMentionable
+import net.dv8tion.jda.api.entities.MessageEmbed
+import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.interactions.components.Button
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.time.Instant
+import kotlin.time.ExperimentalTime
 
 /**
  * Main application launcher
  */
+@OptIn(ExperimentalTime::class)
 fun main() {
-    val jda = light("NDI3NDE2MDY1MjE2MDg2MDE2.Wrd8Og.55BN_kdd6R9IvxEwRyXsv3ygbuc", enableCoroutines=true)
+    val jda = light("NDI3NDE2MDY1MjE2MDg2MDE2.Wrd8Og.hs2UE20GfiJ4bRxMLs7fpenQf_A", enableCoroutines=true)
 
     jda.listener<MessageReceivedEvent> {
         val guild = it.guild
@@ -33,15 +41,21 @@ fun main() {
             if (user == null) // unknown user for name
                 channel.sendMessageFormat("%s, I cannot find a user for your query!", it.author).queue()
             else // load profile and send it as embed
-                channel.sendMessageFormat("%s, here is the user profile:", it.author)
-                    .queue()
+                channel.send("${it.author.asMention}, here is the user profile :", embed= Embed {
+                    title = "Hello Friend"
+                    description = "Goodbye Friend"
+                    field {
+                        name = "How good is this example?"
+                        value = "5 :star:"
+                        inline = false
+                    }
+                    timestamp = Instant.now()
+                    color = 0xFF0000
+                }).queue()
         }
     }
 
-    val test = HashMap<String, suspend CoroutineEventListener.(SlashCommandEvent) -> Unit>()
 
-    val event =
-    test.put("ban",);
 
     jda.onCommand("moderation") { event ->
 
