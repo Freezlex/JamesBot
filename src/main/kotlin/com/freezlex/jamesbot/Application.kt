@@ -20,7 +20,7 @@ import kotlin.time.ExperimentalTime
  */
 @OptIn(ExperimentalTime::class)
 fun main() {
-    val jda = light("NDI3NDE2MDY1MjE2MDg2MDE2.Wrd8Og.hs2UE20GfiJ4bRxMLs7fpenQf_A", enableCoroutines=true)
+    val jda = light(System.getenv("BOT_TOKEN"), enableCoroutines=true)
 
     jda.listener<MessageReceivedEvent> {
         val guild = it.guild
