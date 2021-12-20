@@ -1,5 +1,6 @@
 package com.freezlex.jamesbot
 
+import com.freezlex.jamesbot.commands.test.TestTextualCommand
 import dev.minn.jda.ktx.*
 import dev.minn.jda.ktx.messages.Embeds
 import dev.minn.jda.ktx.messages.send
@@ -28,30 +29,10 @@ fun main() {
         val message = it.message
         val content = message.contentRaw
 
-        if (content.startsWith("!profile")) {
+        if (content.startsWith("!test")) {
             // Send typing indicator and wait for it to arrive
             channel.sendTyping().await()
-            val user = message.mentionedUsers.firstOrNull() ?: run {
-                // Try loading user through prefix loading
-                val matches = guild.retrieveMembersByPrefix(content.substringAfter("!profile "), 1).await()
-                // Take first result, or null
-                matches.firstOrNull()
-            }
-
-            if (user == null) // unknown user for name
-                channel.sendMessageFormat("%s, I cannot find a user for your query!", it.author).queue()
-            else // load profile and send it as embed
-                channel.send("${it.author.asMention}, here is the user profile :", embed= Embed {
-                    title = "Hello Friend"
-                    description = "Goodbye Friend"
-                    field {
-                        name = "How good is this example?"
-                        value = "5 :star:"
-                        inline = false
-                    }
-                    timestamp = Instant.now()
-                    color = 0xFF0000
-                }).queue()
+            TestTextualCommand().run(it)
         }
     }
 
