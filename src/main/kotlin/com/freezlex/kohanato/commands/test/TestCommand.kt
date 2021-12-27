@@ -1,7 +1,7 @@
-package com.freezlex.jamesbot.commands.test
+package com.freezlex.kohanato.commands.test
 
-import com.freezlex.jamesbot.api.contextual.SlashCommand
-import com.freezlex.jamesbot.api.contextual.TextualCommand
+import com.freezlex.kohanato.api.contextual.SlashCommand
+import com.freezlex.kohanato.api.contextual.TextualCommand
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 

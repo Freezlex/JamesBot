@@ -1,10 +1,7 @@
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/b44027b9cc04465fbe893e92c7c9164a)](https://www.codacy.com/gh/Freezlex/JamesBot/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Freezlex/questter&amp;utm_campaign=Badge_Grade)
-[![Java CI with Gradle](https://github.com/Freezlex/JamesBot/actions/workflows/gradle.yml/badge.svg?branch=main)](https://github.com/Freezlex/JamesBot/actions/workflows/gradle.yml)
-[![Discord Bots Status](https://top.gg/api/widget/status/425377070525317120.svg)](https://top.gg/bot/425377070525317120)
-[![Discord Bots Owner](https://top.gg/api/widget/owner/425377070525317120.svg)](https://top.gg/bot/425377070525317120)
+[![Java CI with Gradle](https://github.com/Freezlex/Kohanato/actions/workflows/gradle.yml/badge.svg?branch=main)](https://github.com/Freezlex/Kohanato/actions/workflows/gradle.yml)
 
 
-## JamesBot - Kotlin
+## Kohanato - Kotlin
 
 UNDER DEVELOPPEMENT
 
@@ -85,7 +82,7 @@ Add this configuration into your `~/.gitconfig` :
 
 ## Using our code
 
-**Give credit where credit is due.** If you wish to use our code in a project, please credit us, and take your time to read our full license. We don't mind you using JamesBot code, as it is open-source for a reason, as long as you don't blatantly copy it or refrain from crediting us. Take special care of following the license aswell.
+**Give credit where credit is due.** If you wish to use our code in a project, please credit us, and take your time to read our full license. We don't mind you using Kohanato code, as it is open-source for a reason, as long as you don't blatantly copy it or refrain from crediting us. Take special care of following the license aswell.
 
 ## License
 

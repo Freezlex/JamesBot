@@ -1,14 +1,11 @@
-package com.freezlex.jamesbot.api.contextual
+package com.freezlex.kohanato.api.contextual
 
 import dev.minn.jda.ktx.awaitButton
 import dev.minn.jda.ktx.interactions.danger
 import dev.minn.jda.ktx.interactions.primary
-import dev.minn.jda.ktx.messages.editMessage
-import dev.minn.jda.ktx.messages.send
 import kotlinx.coroutines.withTimeoutOrNull
 import net.dv8tion.jda.api.entities.Emoji
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
-import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
