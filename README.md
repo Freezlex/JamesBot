@@ -1,4 +1,5 @@
-[![Java CI with Gradle](https://github.com/Freezlex/Kohanato/actions/workflows/gradle.yml/badge.svg?branch=main)](https://github.com/Freezlex/Kohanato/actions/workflows/gradle.yml)
+[![Java CI with Gradle](https://github.com/Freezlex/Kohanato/actions/workflows/Kohanato_Main.yml/badge.svg?branch=main)](https://github.com/Freezlex/Kohanato/actions/workflows/Kohanato_Main.yml)
+[![Java CI with Gradle](https://github.com/Freezlex/Kohanato/actions/workflows/Kohanato_Develop.yml/badge.svg?branch=main)](https://github.com/Freezlex/Kohanato/actions/workflows/Kohanato_Develop.yml)
 
 
 ## Kohanato - Kotlin
