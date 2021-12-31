@@ -1,17 +1,7 @@
 package com.freezlex
 
-import io.ktor.routing.*
-import io.ktor.http.*
-import io.ktor.jackson.*
-import com.fasterxml.jackson.databind.*
-import io.ktor.features.*
-import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.request.*
-import com.example.plugins.*
-import kotlin.test.*
-import io.ktor.server.testing.*
 
+/*
 class ApplicationTest {
     @Test
     fun testRoot() {
@@ -22,4 +12,4 @@ class ApplicationTest {
             }
         }
     }
-}
+}*/
