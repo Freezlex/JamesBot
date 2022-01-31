@@ -1,6 +1,5 @@
 package com.freezlex.kohanato.api.contextual
 
-import com.freezlex.kohanato.api.extensions.registry
 import dev.minn.jda.ktx.awaitButton
 import dev.minn.jda.ktx.interactions.danger
 import dev.minn.jda.ktx.messages.into

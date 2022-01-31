@@ -4,9 +4,6 @@ import com.freezlex.kohanato.api.contextual.SlashCommand
 import com.freezlex.kohanato.api.extensions.asDuration
 import dev.minn.jda.ktx.awaitButton
 import dev.minn.jda.ktx.interactions.danger
-import dev.minn.jda.ktx.messages.editMessage
-import dev.minn.jda.ktx.messages.into
-import dev.minn.jda.ktx.messages.reply_
 import kotlinx.coroutines.withTimeoutOrNull
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
 import java.lang.Exception

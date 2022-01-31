@@ -21,4 +21,6 @@ repositories {
 dependencies {
     implementation("net.dv8tion:JDA:$jdaVersion")
     implementation("com.github.minndevelopment:jda-ktx:$jdaKtxVersion")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
+    implementation("org.reflections:reflections:0.10.2")
 }

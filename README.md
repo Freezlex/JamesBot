@@ -11,15 +11,15 @@ UNDER DEVELOPPEMENT
 For better understanding of development we are using commit identity. In fact all of our commit start with an 
 emoji and a snippet, it help to track the main purpose of a commit.
 
-| Keyword |   Snippet    |
-| ------- | ------------ |
-| `new` | 📦 NEW      |
-| `imp` | 👌 IMPROVE  |
-| `fix` | 🐛 FIX      |
-| `rlz` | 🚀 RELEASE  |
-| `doc` | 📖 DOC      |
-| `tst` | 🤖 TEST     |
-| `brk` | ‼️ BREAKING  |
+| Keyword | Snippet     |
+|---------|-------------|
+| `new`   | 📦 NEW      |
+| `imp`   | 👌 IMPROVE  |
+| `fix`   | 🐛 FIX      |
+| `rlz`   | 🚀 RELEASE  |
+| `doc`   | 📖 DOC      |
+| `tst`   | 🤖 TEST     |
+| `brk`   | ‼️ BREAKING |
 
 ### How to use :
 
