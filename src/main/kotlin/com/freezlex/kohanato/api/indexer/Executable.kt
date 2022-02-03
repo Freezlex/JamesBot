@@ -3,6 +3,10 @@ package com.freezlex.kohanato.api.indexer
 import com.freezlex.kohanato.api.arguments.Arguments
 import com.freezlex.kohanato.api.contextual.BaseCommand
 import com.freezlex.kohanato.api.contextual.SlashCommand
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
+import java.util.concurrent.ExecutorService
 import kotlin.reflect.KFunction
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.callSuspendBy
@@ -15,9 +19,9 @@ abstract class Executable (
     val arguments: List<Arguments>,
     private val kParameter: KParameter,
         ) {
-    open fun execute(ctx: Context, args: HashMap<KParameter, Any?>, complete: (Boolean, Throwable?) -> Unit, executor: ExecutorService?) {
-        method.instanceParameter?.let { args[it] = properties }
-        args[contextParameter] = ctx
+    open fun execute(event: SlashCommandEvent, args: HashMap<KParameter, Any?>, complete: (Boolean, Throwable?) -> Unit, executor: ExecutorService?) {
+        method.instanceParameter?.let { args[it] = command }
+        args[kParameter] = event
 
         if (method.isSuspend) {
             GlobalScope.launch {
