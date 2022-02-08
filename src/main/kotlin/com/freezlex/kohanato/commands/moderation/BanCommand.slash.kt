@@ -1,17 +1,17 @@
 package com.freezlex.kohanato.commands.moderation
 
-import com.freezlex.kohanato.api.contextual.SlashCommand
-import com.freezlex.kohanato.api.extensions.asDuration
+import com.freezlex.kohanato.core.commands.contextual.SlashCommand
+import com.freezlex.kohanato.core.extensions.asDuration
 import dev.minn.jda.ktx.awaitButton
 import dev.minn.jda.ktx.interactions.danger
 import kotlinx.coroutines.withTimeoutOrNull
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import java.lang.Exception
 import kotlin.time.Duration.Companion.minutes
 
 class BanSlashCommand: SlashCommand {
 
-    override suspend fun run(event: SlashCommandEvent) {
+    override suspend fun run(event: SlashCommandInteractionEvent) {
         val user = event.getOption("member")!!.asUser
         val duration = event.getOption("duration")?.asString?.asDuration()
         val confirm = danger("${user.id}:ban", "Confirm")

@@ -1,6 +1,6 @@
-package com.freezlex.kohanato.api.events
+package com.freezlex.kohanato.core.events
 
-import com.freezlex.kohanato.logger
+import com.freezlex.kohanato.core.logger
 import net.dv8tion.jda.api.events.ReadyEvent
 
 object OnReadyEvent {

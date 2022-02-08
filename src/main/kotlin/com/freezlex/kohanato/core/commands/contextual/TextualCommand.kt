@@ -1,4 +1,4 @@
-package com.freezlex.kohanato.api.contextual
+package com.freezlex.kohanato.core.commands.contextual
 
 import dev.minn.jda.ktx.awaitButton
 import dev.minn.jda.ktx.interactions.danger
@@ -10,10 +10,6 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime
 
 interface TextualCommand: BaseCommand {
-
-    val guildOnly: Boolean
-        get() = false;
-
     @OptIn(ExperimentalTime::class)
     suspend fun run(event: MessageReceivedEvent){
         val confirm = primary("${event.author.id}:did-forgot", "Yes", Emoji.fromUnicode("✅"))

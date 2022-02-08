@@ -1,9 +1,9 @@
-package com.freezlex.kohanato.api.arguments
+package com.freezlex.kohanato.core.commands.arguments
 
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import kotlin.reflect.KParameter
 
-class Arguments (
+class Argument (
     val name: String,
     val type: Class<*>,
     val greedy: Boolean,

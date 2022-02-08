@@ -1,11 +1,10 @@
-package com.freezlex.kohanato.api.indexer
+package com.freezlex.kohanato.core.indexer
 
-import com.freezlex.kohanato.api.arguments.Arguments
-import com.freezlex.kohanato.api.contextual.BaseCommand
-import com.freezlex.kohanato.api.contextual.SlashCommand
+import com.freezlex.kohanato.core.commands.arguments.Argument
+import com.freezlex.kohanato.core.commands.contextual.BaseCommand
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import java.util.concurrent.ExecutorService
 import kotlin.reflect.KFunction
 import kotlin.reflect.KParameter
@@ -13,13 +12,13 @@ import kotlin.reflect.full.callSuspendBy
 import kotlin.reflect.full.instanceParameter
 
 abstract class Executable (
-    val name: String,
+    var name: String,
     val method: KFunction<*>,
     val command: BaseCommand,
-    val arguments: List<Arguments>,
+    val arguments: List<Argument>,
     private val kParameter: KParameter,
         ) {
-    open fun execute(event: SlashCommandEvent, args: HashMap<KParameter, Any?>, complete: (Boolean, Throwable?) -> Unit, executor: ExecutorService?) {
+    open fun execute(event: SlashCommandInteractionEvent, args: HashMap<KParameter, Any?>, complete: (Boolean, Throwable?) -> Unit, executor: ExecutorService?) {
         method.instanceParameter?.let { args[it] = command }
         args[kParameter] = event
 

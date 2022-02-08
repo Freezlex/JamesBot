@@ -1,4 +1,4 @@
-package com.freezlex.kohanato.api.indexer
+package com.freezlex.kohanato.core.indexer
 
 import java.net.URLClassLoader
 

@@ -1,18 +1,18 @@
-package com.freezlex.kohanato.api.contextual
+package com.freezlex.kohanato.core.commands.contextual
 
 import dev.minn.jda.ktx.awaitButton
 import dev.minn.jda.ktx.interactions.danger
 import dev.minn.jda.ktx.messages.into
 import dev.minn.jda.ktx.messages.reply_
 import kotlinx.coroutines.withTimeoutOrNull
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.ExperimentalTime
 
 interface SlashCommand: BaseCommand {
 
     @OptIn(ExperimentalTime::class)
-    suspend fun run(event: SlashCommandEvent){
+    suspend fun run(event: SlashCommandInteractionEvent){
         val confirm = danger("${event.user.id}:default", "Yes, I guess")
         event.reply_(
             "Did the **Freezlex** forgot to implement this command ?",
