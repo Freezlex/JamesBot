@@ -4,7 +4,10 @@ import com.freezlex.kohanato.core.commands.contextual.Command
 import com.freezlex.kohanato.core.commands.arguments.Argument
 import com.freezlex.kohanato.core.commands.arguments.Param
 import com.freezlex.kohanato.core.commands.contextual.BaseCommand
+import net.dv8tion.jda.api.events.Event
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
+import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction
 import org.reflections.Reflections
 import org.reflections.scanners.MethodParameterNamesScanner
 import org.reflections.scanners.Scanners
@@ -57,14 +60,17 @@ class Indexer {
 
     fun loadCommand(method: KFunction<*>, command: BaseCommand): Command {
         require(method.javaMethod!!.declaringClass == command::class.java){ "${method.name} is not from ${command::class.simpleName}" }
-        val pck = command::class.java.`package`.name
 
-        val name = command.name?.lowercase()?: pck.split('.').last().replace('_', ' ').lowercase()
-        val category = command.category?.lowercase()?: pck.split('.').dropLast(1).last().replace('_', ' ').lowercase()
+        val name = command.name?.lowercase()?: command::class.java.name
+            .split('.')
+            .last()
+            .removeSuffix("SlashCommand")
+            .lowercase()
+        val category = command.category?.lowercase()?: command::class.java.`package`.name.split('.').last().lowercase()
         val cooldown = command.cooldown
-        val event = method.valueParameters.firstOrNull() { it.type.classifier?.equals(BaseCommand::class) == true}
-        require(event != null) { "${method.name} is missing the event parameters!" }
-        val arguments = loadParameters(method.valueParameters.filterNot { it.type.classifier?.equals(BaseCommand::class) == true })
+        val event = method.valueParameters.firstOrNull() { it.type.classifier?.equals(SlashCommandInteractionEvent::class) == true}
+        require(event != null) { "${method.name} method from $name command is missing the event parameters!" }
+        val arguments = loadParameters(method.valueParameters.filterNot { it.type.classifier?.equals(SlashCommandInteractionEvent::class) == true })
 
         return Command(name, category, this.jar, cooldown, method, command, arguments, event)
     }

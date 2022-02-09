@@ -1,6 +1,5 @@
 package com.freezlex.kohanato.core.events
 
-import com.freezlex.kohanato.commands.moderation.BanSlashCommand
 import com.freezlex.kohanato.core.KohanatoCore
 import com.freezlex.kohanato.core.commands.Commands
 import com.freezlex.kohanato.core.commands.RunCommand
@@ -13,8 +12,10 @@ import kotlin.reflect.KParameter
 object OnSlashCommandEvent {
     suspend fun run(executor: KohanatoCore, event: SlashCommandInteractionEvent){
 
+        println(Commands.map { "${it.key} - ${it.value.category}" })
+
         val command: Command = if(event.subcommandName != null){
-            Commands.filter { it.value.command.name.equals(event.subcommandName, true) && it.value.category.lowercase() == event.name }.values.firstOrNull()?:
+            Commands.filter { it.key.equals(event.subcommandName, true) && it.value.category.lowercase() == event.name }.values.firstOrNull()?:
             return executor.dispatchSafely { it.onUnknownSlashCommand(event, event.subcommandName!!) }
         }else{
             Commands[event.name]?: return executor.dispatchSafely { it.onUnknownSlashCommand(event, event.name) }
@@ -29,6 +30,6 @@ object OnSlashCommandEvent {
             return executor.dispatchSafely { it.onParseError(command, e) }
         }
 
-        RunCommand(executor, event, command, arguments)
+        RunCommand(executor, event, command, arguments).execute()
     }
 }

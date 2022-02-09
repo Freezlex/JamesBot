@@ -12,19 +12,31 @@ object CommandThrowable {
 
     fun onCommandError(command: Command, error: Throwable) = error.printStackTrace()
 
-    fun onBadArgument(command: Command, e: BadArgument){}
+    fun onBadArgument(command: Command, e: BadArgument){
+        println("Bad args")
+    }
 
-    fun onParseError(command: Command, e: Throwable){}
+    fun onParseError(command: Command, e: Throwable){
+        println("Parsing error ! ${e}")
+    }
 
-    fun onCommandPostInvoke(command: Command, failed: Boolean){}
+    fun onCommandPostInvoke(command: Command, failed: Boolean){
+        println("Error at post invoke")
+    }
 
     fun onCommandPreInvoke(command: Command) = true
 
-    fun onGuildOnlyInvoke(command: Command){}
+    fun onGuildOnlyInvoke(command: Command){
+        println("Is Guild only")
+    }
 
-    fun onCommandCooldown(command: Command, cooldown: Long){}
+    fun onCommandCooldown(command: Command, cooldown: Long){
+        println("On cooldown")
+    }
 
-    fun onBotMissingPermissions(command: Command, permission: List<Permission>){}
+    fun onBotMissingPermissions(command: Command, permission: List<Permission>){
+        println("I'm cooling down")
+    }
 
     /**
      * Message : "Unknown interaction `%1$s`, Did you mean `%2$s` ?"
@@ -33,6 +45,6 @@ object CommandThrowable {
      * @param bestMatches A list of close match from what the user sent
      */
     fun onUnknownSlashCommand(event: SlashCommandInteractionEvent, tentative: String){
-        event.reply("Commande `$tentative` inconnue. Vouliez-vous dire `${findBestMatch(Commands.map { s -> s.key }, tentative)}` ?")
+        event.reply("Commande `$tentative` inconnue. Vouliez-vous dire `${findBestMatch(Commands.map { s -> s.key }, tentative)}` ?").queue()
     }
 }

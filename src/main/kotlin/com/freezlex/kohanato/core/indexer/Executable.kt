@@ -2,8 +2,7 @@ package com.freezlex.kohanato.core.indexer
 
 import com.freezlex.kohanato.core.commands.arguments.Argument
 import com.freezlex.kohanato.core.commands.contextual.BaseCommand
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.coroutineScope
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import java.util.concurrent.ExecutorService
 import kotlin.reflect.KFunction
@@ -13,19 +12,18 @@ import kotlin.reflect.full.instanceParameter
 
 abstract class Executable (
     var name: String,
-    val method: KFunction<*>,
+    private val method: KFunction<*>,
     val command: BaseCommand,
     val arguments: List<Argument>,
     private val kParameter: KParameter,
         ) {
-    open fun execute(event: SlashCommandInteractionEvent, args: HashMap<KParameter, Any?>, complete: (Boolean, Throwable?) -> Unit, executor: ExecutorService?) {
-        method.instanceParameter?.let { args[it] = command }
+    suspend fun execute(event: SlashCommandInteractionEvent, args: HashMap<KParameter, Any?>, complete: (Boolean, Throwable?) -> Unit, executor: ExecutorService?) {
+        method.instanceParameter?.let {
+            args[it] = command }
         args[kParameter] = event
 
         if (method.isSuspend) {
-            GlobalScope.launch {
-                executeAsync(args, complete)
-            }
+            executeAsync(args, complete)
         } else {
             if (executor != null) {
                 executor.execute {
@@ -54,6 +52,7 @@ abstract class Executable (
      */
     private suspend fun executeAsync(args: HashMap<KParameter, Any?>, complete: (Boolean, Throwable?) -> Unit) {
         try {
+            // TODO : Fix parser for Duration? which will not work until you mark it as non-nullable
             method.callSuspendBy(args)
             complete(true, null)
         } catch (e: Throwable) {

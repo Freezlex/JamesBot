@@ -1,9 +1,7 @@
 package com.freezlex.kohanato.core.commands.parser
 
 import com.freezlex.kohanato.core.commands.arguments.Argument
-import com.freezlex.kohanato.core.commands.parser.parsers.BooleanParser
-import com.freezlex.kohanato.core.commands.parser.parsers.DoubleParser
-import com.freezlex.kohanato.core.commands.parser.parsers.FloatParser
+import com.freezlex.kohanato.core.commands.parser.parsers.*
 import com.freezlex.kohanato.core.indexer.Executable
 import com.freezlex.kohanato.core.throwable.BadArgument
 import com.freezlex.kohanato.core.throwable.ParserNotRegistered
@@ -12,7 +10,9 @@ import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.interactions.commands.OptionMapping
 import java.net.URL
 import java.util.*
+import kotlin.jvm.internal.Intrinsics
 import kotlin.reflect.KParameter
+import kotlin.time.Duration
 
 /**
  * The parser for the args
@@ -143,16 +143,24 @@ class Parser(
             println("Register all parsers")
             // Kotlin types and primitives
             val booleanParser = BooleanParser()
-            parsers[Boolean::class.java] = booleanParser
-            parsers[java.lang.Boolean::class.java] = booleanParser
+            this.parsers[Boolean::class.java] = booleanParser
+            this.parsers[java.lang.Boolean::class.java] = booleanParser
+
+            this.parsers[String::class.java] = StringParser()
 
             val doubleParser = DoubleParser()
-            parsers[Double::class.java] = doubleParser
-            parsers[java.lang.Double::class.java] = doubleParser
+            this.parsers[Double::class.java] = doubleParser
+            this.parsers[java.lang.Double::class.java] = doubleParser
 
             val floatParser = FloatParser()
-            parsers[Float::class.java] = floatParser
-            parsers[java.lang.Float::class.java] = floatParser
+            this.parsers[Float::class.java] = floatParser
+            this.parsers[java.lang.Float::class.java] = floatParser
+
+            val durationParser = DurationParser()
+            this.parsers[Duration::class.java] = durationParser
+            this.parsers[java.time.Duration::class.java] = durationParser
+
+            this.parsers[Member::class.java] = MemberParser()
         }
 
         /**

@@ -8,7 +8,7 @@ import com.freezlex.kohanato.core.logger
 object Commands: HashMap<String, Command>() {
 
     /** Get all the commands from the command collection */
-    fun getCommands(): HashMap<String, Command>{
+    private fun getCommands(): HashMap<String, Command>{
         return this;
     }
 

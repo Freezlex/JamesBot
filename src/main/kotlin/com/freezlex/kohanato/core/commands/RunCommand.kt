@@ -13,10 +13,8 @@ class RunCommand(
     private val executor: KohanatoCore,
     val event: SlashCommandInteractionEvent,
     val command: Command,
-    val arguments: HashMap<KParameter, Any?>,
+    private val arguments: HashMap<KParameter, Any?>,
 ) {
-
-    private val isFromGuild = this.event.isFromGuild
 
     private fun callback() =
         { success: Boolean, err: Throwable? ->
@@ -30,8 +28,8 @@ class RunCommand(
             this.executor.dispatchSafely { it.onCommandPostInvoke(this.command, !success) }
         }
 
-    fun execute(){
-        if(!isFromGuild && this.command.command.guildOnly)return this.executor.dispatchSafely { it.onGuildOnlyInvoke(this.command) }
+    suspend fun execute(){
+        if(!this.event.isFromGuild && this.command.command.guildOnly)return this.executor.dispatchSafely { it.onGuildOnlyInvoke(this.command) }
 
         if(command.cooldown != null){
             command.cooldown.forEach {
@@ -50,7 +48,7 @@ class RunCommand(
             }
         }
 
-        if(isFromGuild){
+        if(this.event.isFromGuild){
             if(command.command.botPermissions.isNotEmpty()){
                 val botCheck = command.command.botPermissions.filterNot {
                     this.event.guild!!.selfMember.hasPermission(this.event.textChannel, it)

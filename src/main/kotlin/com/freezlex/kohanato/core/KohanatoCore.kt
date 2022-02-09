@@ -1,5 +1,7 @@
 package com.freezlex.kohanato.core
 
+import com.freezlex.kohanato.core.commands.Commands
+import com.freezlex.kohanato.core.commands.parser.Parser
 import com.freezlex.kohanato.core.events.OnButtonClickEvent
 import com.freezlex.kohanato.core.events.OnMessageReceivedEvent
 import com.freezlex.kohanato.core.events.OnReadyEvent
@@ -43,10 +45,12 @@ class KohanatoCore: EventListener {
     }
 
     fun commandsPackage(packageName: String): KohanatoCore{
+        Commands.register(packageName);
         return this
     }
 
     fun launch(): KohanatoCore{
+        Parser.init()
         DefaultShardManagerBuilder
             .createDefault(System.getenv("BOT_TOKEN"), GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
             .disableIntents(listOf(
@@ -74,13 +78,13 @@ class KohanatoCore: EventListener {
     }
 
     override fun onEvent(event: GenericEvent) {
-        var that = this;
+        val bind = this;
         try{
             when(event){
                 is ReadyEvent -> runBlocking { OnReadyEvent.run(event) }
-                is SlashCommandInteractionEvent -> runBlocking { OnSlashCommandEvent.run(that, event) }
-                is MessageReceivedEvent -> runBlocking { OnMessageReceivedEvent.run(that, event) }
-                is ButtonInteractionEvent -> runBlocking { OnButtonClickEvent.run(that, event) }
+                is SlashCommandInteractionEvent -> runBlocking { OnSlashCommandEvent.run(bind, event) }
+                is MessageReceivedEvent -> runBlocking { OnMessageReceivedEvent.run(bind, event) }
+                is ButtonInteractionEvent -> runBlocking { OnButtonClickEvent.run(bind, event) }
             }
         }catch (e: Throwable){
             throw Throwable(e)
@@ -100,4 +104,4 @@ class KohanatoCore: EventListener {
     }
 }
 
-val logger: Logger = LoggerFactory.getLogger("Koahanto")
+val logger: Logger = LoggerFactory.getLogger("Kohanato")

@@ -1,5 +1,6 @@
 val jdaVersion: String by project
 val jdaKtxVersion: String by project
+val slf4jVersion: String by project
 
 plugins {
     application
@@ -9,7 +10,7 @@ plugins {
 group = "com.freezlex"
 version = "0.0.1"
 application {
-    mainClass.set("com.freezlex.ApplicationKt")
+    mainClass.set("com.freezlex.kohanato.ApplicationKt")
 }
 
 repositories {
@@ -23,4 +24,18 @@ dependencies {
     implementation("com.github.minndevelopment:jda-ktx:$jdaKtxVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
     implementation("org.reflections:reflections:0.10.2")
+    implementation("org.apache.logging.log4j:log4j-core:2.17.1")
+    implementation("org.slf4j:slf4j-api:$slf4jVersion")
+}
+
+tasks.withType<Jar> {
+    manifest {
+        attributes["Main-Class"] = application.mainClass
+    }
+    from(sourceSets.main.get().output)
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
 }

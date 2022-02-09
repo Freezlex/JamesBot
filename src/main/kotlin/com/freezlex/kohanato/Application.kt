@@ -8,6 +8,7 @@ import com.freezlex.kohanato.core.KohanatoCore
 fun main() {
     KohanatoCore()
         .defineOwners(306703362261254154)
+        .commandsPackage("com.freezlex.kohanato.commands")
         .processByEnv()
         .launch()
 }

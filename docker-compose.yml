@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  kohanato-core:
+    container_name: kohanato-core
+    build:
+      context: .
+    depends_on:
+      - kohanato-mysql-dev
+    env_file:
+      - ./environment/mysql/.env.dev
+      - ./environment/kotlin/.env.dev
+    networks:
+      - kohanato-network-dev
+
+  kohanato-mysql-dev:
+    container_name: kohanato-mysql-dev
+    image: mariadb:10.7.1
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
+    env_file:
+      - ./environment/mysql/.env.dev
+    networks:
+      - kohanato-network-dev
+    ports:
+      - "3306:3306"
+
+  kohanato-adminer-dev:
+    container_name: kohanato-adminer-dev
+    image: adminer
+    depends_on:
+      - kohanato-mysql-dev
+    networks:
+      - kohanato-network-dev
+    ports:
+      - "8080:8080"
+
+volumes:
+  kohanato-core-data: {}
+
+networks:
+  kohanato-network-dev:
+    driver: bridge
