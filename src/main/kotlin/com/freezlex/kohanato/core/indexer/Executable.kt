@@ -2,7 +2,7 @@ package com.freezlex.kohanato.core.indexer
 
 import com.freezlex.kohanato.core.commands.arguments.Argument
 import com.freezlex.kohanato.core.commands.contextual.BaseCommand
-import kotlinx.coroutines.coroutineScope
+import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import java.util.concurrent.ExecutorService
 import kotlin.reflect.KFunction
@@ -17,7 +17,7 @@ abstract class Executable (
     val arguments: List<Argument>,
     private val kParameter: KParameter,
         ) {
-    suspend fun execute(event: SlashCommandInteractionEvent, args: HashMap<KParameter, Any?>, complete: (Boolean, Throwable?) -> Unit, executor: ExecutorService?) {
+    suspend fun execute(event: GenericCommandInteractionEvent, args: HashMap<KParameter, Any?>, complete: (Boolean, Throwable?) -> Unit, executor: ExecutorService?) {
         method.instanceParameter?.let {
             args[it] = command }
         args[kParameter] = event

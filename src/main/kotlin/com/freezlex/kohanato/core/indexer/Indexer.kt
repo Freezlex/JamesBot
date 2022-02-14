@@ -1,13 +1,13 @@
 package com.freezlex.kohanato.core.indexer
 
-import com.freezlex.kohanato.core.commands.contextual.Command
 import com.freezlex.kohanato.core.commands.arguments.Argument
 import com.freezlex.kohanato.core.commands.arguments.Param
 import com.freezlex.kohanato.core.commands.contextual.BaseCommand
-import net.dv8tion.jda.api.events.Event
+import com.freezlex.kohanato.core.commands.contextual.KoCommand
+import com.freezlex.kohanato.core.commands.parser.InferType
+import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
-import net.dv8tion.jda.api.interactions.commands.OptionType
-import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction
+import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent
 import org.reflections.Reflections
 import org.reflections.scanners.MethodParameterNamesScanner
 import org.reflections.scanners.Scanners
@@ -58,21 +58,22 @@ class Indexer {
         return runner!!
     }
 
-    fun loadCommand(method: KFunction<*>, command: BaseCommand): Command {
+    fun loadCommand(method: KFunction<*>, command: BaseCommand): KoCommand {
         require(method.javaMethod!!.declaringClass == command::class.java){ "${method.name} is not from ${command::class.simpleName}" }
 
-        val name = command.name?.lowercase()?: command::class.java.name
-            .split('.')
-            .last()
-            .removeSuffix("SlashCommand")
-            .lowercase()
-        val category = command.category?.lowercase()?: command::class.java.`package`.name.split('.').last().lowercase()
+        val name = command.name?.lowercase()?: throw IllegalStateException("The command ${command::class.java.name} is missing a name.")
+        val category = command.category
         val cooldown = command.cooldown
-        val event = method.valueParameters.firstOrNull() { it.type.classifier?.equals(SlashCommandInteractionEvent::class) == true}
+        // TODO : Refactor this check but we need to find a global scope to check instead of pointing class
+        val event = method.valueParameters.firstOrNull() {
+            it.type.classifier?.equals(SlashCommandInteractionEvent::class) == true || it.type.classifier?.equals(UserContextInteractionEvent::class) == true || it.type.classifier?.equals(MessageContextInteractionEvent::class) == true
+        }
         require(event != null) { "${method.name} method from $name command is missing the event parameters!" }
-        val arguments = loadParameters(method.valueParameters.filterNot { it.type.classifier?.equals(SlashCommandInteractionEvent::class) == true })
+        val arguments = loadParameters(method.valueParameters.filterNot {
+            it.type.classifier?.equals(SlashCommandInteractionEvent::class) == true || it.type.classifier?.equals(UserContextInteractionEvent::class) == true || it.type.classifier?.equals(MessageContextInteractionEvent::class) == true
+        })
 
-        return Command(name, category, this.jar, cooldown, method, command, arguments, event)
+        return KoCommand(name, category, this.jar, cooldown, method, command, arguments, event)
     }
 
     private fun loadParameters(parameters: List<KParameter>): List<Argument>{
@@ -83,7 +84,7 @@ class Indexer {
             val name = if(p?.name == "" || p?.name == null) it.name.toString() else p.name
             val type = it.type.jvmErasure.javaObjectType
             val greedy = p?.greedy?: false
-            val sType = p?.type?: OptionType.STRING
+            val inferredType = InferType.predicate(it.type)
             val optional = it.isOptional
             val option = p?.options?: arrayOf()
             val nullable= it.type.isMarkedNullable
@@ -93,7 +94,7 @@ class Indexer {
             }else{
                 p?.tentative?: false
             }
-            arguments.add(Argument(name, type, greedy, optional, nullable, tentative, sType, description, option.toMutableList(), it))
+            arguments.add(Argument(name, type, greedy, optional, nullable, tentative, inferredType, description, option.toMutableList(), it))
         }
         return arguments
     }

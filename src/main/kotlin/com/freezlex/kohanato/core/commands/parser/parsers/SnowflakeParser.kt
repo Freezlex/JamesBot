@@ -1,7 +1,7 @@
 package com.freezlex.kohanato.core.commands.parser.parsers
 
 import com.freezlex.kohanato.core.commands.parser.Parsed
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
+import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent
 import java.util.*
 import java.util.regex.Pattern
 
@@ -17,7 +17,7 @@ class SnowflakeParser : Parsed<Snowflake> {
      * @param param
      *          The params to parse
      */
-    override fun parse(event: SlashCommandInteractionEvent, param: String): Optional<Snowflake> {
+    override fun parse(event: GenericCommandInteractionEvent, param: String): Optional<Snowflake> {
         val match = snowflakeMatch.matcher(param)
 
         if (match.matches()) {

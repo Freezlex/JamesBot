@@ -5,12 +5,11 @@ import com.freezlex.kohanato.core.commands.parser.parsers.*
 import com.freezlex.kohanato.core.indexer.Executable
 import com.freezlex.kohanato.core.throwable.BadArgument
 import com.freezlex.kohanato.core.throwable.ParserNotRegistered
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.entities.*
+import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionMapping
-import java.net.URL
 import java.util.*
-import kotlin.jvm.internal.Intrinsics
 import kotlin.reflect.KParameter
 import kotlin.time.Duration
 
@@ -24,7 +23,7 @@ import kotlin.time.Duration
  *          The args from the command
  */
 class Parser(
-    private val event: SlashCommandInteractionEvent,
+    private val event: GenericCommandInteractionEvent,
     private val delimiter: Char,
     commandArgs: List<String>
 ) {
@@ -161,6 +160,7 @@ class Parser(
             this.parsers[java.time.Duration::class.java] = durationParser
 
             this.parsers[Member::class.java] = MemberParser()
+            this.parsers[User::class.java] = UserParser()
         }
 
         /**
@@ -176,7 +176,7 @@ class Parser(
          *
          * TODO : Simplify the parser we are not using string args anymore so we should use it only when someone decide to use a varargs as parameters
          */
-        fun parseArguments(command: Executable, event: SlashCommandInteractionEvent, args: List<String>, delimiter: Char): HashMap<KParameter, Any?> {
+        fun parseArguments(command: Executable, event: GenericCommandInteractionEvent, args: List<String>, delimiter: Char): HashMap<KParameter, Any?> {
             if (command.arguments.isEmpty()) {
                 return hashMapOf()
             }
@@ -212,7 +212,7 @@ class Parser(
          * @param delimiter
          *          The char delimiter for the command
          */
-        fun parseArguments(cmd: Executable, event: SlashCommandInteractionEvent, args: List<OptionMapping>?): HashMap<KParameter, Any?> {
+        fun parseArguments(cmd: Executable, event: GenericCommandInteractionEvent, args: List<OptionMapping>?): HashMap<KParameter, Any?> {
             if(args == null)return hashMapOf();
             return parseArguments(cmd, event , args.map { it.asString }, ' ')
         }

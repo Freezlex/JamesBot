@@ -1,6 +1,6 @@
 package com.freezlex.kohanato.core.cooldown
 
-import com.freezlex.kohanato.core.commands.contextual.Command
+import com.freezlex.kohanato.core.commands.contextual.KoCommand
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -10,16 +10,16 @@ import kotlin.time.Duration
 object CooldownProvider {
     private val buckets = ConcurrentHashMap<BucketType, Bucket>()
 
-    fun isOnCooldown(id: Long, bucket: BucketType, command: Command): Boolean {
-        return buckets[bucket]?.isOnCooldown(id, command.name) ?: false
+    fun isOnCooldown(id: Long, bucket: BucketType, koCommand: KoCommand): Boolean {
+        return buckets[bucket]?.isOnCooldown(id, koCommand.name) ?: false
     }
 
-    fun getCooldownTime(id: Long, bucket: BucketType, command: Command): Long {
-        return buckets[bucket]?.getCooldownRemainingTime(id, command.name) ?: 0
+    fun getCooldownTime(id: Long, bucket: BucketType, koCommand: KoCommand): Long {
+        return buckets[bucket]?.getCooldownRemainingTime(id, koCommand.name) ?: 0
     }
 
-    fun setCooldown(id: Long, bucket: BucketType, time: Duration, command: Command) {
-        buckets.computeIfAbsent(bucket) { Bucket() }.setCooldown(id, time, command.name)
+    fun setCooldown(id: Long, bucket: BucketType, time: Duration, koCommand: KoCommand) {
+        buckets.computeIfAbsent(bucket) { Bucket() }.setCooldown(id, time, koCommand.name)
     }
 
     class Bucket {

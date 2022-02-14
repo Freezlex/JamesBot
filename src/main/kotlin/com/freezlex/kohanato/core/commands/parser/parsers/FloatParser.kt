@@ -1,7 +1,7 @@
 package com.freezlex.kohanato.core.commands.parser.parsers
 
 import com.freezlex.kohanato.core.commands.parser.Parsed
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
+import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent
 import java.util.*
 
 /**
@@ -16,7 +16,7 @@ class FloatParser : Parsed<Float> {
      * @param param
      *          The params to parse
      */
-    override fun parse(event: SlashCommandInteractionEvent, param: String): Optional<Float> {
+    override fun parse(event: GenericCommandInteractionEvent, param: String): Optional<Float> {
         return Optional.ofNullable(param.toFloatOrNull())
     }
 

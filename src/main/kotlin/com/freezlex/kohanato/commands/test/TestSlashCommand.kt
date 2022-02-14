@@ -1,11 +1,16 @@
 package com.freezlex.kohanato.commands.test
 
+import com.freezlex.kohanato.core.commands.Categories
 import com.freezlex.kohanato.core.commands.contextual.SlashCommand
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 
 class TestSlashCommand: SlashCommand {
-    override val category: String = "TEST"
-    override val subSlashCommand: Boolean = false
+
+    override val name: String
+        get() = "test"
+    override val category: Categories = Categories.UNCATEGORIZED
+    override val isSubGroup: Boolean
+        get() = false
 
     override suspend fun run(event: SlashCommandInteractionEvent) {
         super.run(event)

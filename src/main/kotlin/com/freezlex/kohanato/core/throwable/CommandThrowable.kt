@@ -1,40 +1,41 @@
 package com.freezlex.kohanato.core.throwable
 
-import com.freezlex.kohanato.core.commands.Commands
-import com.freezlex.kohanato.core.commands.contextual.Command
+import com.freezlex.kohanato.core.commands.KoCommands
+import com.freezlex.kohanato.core.commands.contextual.KoCommand
 import com.freezlex.kohanato.core.extensions.findBestMatch
 import net.dv8tion.jda.api.Permission
+import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 
 object CommandThrowable {
 
     fun onInternalError(error: Throwable)  = error.printStackTrace()
 
-    fun onCommandError(command: Command, error: Throwable) = error.printStackTrace()
+    fun onCommandError(koCommand: KoCommand, error: Throwable) = error.printStackTrace()
 
-    fun onBadArgument(command: Command, e: BadArgument){
+    fun onBadArgument(koCommand: KoCommand, e: BadArgument){
         println("Bad args")
     }
 
-    fun onParseError(command: Command, e: Throwable){
+    fun onParseError(koCommand: KoCommand, e: Throwable){
         println("Parsing error ! ${e}")
     }
 
-    fun onCommandPostInvoke(command: Command, failed: Boolean){
+    fun onCommandPostInvoke(koCommand: KoCommand, failed: Boolean){
         println("Error at post invoke")
     }
 
-    fun onCommandPreInvoke(command: Command) = true
+    fun onCommandPreInvoke(koCommand: KoCommand) = true
 
-    fun onGuildOnlyInvoke(command: Command){
+    fun onGuildOnlyInvoke(koCommand: KoCommand){
         println("Is Guild only")
     }
 
-    fun onCommandCooldown(command: Command, cooldown: Long){
+    fun onCommandCooldown(koCommand: KoCommand, cooldown: Long){
         println("On cooldown")
     }
 
-    fun onBotMissingPermissions(command: Command, permission: List<Permission>){
+    fun onBotMissingPermissions(koCommand: KoCommand, permission: List<Permission>){
         println("I'm cooling down")
     }
 
@@ -44,7 +45,7 @@ object CommandThrowable {
      * @param command The command sent by the user
      * @param bestMatches A list of close match from what the user sent
      */
-    fun onUnknownSlashCommand(event: SlashCommandInteractionEvent, tentative: String){
-        event.reply("Commande `$tentative` inconnue. Vouliez-vous dire `${findBestMatch(Commands.map { s -> s.key }, tentative)}` ?").queue()
+    fun onUnknownCommand(event: GenericCommandInteractionEvent, tentative: String){
+        event.reply("Commande `$tentative` inconnue. Vouliez-vous dire `${findBestMatch(KoCommands.map { s -> s.key }, tentative)}` ?").queue()
     }
 }

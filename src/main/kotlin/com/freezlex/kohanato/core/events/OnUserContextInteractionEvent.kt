@@ -6,12 +6,11 @@ import com.freezlex.kohanato.core.commands.RunCommand
 import com.freezlex.kohanato.core.commands.contextual.KoCommand
 import com.freezlex.kohanato.core.commands.parser.Parser
 import com.freezlex.kohanato.core.throwable.BadArgument
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
+import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent
 import kotlin.reflect.KParameter
 
-object OnSlashCommandEvent {
-    suspend fun run(executor: KohanatoCore, event: SlashCommandInteractionEvent){
-
+object OnUserContextInteractionEvent {
+    suspend fun run(executor: KohanatoCore, event: UserContextInteractionEvent){
         val koCommand: KoCommand = if(event.subcommandName != null){
             KoCommands.filter { it.key.equals(event.subcommandName, true) && it.value.category.fName.lowercase() == event.name }.values.firstOrNull()?:
             return executor.dispatchSafely { it.onUnknownCommand(event, event.subcommandName!!) }

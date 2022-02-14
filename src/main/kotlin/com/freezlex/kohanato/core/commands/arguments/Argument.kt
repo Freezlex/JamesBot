@@ -10,7 +10,7 @@ class Argument (
     val optional: Boolean, // Denotes that a parameter has a default value.
     val isNullable: Boolean,
     val isTentative: Boolean,
-    val slashType: OptionType,
+    val inferredType: OptionType,
     val description: String,
     val options: MutableList<String>,
     internal val kparam: KParameter

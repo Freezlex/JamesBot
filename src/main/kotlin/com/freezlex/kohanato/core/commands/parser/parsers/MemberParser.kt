@@ -2,7 +2,7 @@ package com.freezlex.kohanato.core.commands.parser.parsers
 
 import com.freezlex.kohanato.core.commands.parser.Parsed
 import net.dv8tion.jda.api.entities.Member
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
+import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent
 import java.util.*
 
 /**
@@ -18,7 +18,7 @@ class MemberParser : Parsed<Member> {
      * @param param
      *          The params to parse
      */
-    override fun parse(event: SlashCommandInteractionEvent, param: String): Optional<Member> {
+    override fun parse(event: GenericCommandInteractionEvent, param: String): Optional<Member> {
         val snowflake = snowflakeParser.parse(event, param)
 
         val member: Member? = if (snowflake.isPresent) event.guild!!.getMemberById(snowflake.get().resolved) else {
@@ -29,7 +29,6 @@ class MemberParser : Parsed<Member> {
                 event.guild?.getMembersByName(param, false)?.firstOrNull()
             }
         }
-        println(member)
         return Optional.ofNullable(member)
     }
 
