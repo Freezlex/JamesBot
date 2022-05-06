@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 val jdaVersion: String by project
 val jdaKtxVersion: String by project
 val slf4jVersion: String by project
+val gsonVersion: String by project
 
 plugins {
     application
@@ -26,8 +27,9 @@ dependencies {
     implementation("com.github.minndevelopment:jda-ktx:$jdaKtxVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
     implementation("org.reflections:reflections:0.10.2")
-    implementation("org.apache.logging.log4j:log4j-core:2.17.1")
-    implementation("org.slf4j:slf4j-api:$slf4jVersion")
+    implementation("com.google.code.gson:gson:$gsonVersion")
+    implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
+    implementation("ch.qos.logback", "logback-classic", "1.2.6")
 }
 
 tasks.withType<KotlinCompile> {

@@ -1,12 +1,12 @@
 package com.freezlex.kohanato.commands.test
 
+import com.freezlex.kohanato.core.KoListener
 import com.freezlex.kohanato.core.commands.Categories
 import com.freezlex.kohanato.core.commands.contextual.UserContextCommand
 import dev.minn.jda.ktx.Embed
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent
 import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatterBuilder
 
 class UserInfoCommand: UserContextCommand {
 
@@ -15,8 +15,9 @@ class UserInfoCommand: UserContextCommand {
     override val category: Categories
         get() = Categories.UNCATEGORIZED
 
-    override suspend fun run(event: UserContextInteractionEvent) {
-        val member: Member = event.targetMember?: return event.reply("This command must be used in a guild only.").queue()
+    fun run(kl: KoListener) {
+        val event = kl.event as UserContextInteractionEvent
+        val member: Member = kl.event.targetMember?: return event.reply("This command must be used in a guild only.").queue()
         val format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
         event.reply("Here's some data for you !").addEmbeds(Embed {
             title = "Informations about ${member.effectiveName}"

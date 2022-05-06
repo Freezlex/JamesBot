@@ -3,6 +3,9 @@ package com.freezlex.kohanato.core
 import com.freezlex.kohanato.core.commands.KoCommands
 import com.freezlex.kohanato.core.commands.parser.Parser
 import com.freezlex.kohanato.core.events.*
+import com.freezlex.kohanato.core.i18n.Language
+import com.freezlex.kohanato.core.i18n.LanguageModel
+import com.freezlex.kohanato.core.i18n.TestClass
 import com.freezlex.kohanato.core.throwable.CommandThrowable
 import dev.minn.jda.ktx.CoroutineEventListener
 import dev.minn.jda.ktx.injectKTX
@@ -70,30 +73,9 @@ class KohanatoCore: CoroutineEventListener {
 
     override suspend fun onEvent(event: GenericEvent) {
         try{
-            when(event){
-                is ReadyEvent -> OnReadyEvent.run(event)
-                is SlashCommandInteractionEvent -> OnSlashCommandEvent.run(this, event)
-                is MessageReceivedEvent -> OnMessageReceivedEvent.run(this, event)
-                is ButtonInteractionEvent -> OnButtonClickEvent.run(this, event)
-                is UserContextInteractionEvent -> OnUserContextInteractionEvent.run(this, event)
-                is MessageContextInteractionEvent -> OnMessageContextInteractionEvent.run(this, event)
-            }
+            KoListener(this, event).run();
         }catch (e: Throwable){
             throw Throwable(e)
         }
     }
-
-    fun dispatchSafely(invoker: (CommandThrowable) -> Unit) {
-        try {
-            CommandThrowable.run(invoker)
-        } catch (e: Throwable) {
-            try {
-                CommandThrowable.onInternalError(e)
-            } catch (inner: Throwable) {
-                println(inner)
-            }
-        }
-    }
 }
-
-val logger: Logger = LoggerFactory.getLogger("Kohanato")

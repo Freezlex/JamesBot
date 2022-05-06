@@ -8,6 +8,7 @@ import dev.minn.jda.ktx.messages.into
 import dev.minn.jda.ktx.messages.reply_
 import kotlinx.coroutines.withTimeoutOrNull
 import net.dv8tion.jda.api.Permission
+import net.dv8tion.jda.api.events.Event
 import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent
 import kotlin.time.Duration.Companion.minutes
 

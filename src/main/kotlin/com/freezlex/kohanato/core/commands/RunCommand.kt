@@ -1,5 +1,6 @@
 package com.freezlex.kohanato.core.commands
 
+import com.freezlex.kohanato.core.KoListener
 import com.freezlex.kohanato.core.KohanatoCore
 import com.freezlex.kohanato.core.commands.contextual.KoCommand
 import com.freezlex.kohanato.core.cooldown.BucketType
@@ -10,7 +11,7 @@ import kotlin.reflect.KParameter
 import kotlin.time.Duration.Companion.milliseconds
 
 class RunCommand(
-    private val executor: KohanatoCore,
+    private val kl: KoListener,
     val event: GenericCommandInteractionEvent,
     val koCommand: KoCommand,
     private val arguments: HashMap<KParameter, Any?>,
@@ -21,15 +22,15 @@ class RunCommand(
             if (err != null) {
                 val handled = koCommand.command.onCommandError(this.koCommand, err)
                 if (!handled) {
-                    this.executor.dispatchSafely { it.onCommandError(this.koCommand, err) }
+                    this.kl.dispatchSafely { it.onCommandError(this.koCommand, err) }
                 }
             }
 
-            this.executor.dispatchSafely { it.onCommandPostInvoke(this.koCommand, !success) }
+            this.kl.dispatchSafely { it.onCommandPostInvoke(this.koCommand, !success) }
         }
 
     suspend fun execute(){
-        if(!this.event.isFromGuild && this.koCommand.command.guildOnly)return this.executor.dispatchSafely { it.onGuildOnlyInvoke(this.koCommand) }
+        if(!this.event.isFromGuild && this.koCommand.command.guildOnly)return this.kl.dispatchSafely { it.onGuildOnlyInvoke(this.koCommand) }
 
         if(koCommand.cooldown != null){
             koCommand.cooldown.forEach {
@@ -42,7 +43,7 @@ class RunCommand(
                 if(entityId != null){
                     if(CooldownProvider.isOnCooldown(entityId, it.bucket, this.koCommand)){
                         val time = CooldownProvider.getCooldownTime(entityId, it.bucket, this.koCommand)/1000
-                        return executor.dispatchSafely { t -> t.onCommandCooldown(this.koCommand, time) }
+                        return kl.dispatchSafely { t -> t.onCommandCooldown(this.koCommand, time) }
                     }
                 }
             }
@@ -54,7 +55,7 @@ class RunCommand(
                     this.event.guild!!.selfMember.hasPermission(this.event.textChannel, it)
                 }
                 if(botCheck.isNotEmpty()){
-                    return executor.dispatchSafely { it.onBotMissingPermissions(this.koCommand, botCheck) }
+                    return kl.dispatchSafely { it.onBotMissingPermissions(this.koCommand, botCheck) }
                 }
             }
         }
@@ -76,6 +77,6 @@ class RunCommand(
 
         }
 
-        koCommand.execute(this.event, arguments, callback(), null)
+        koCommand.execute(this.kl, arguments, callback(), null)
     }
 }

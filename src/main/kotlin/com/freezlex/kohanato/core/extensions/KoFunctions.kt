@@ -1,5 +1,12 @@
 package com.freezlex.kohanato.core.extensions
 
+import com.freezlex.kohanato.core.KohanatoCore
+import com.freezlex.kohanato.core.i18n.Language
+import com.freezlex.kohanato.core.i18n.LanguageModel
+import com.freezlex.kohanato.core.i18n.Test
+import net.dv8tion.jda.api.events.Event
+import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent
+import net.dv8tion.jda.api.interactions.commands.CommandInteraction
 import java.text.Normalizer
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
@@ -18,6 +25,14 @@ fun String.asDuration(): Duration? {
         else -> null
     }
 }
+
+/*fun CommandInteraction.localize{
+    Language.localize();
+}*/
+
+var KohanatoCore.test: String
+    get() = "test"
+    set(value) = TODO()
 
 /**
  * Escape potential regex from a string
