@@ -1,8 +1,9 @@
 package com.freezlex.kohanato.core.commands.contextual
 
-import dev.minn.jda.ktx.awaitButton
-import dev.minn.jda.ktx.interactions.danger
-import dev.minn.jda.ktx.interactions.primary
+import com.freezlex.kohanato.core.KoListener
+import dev.minn.jda.ktx.events.awaitButton
+import dev.minn.jda.ktx.interactions.components.danger
+import dev.minn.jda.ktx.interactions.components.primary
 import kotlinx.coroutines.withTimeoutOrNull
 import net.dv8tion.jda.api.entities.Emoji
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
@@ -11,7 +12,7 @@ import kotlin.time.ExperimentalTime
 
 interface TextualCommand: BaseCommand {
     @OptIn(ExperimentalTime::class)
-    suspend fun run(event: MessageReceivedEvent){
+    suspend fun run(koListener: KoListener, event: MessageReceivedEvent){
         val confirm = primary("${event.author.id}:did-forgot", "Yes", Emoji.fromUnicode("✅"))
         val deny = danger("${event.author.id}:did-not-forgot", "No", Emoji.fromUnicode("❌"))
 

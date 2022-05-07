@@ -1,12 +1,13 @@
 package com.freezlex.kohanato.commands.moderation
 
+import com.freezlex.kohanato.core.KoListener
 import com.freezlex.kohanato.core.commands.Categories
 import com.freezlex.kohanato.core.commands.arguments.Param
 import com.freezlex.kohanato.core.commands.contextual.SlashCommand
 import com.freezlex.kohanato.core.cooldown.BucketType
 import com.freezlex.kohanato.core.cooldown.Cooldown
-import dev.minn.jda.ktx.awaitButton
-import dev.minn.jda.ktx.interactions.danger
+import dev.minn.jda.ktx.events.awaitButton
+import dev.minn.jda.ktx.interactions.components.danger
 import kotlinx.coroutines.withTimeoutOrNull
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
@@ -25,6 +26,7 @@ class BanSlashCommand: SlashCommand {
         get() = listOf(Cooldown(1.minutes, BucketType.USER))
 
     suspend fun run(
+        kl: KoListener,
         event: SlashCommandInteractionEvent,
         @Param(name = "member", description = "The member that should be banned")
         member: User,

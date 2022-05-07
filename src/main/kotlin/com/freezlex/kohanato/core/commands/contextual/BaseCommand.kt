@@ -1,14 +1,14 @@
 package com.freezlex.kohanato.core.commands.contextual
 
+import com.freezlex.kohanato.core.KoListener
 import com.freezlex.kohanato.core.commands.Categories
 import com.freezlex.kohanato.core.cooldown.Cooldown
-import dev.minn.jda.ktx.awaitButton
-import dev.minn.jda.ktx.interactions.danger
+import dev.minn.jda.ktx.events.awaitButton
+import dev.minn.jda.ktx.interactions.components.danger
 import dev.minn.jda.ktx.messages.into
 import dev.minn.jda.ktx.messages.reply_
 import kotlinx.coroutines.withTimeoutOrNull
 import net.dv8tion.jda.api.Permission
-import net.dv8tion.jda.api.events.Event
 import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent
 import kotlin.time.Duration.Companion.minutes
 
@@ -35,7 +35,7 @@ interface BaseCommand {
 
     fun localCheck(koCommand: KoCommand): Boolean = true
 
-    suspend fun run(event: GenericCommandInteractionEvent){
+    suspend fun run(kl: KoListener, event: GenericCommandInteractionEvent){
         val confirm = danger("${event.user.id}:default", "Yes, I guess")
         event.reply_(
             "Did the **Freezlex** forgot to implement this command ?",

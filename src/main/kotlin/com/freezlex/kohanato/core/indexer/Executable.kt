@@ -3,6 +3,7 @@ package com.freezlex.kohanato.core.indexer
 import com.freezlex.kohanato.core.KoListener
 import com.freezlex.kohanato.core.commands.arguments.Argument
 import com.freezlex.kohanato.core.commands.contextual.BaseCommand
+import net.dv8tion.jda.api.events.GenericEvent
 import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import java.util.concurrent.ExecutorService
@@ -17,12 +18,13 @@ abstract class Executable (
     val command: BaseCommand,
     val arguments: List<Argument>,
     private val kParameter: KParameter,
+    private val event: KParameter
         ) {
     suspend fun execute(kl: KoListener, args: HashMap<KParameter, Any?>, complete: (Boolean, Throwable?) -> Unit, executor: ExecutorService?) {
         method.instanceParameter?.let {
             args[it] = command }
         args[kParameter] = kl
-        val testParameter: KParameter;
+        args[event] = kl.event
 
         if (method.isSuspend) {
             executeAsync(args, complete)

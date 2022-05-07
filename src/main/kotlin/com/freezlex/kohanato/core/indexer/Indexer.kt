@@ -1,5 +1,6 @@
 package com.freezlex.kohanato.core.indexer
 
+import com.freezlex.kohanato.core.KoListener
 import com.freezlex.kohanato.core.commands.arguments.Argument
 import com.freezlex.kohanato.core.commands.arguments.Param
 import com.freezlex.kohanato.core.commands.contextual.BaseCommand
@@ -69,11 +70,15 @@ class Indexer {
             it.type.classifier?.equals(SlashCommandInteractionEvent::class) == true || it.type.classifier?.equals(UserContextInteractionEvent::class) == true || it.type.classifier?.equals(MessageContextInteractionEvent::class) == true
         }
         require(event != null) { "${method.name} method from $name command is missing the event parameters!" }
+        val context = method.valueParameters.firstOrNull() {
+            it.type.classifier?.equals(KoListener::class) == true
+        }
+        require(context != null) { "${method.name} method from $name command is missing the KoListener parameters!" }
         val arguments = loadParameters(method.valueParameters.filterNot {
-            it.type.classifier?.equals(SlashCommandInteractionEvent::class) == true || it.type.classifier?.equals(UserContextInteractionEvent::class) == true || it.type.classifier?.equals(MessageContextInteractionEvent::class) == true
+            it.type.classifier?.equals(SlashCommandInteractionEvent::class) == true || it.type.classifier?.equals(UserContextInteractionEvent::class) == true || it.type.classifier?.equals(MessageContextInteractionEvent::class) == true || it.type.classifier?.equals(KoListener::class) == true
         })
 
-        return KoCommand(name, category, this.jar, cooldown, method, command, arguments, event)
+        return KoCommand(name, category, this.jar, cooldown, method, command, arguments, context, event)
     }
 
     private fun loadParameters(parameters: List<KParameter>): List<Argument>{

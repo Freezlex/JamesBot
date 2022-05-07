@@ -5,6 +5,7 @@ import com.freezlex.kohanato.core.commands.arguments.Argument
 import com.freezlex.kohanato.core.cooldown.Cooldown
 import com.freezlex.kohanato.core.indexer.Executable
 import com.freezlex.kohanato.core.indexer.Jar
+import net.dv8tion.jda.api.events.GenericEvent
 import kotlin.reflect.KFunction
 import kotlin.reflect.KParameter
 
@@ -16,5 +17,6 @@ class KoCommand (
     method: KFunction<*>,
     baseCommand: BaseCommand,
     arguments: List<Argument>,
-    kParameter: KParameter
-    ) : Executable(name, method, baseCommand, arguments, kParameter)
+    kParameter: KParameter,
+    event: KParameter
+    ) : Executable(name, method, baseCommand, arguments, kParameter, event)

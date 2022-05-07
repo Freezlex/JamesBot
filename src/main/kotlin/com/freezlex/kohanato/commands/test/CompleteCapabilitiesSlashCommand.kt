@@ -1,5 +1,6 @@
 package com.freezlex.kohanato.commands.test
 
+import com.freezlex.kohanato.core.KoListener
 import com.freezlex.kohanato.core.commands.Categories
 import com.freezlex.kohanato.core.commands.contextual.SlashCommand
 import net.dv8tion.jda.api.entities.Member
@@ -14,7 +15,7 @@ class CompleteCapabilitiesSlashCommand: SlashCommand {
     override val category: Categories
         get() = Categories.UNCATEGORIZED
 
-    fun run(event: SlashCommandInteractionEvent, member: Member) {
+    fun run(kl: KoListener, event: SlashCommandInteractionEvent, member: Member) {
         event.reply("Selected user : ${member.nickname}")
     }
 }
