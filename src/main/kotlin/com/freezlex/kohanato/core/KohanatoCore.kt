@@ -2,7 +2,6 @@ package com.freezlex.kohanato.core
 
 import com.freezlex.kohanato.core.commands.KoCommands
 import com.freezlex.kohanato.core.commands.parser.Parser
-import com.freezlex.kohanato.core.events.*
 import dev.minn.jda.ktx.events.CoroutineEventListener
 import dev.minn.jda.ktx.jdabuilder.injectKTX
 import net.dv8tion.jda.api.OnlineStatus
@@ -60,7 +59,7 @@ class KohanatoCore: CoroutineEventListener {
 
     override suspend fun onEvent(event: GenericEvent) {
         try{
-            KoListener(this, event).run();
+            KoListener(this, event);
         }catch (e: Throwable){
             throw Throwable(e)
         }

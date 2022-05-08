@@ -17,14 +17,14 @@ abstract class Executable (
     private val method: KFunction<*>,
     val command: BaseCommand,
     val arguments: List<Argument>,
-    private val kParameter: KParameter,
-    private val event: KParameter
+    private val cKParameter: KParameter,
+    private val eKParameter: KParameter
         ) {
-    suspend fun execute(kl: KoListener, args: HashMap<KParameter, Any?>, complete: (Boolean, Throwable?) -> Unit, executor: ExecutorService?) {
+    suspend fun execute(event: GenericEvent, core: KoListener, args: HashMap<KParameter, Any?>, complete: (Boolean, Throwable?) -> Unit, executor: ExecutorService?) {
         method.instanceParameter?.let {
             args[it] = command }
-        args[kParameter] = kl
-        args[event] = kl.event
+        args[cKParameter] = core
+        args[eKParameter] = event
 
         if (method.isSuspend) {
             executeAsync(args, complete)

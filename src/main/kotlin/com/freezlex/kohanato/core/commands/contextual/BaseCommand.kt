@@ -35,7 +35,7 @@ interface BaseCommand {
 
     fun localCheck(koCommand: KoCommand): Boolean = true
 
-    suspend fun run(kl: KoListener, event: GenericCommandInteractionEvent){
+    suspend fun run(core: KoListener, event: GenericCommandInteractionEvent){
         val confirm = danger("${event.user.id}:default", "Yes, I guess")
         event.reply_(
             "Did the **Freezlex** forgot to implement this command ?",

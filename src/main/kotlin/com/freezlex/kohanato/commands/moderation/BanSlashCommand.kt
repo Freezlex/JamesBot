@@ -25,9 +25,7 @@ class BanSlashCommand: SlashCommand {
     override val cooldown: List<Cooldown>
         get() = listOf(Cooldown(1.minutes, BucketType.USER))
 
-    suspend fun run(
-        kl: KoListener,
-        event: SlashCommandInteractionEvent,
+    suspend fun run( core: KoListener, event: SlashCommandInteractionEvent,
         @Param(name = "member", description = "The member that should be banned")
         member: User,
         @Param(name = "duration", description = "The duration of the ban")

@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEven
 
 interface UserContextCommand : BaseCommand {
 
-    suspend fun run(kl: KoListener, event: UserContextInteractionEvent){
-        super.run(kl, event)
+    suspend fun run(core: KoListener, event: UserContextInteractionEvent){
+        super.run(core, event)
     }
 }

@@ -1,17 +1,15 @@
 package com.freezlex.kohanato.core.commands
 
 import com.freezlex.kohanato.core.KoListener
-import com.freezlex.kohanato.core.KohanatoCore
 import com.freezlex.kohanato.core.commands.contextual.KoCommand
 import com.freezlex.kohanato.core.cooldown.BucketType
 import com.freezlex.kohanato.core.cooldown.CooldownProvider
 import net.dv8tion.jda.api.events.interaction.command.GenericCommandInteractionEvent
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import kotlin.reflect.KParameter
 import kotlin.time.Duration.Companion.milliseconds
 
 class RunCommand(
-    private val kl: KoListener,
+    private val core: KoListener,
     val event: GenericCommandInteractionEvent,
     val koCommand: KoCommand,
     private val arguments: HashMap<KParameter, Any?>,
@@ -22,15 +20,15 @@ class RunCommand(
             if (err != null) {
                 val handled = koCommand.command.onCommandError(this.koCommand, err)
                 if (!handled) {
-                    this.kl.dispatchSafely { it.onCommandError(this.koCommand, err) }
+                    this.core.dispatchSafely { it.onCommandError(this.koCommand, err) }
                 }
             }
 
-            this.kl.dispatchSafely { it.onCommandPostInvoke(this.koCommand, !success) }
+            this.core.dispatchSafely { it.onCommandPostInvoke(this.koCommand, !success) }
         }
 
     suspend fun execute(){
-        if(!this.event.isFromGuild && this.koCommand.command.guildOnly)return this.kl.dispatchSafely { it.onGuildOnlyInvoke(this.koCommand) }
+        if(!this.event.isFromGuild && this.koCommand.command.guildOnly)return this.core.dispatchSafely { it.onGuildOnlyInvoke(this.koCommand) }
 
         if(koCommand.cooldown != null){
             koCommand.cooldown.forEach {
@@ -43,7 +41,7 @@ class RunCommand(
                 if(entityId != null){
                     if(CooldownProvider.isOnCooldown(entityId, it.bucket, this.koCommand)){
                         val time = CooldownProvider.getCooldownTime(entityId, it.bucket, this.koCommand)/1000
-                        return kl.dispatchSafely { t -> t.onCommandCooldown(this.koCommand, time) }
+                        return core.dispatchSafely { t -> t.onCommandCooldown(this.koCommand, time) }
                     }
                 }
             }
@@ -55,7 +53,7 @@ class RunCommand(
                     this.event.guild!!.selfMember.hasPermission(this.event.textChannel, it)
                 }
                 if(botCheck.isNotEmpty()){
-                    return kl.dispatchSafely { it.onBotMissingPermissions(this.koCommand, botCheck) }
+                    return core.dispatchSafely { it.onBotMissingPermissions(this.koCommand, botCheck) }
                 }
             }
         }
@@ -77,6 +75,6 @@ class RunCommand(
 
         }
 
-        koCommand.execute(this.kl, arguments, callback(), null)
+        koCommand.execute(event, this.core, arguments, callback(), null)
     }
 }

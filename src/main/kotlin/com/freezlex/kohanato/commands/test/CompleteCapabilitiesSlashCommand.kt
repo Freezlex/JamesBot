@@ -15,7 +15,7 @@ class CompleteCapabilitiesSlashCommand: SlashCommand {
     override val category: Categories
         get() = Categories.UNCATEGORIZED
 
-    fun run(kl: KoListener, event: SlashCommandInteractionEvent, member: Member) {
+    fun run(core: KoListener, event: SlashCommandInteractionEvent, member: Member) {
         event.reply("Selected user : ${member.nickname}")
     }
 }

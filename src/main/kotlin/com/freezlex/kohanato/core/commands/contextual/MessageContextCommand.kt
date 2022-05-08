@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionE
 
 interface MessageContextCommand : BaseCommand {
 
-    suspend fun run(kl: KoListener, event: MessageContextInteractionEvent){
-        super.run(kl, event)
+    suspend fun run(core: KoListener, event: MessageContextInteractionEvent){
+        super.run(core, event)
     }
 }

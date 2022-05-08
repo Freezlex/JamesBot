@@ -5,7 +5,7 @@ import com.freezlex.kohanato.core.KohanatoCore
 import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent
 
 object OnMessageContextInteractionEvent {
-    fun run(core: KoListener){
+    fun run(event: MessageContextInteractionEvent, core: KoListener){
 
     }
 }

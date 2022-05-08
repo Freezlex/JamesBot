@@ -15,7 +15,7 @@ class UserInfoCommand: UserContextCommand {
     override val category: Categories
         get() = Categories.UNCATEGORIZED
 
-    override suspend fun run(kl: KoListener, event: UserContextInteractionEvent) {
+    override suspend fun run(core: KoListener, event: UserContextInteractionEvent) {
         val member: Member = event.targetMember?: return event.reply("This command must be used in a guild only.").queue()
         val format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
         event.reply("Here's some data for you !").addEmbeds(Embed {

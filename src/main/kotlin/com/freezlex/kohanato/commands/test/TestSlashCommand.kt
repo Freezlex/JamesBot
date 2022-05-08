@@ -13,7 +13,7 @@ class TestSlashCommand: SlashCommand {
     override val isSubGroup: Boolean
         get() = false
 
-    override suspend fun run(kl:KoListener, event: SlashCommandInteractionEvent) {
-        super.run(kl, event)
+    override suspend fun run(core:KoListener, event: SlashCommandInteractionEvent) {
+        super.run(core, event)
     }
 }

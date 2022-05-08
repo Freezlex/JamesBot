@@ -5,7 +5,7 @@ import com.freezlex.kohanato.core.KohanatoCore
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 
 object OnMessageReceivedEvent {
-    fun run(core: KoListener){
-
+    fun run(event: MessageReceivedEvent, core: KoListener){
+        // TODO: Implement some action to do when a user send a message
     }
 }

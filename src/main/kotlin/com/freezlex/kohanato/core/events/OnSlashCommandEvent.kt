@@ -12,25 +12,24 @@ import kotlin.reflect.KParameter
 
 object OnSlashCommandEvent {
 
-    suspend fun run(core: KoListener){
+    suspend fun run(event: SlashCommandInteractionEvent, core: KoListener){
 
-        if(core.event !is SlashCommandInteractionEvent) return core.dispatchSafely {  }
-        val koCommand: KoCommand = if(core.event.subcommandName != null){
-            KoCommands.filter { it.key.equals(core.event.subcommandName, true) && it.value.category.fName.lowercase() == core.event.name }.values.firstOrNull()?:
-            return core.dispatchSafely { it.onUnknownCommand(core.event, core.event.subcommandName!!) }
+        val koCommand: KoCommand = if(event.subcommandName != null){
+            KoCommands.filter { it.key.equals(event.subcommandName, true) && it.value.category.fName.lowercase() == event.name }.values.firstOrNull()?:
+            return core.dispatchSafely { it.onUnknownCommand(event, event.subcommandName!!) }
         }else{
-            KoCommands[core.event.name]?: return core.dispatchSafely { it.onUnknownCommand(core.event, core.event.name) }
+            KoCommands[event.name]?: return core.dispatchSafely { it.onUnknownCommand(event, event.name) }
         }
 
         val arguments: HashMap<KParameter, Any?>
         try{
-            arguments = Parser.parseArguments(koCommand, core.event, core.event.options)
+            arguments = Parser.parseArguments(koCommand, event, event.options)
         }catch (e: BadArgument){
             return core.dispatchSafely { it.onBadArgument(koCommand, e) }
         }catch (e: Throwable){
             return core.dispatchSafely { it.onParseError(koCommand, e) }
         }
 
-        RunCommand(core, core.event, koCommand, arguments).execute()
+        RunCommand(core, event, koCommand, arguments).execute()
     }
 }

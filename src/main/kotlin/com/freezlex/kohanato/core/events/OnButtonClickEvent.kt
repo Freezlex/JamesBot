@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 
 object OnButtonClickEvent {
 
-    fun run(core: KoListener){
+    fun run(event: ButtonInteractionEvent, core: KoListener){
 
     }
 }

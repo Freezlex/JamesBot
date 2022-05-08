@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 
 interface SlashCommand: BaseCommand {
 
-    suspend fun run(kl: KoListener, event: SlashCommandInteractionEvent) {
-        super.run(kl, event)
+    suspend fun run(core: KoListener, event: SlashCommandInteractionEvent) {
+        super.run(core, event)
     }
 }
