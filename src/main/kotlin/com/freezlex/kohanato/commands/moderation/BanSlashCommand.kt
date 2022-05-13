@@ -28,10 +28,13 @@ class BanSlashCommand: SlashCommand {
     suspend fun run( core: KoListener, event: SlashCommandInteractionEvent,
         @Param(name = "member", description = "The member that should be banned")
         member: User,
-        @Param(name = "duration", description = "The duration of the ban")
-        duration: Duration,
-        @Param(name = "reason", description = "The reason of the ban")
-        reason: String?) {
+        @Param(name = "duration", description = "How much time must this user be banned for.")
+        duration: Duration? = null,
+        @Param(name= "delete_messages", description = "How much of their recent message history to delete.")
+        messageDel: Duration? = null,
+        @Param(name = "reason", description = "The reason for banning, if any.")
+        reason: String? = null)
+    {
         val confirm = danger("${member.id}:ban", "Confirm")
         val reply = event.reply("Are you sure you want to ban **${member.asTag}**?").setEphemeral(true).addActionRow(confirm).complete()
 
@@ -39,8 +42,8 @@ class BanSlashCommand: SlashCommand {
             val pressed = event.user.awaitButton(confirm) // await for user to click button
             pressed.deferEdit().queue() // Acknowledge the button press
             try{
-                event.guild?.ban(member, duration.inWholeDays.toInt() ?: 1, event.getOption("reason")?.asString?: "No reason provided")?.queue() // the button is pressed -> execute action
-                reply.editOriginal("**${member.name}** has been banned for ${duration.inWholeDays ?: "Undefined"} days.")
+                event.guild?.ban(member, duration?.inWholeDays?.toInt() ?: 1, event.getOption("reason")?.asString?: "No reason provided")?.queue() // the button is pressed -> execute action
+                reply.editOriginal("**${member.name}** has been banned for ${duration?.inWholeDays ?: "Undefined"} days.")
                     .setActionRow(confirm.asDisabled())
                     .queue()
             }catch (e: Exception){

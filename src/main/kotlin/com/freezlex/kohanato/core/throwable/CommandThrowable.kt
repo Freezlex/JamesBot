@@ -11,31 +11,32 @@ object CommandThrowable {
 
     fun onInternalError(error: Throwable)  = error.printStackTrace()
 
-    fun onCommandError(koCommand: KoCommand, error: Throwable) = error.printStackTrace()
+    fun onCommandError(core: KoCommand, error: Throwable) = error.printStackTrace()
 
-    fun onBadArgument(koCommand: KoCommand, e: BadArgument){
+    fun onBadArgument(core: KoCommand, e: BadArgument){
+
         println("Bad args")
     }
 
-    fun onParseError(koCommand: KoCommand, e: Throwable){
+    fun onParseError(core: KoCommand, e: Throwable){
         println("Parsing error ! ${e}")
     }
 
-    fun onCommandPostInvoke(koCommand: KoCommand, failed: Boolean){
+    fun onCommandPostInvoke(core: KoCommand, failed: Boolean){
         println("Error at post invoke")
     }
 
-    fun onCommandPreInvoke(koCommand: KoCommand) = true
+    fun onCommandPreInvoke(core: KoCommand) = true
 
     fun onGuildOnlyInvoke(koCommand: KoCommand){
         println("Is Guild only")
     }
 
-    fun onCommandCooldown(koCommand: KoCommand, cooldown: Long){
+    fun onCommandCooldown(core: KoCommand, cooldown: Long){
         println("On cooldown")
     }
 
-    fun onBotMissingPermissions(koCommand: KoCommand, permission: List<Permission>){
+    fun onBotMissingPermissions(core: KoCommand, permission: List<Permission>){
         println("I'm cooling down")
     }
 

@@ -1,8 +1,8 @@
 package com.freezlex.kohanato.core
 
 import com.freezlex.kohanato.core.events.*
+import com.freezlex.kohanato.core.i18n.LangManager
 import com.freezlex.kohanato.core.i18n.Language
-import com.freezlex.kohanato.core.i18n.LanguageModel
 import com.freezlex.kohanato.core.throwable.CommandThrowable
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -28,10 +28,11 @@ class KoListener(
     event: GenericEvent
 ) {
 
-    var language: LanguageModel? = Language["en"]
+    lateinit var language: LangManager;
 
     init {
         GlobalScope.async { run(event) }
+        language = Language.getLangManager();
     }
 
     suspend fun run(event: GenericEvent) {

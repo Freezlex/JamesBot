@@ -2,6 +2,9 @@ package com.freezlex.kohanato.core
 
 import com.freezlex.kohanato.core.commands.KoCommands
 import com.freezlex.kohanato.core.commands.parser.Parser
+import com.freezlex.kohanato.core.i18n.Language
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import dev.minn.jda.ktx.events.CoroutineEventListener
 import dev.minn.jda.ktx.jdabuilder.injectKTX
 import net.dv8tion.jda.api.OnlineStatus
@@ -11,6 +14,11 @@ import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder
 import net.dv8tion.jda.api.utils.ChunkingFilter
 import net.dv8tion.jda.api.utils.MemberCachePolicy
+
+/**
+ * Global variable [GSON]
+ */
+val GSON: Gson by lazy { GsonBuilder().setPrettyPrinting().serializeNulls().create() }
 
 /**
  * Used to create new instances of JDA's DefaultShardManagerBuilder implementation.

@@ -192,7 +192,7 @@ class Parser(
                 if (useValue) {
                     //This will only place the argument into the map if the value is null,
                     // or if the parameter requires a value (i.e. marked nullable).
-                    //Commands marked optional already have a parameter so they don't need user-provided values
+                    //Commands marked optional already have a parameter, so they don't need user-provided values
                     // unless the argument was successfully resolved for that parameter.
                     resolvedArgs[arg.kparam] = res
                 }
@@ -205,12 +205,10 @@ class Parser(
          * Parse the argument from the message argument provided
          * @param cmd
          *          The invoked command
-         * @param ctx
+         * @param event
          *          The context of the incoming event
          * @param args
          *          The provided args in the command
-         * @param delimiter
-         *          The char delimiter for the command
          */
         fun parseArguments(cmd: Executable, event: GenericCommandInteractionEvent, args: List<OptionMapping>?): HashMap<KParameter, Any?> {
             if(args == null)return hashMapOf();

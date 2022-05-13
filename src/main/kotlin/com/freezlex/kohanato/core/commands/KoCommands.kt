@@ -117,14 +117,14 @@ object KoCommands: HashMap<String, KoCommand>() {
     private fun createGroupedSlash(ca: Categories, co: MutableList<KoCommand>): SlashCommandData{
         return Commands.slash(ca.fName, ca.description)
             .addSubcommands(co.map { SubcommandData(it.name, it.command.description)
-                .addOptions(it.arguments.map {a -> OptionData(a.inferredType, a.name, a.description, a.optional)
+                .addOptions(it.arguments.sortedBy { a -> a.optional }.map {a -> OptionData(a.inferredType, a.name, a.description, !a.optional)
                     .addChoices(a.options.map { o -> Command.Choice(o , o) }) }) })
     }
 
     private fun createNonGroupedSlash(c: MutableList<KoCommand>): List<SlashCommandData>{
         return c.map {
             Commands.slash(it.name, it.command.description).addOptions(
-                it.arguments.map {a -> OptionData(a.inferredType, a.name, a.description, a.optional)
+                it.arguments.sortedByDescending { a -> a.optional }.map {a -> OptionData(a.inferredType, a.name, a.description, a.optional)
                     .addChoices(a.options.map { o -> Command.Choice(o , o) }) })
         }
     }
