@@ -16,6 +16,7 @@ class CompleteCapabilitiesSlashCommand: SlashCommand {
         get() = Categories.UNCATEGORIZED
 
     fun run(core: KoListener, event: SlashCommandInteractionEvent, member: Member) {
-        event.reply("Selected user : ${member.nickname}")
+        val reply = core.language.getString(this, "run", "selectedUser", "Selected user %s")
+        event.reply(reply.format(member)).queue()
     }
 }

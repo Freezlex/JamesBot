@@ -1,6 +1,7 @@
 package com.freezlex.kohanato.core.extensions
 
 import com.freezlex.kohanato.core.KohanatoCore
+import com.freezlex.kohanato.core.i18n.LangManager
 import java.text.Normalizer
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days

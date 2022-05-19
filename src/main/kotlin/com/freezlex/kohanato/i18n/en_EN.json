@@ -1,5 +1,0 @@
-{
-  "exceptions": {
-    "on_unknown_command": "Unknown interaction `%1$s`, Did you mean `%2$s` ?"
-  }
-}

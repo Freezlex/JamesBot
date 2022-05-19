@@ -25,9 +25,9 @@ object OnSlashCommandEvent {
         try{
             arguments = Parser.parseArguments(koCommand, event, event.options)
         }catch (e: BadArgument){
-            return core.dispatchSafely { it.onBadArgument(koCommand, e) }
+            return core.dispatchSafely { it.onBadArgument(core, koCommand, e) }
         }catch (e: Throwable){
-            return core.dispatchSafely { it.onParseError(koCommand, e) }
+            return core.dispatchSafely { it.onParseError(core, koCommand, e) }
         }
 
         RunCommand(core, event, koCommand, arguments).execute()

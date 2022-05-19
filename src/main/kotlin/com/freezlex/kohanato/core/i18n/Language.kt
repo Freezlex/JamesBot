@@ -1,15 +1,18 @@
 package com.freezlex.kohanato.core.i18n
 
-import com.freezlex.kohanato.core.KoListener
-import com.freezlex.kohanato.core.logger
-import com.google.gson.Gson
+import com.freezlex.kohanato.core.events.*
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.events.GenericEvent
+import net.dv8tion.jda.api.events.ReadyEvent
+import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent
+import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
+import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
+import net.dv8tion.jda.api.events.message.GenericMessageEvent
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import java.io.File
-import java.nio.charset.StandardCharsets
-import java.nio.file.Files
-import java.nio.file.Path
 
 private val LANG_MANAGERS: MutableMap<String, LangManager> = mutableMapOf()
 
@@ -35,11 +38,34 @@ object Language {
      * @param guild [Guild] guild.
      * @return [LangManager] langManager.
      */
-    fun getLangManager(core: KoListener): LangManager {
-        val code = getGuildLangCode() ?: "en"
+    fun getLangManager(event: GenericEvent): LangManager {
+        val code: String = when(event){
+            is GenericInteractionCreateEvent -> getLangCodeFromInteraction(event)
+            is GenericMessageEvent -> getLangCodeFromGeneric(event)
+            else -> "en";
+        }
         if (!LANG_MANAGERS.containsKey(code)) LANG_MANAGERS[code] = LangManager(code)
         return LANG_MANAGERS[code]!!
     }
+
+    /**
+     * Determine lang code from cache or userLocal
+     * @param event The event from the interaction event
+     */
+    private fun getLangCodeFromInteraction(event: GenericInteractionCreateEvent): String =
+        event.userLocale.toLanguageTag().split("-").first()
+
+    /**
+     * Determine lang from cache or guild cache/locale
+     * @param event The event from the generic message event
+     */
+    private fun getLangCodeFromGeneric(event: GenericMessageEvent): String =
+        getGuildLangCode(event.guild)?: "en"
+
+    /**
+     * TODO : Implement when cache is built
+     * private fun getUserLangCode(user: User?): String?;
+     */
 
     private fun getGuildLangCode(guild: Guild?): String? = guild?.locale?.toLanguageTag()?.split("-")?.first()
 }

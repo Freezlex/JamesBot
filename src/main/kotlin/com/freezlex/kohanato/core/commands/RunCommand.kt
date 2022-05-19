@@ -20,15 +20,15 @@ class RunCommand(
             if (err != null) {
                 val handled = koCommand.command.onCommandError(this.koCommand, err)
                 if (!handled) {
-                    this.core.dispatchSafely { it.onCommandError(this.koCommand, err) }
+                    this.core.dispatchSafely { it.onCommandError(core, this.koCommand, err) }
                 }
             }
 
-            this.core.dispatchSafely { it.onCommandPostInvoke(this.koCommand, !success) }
+            this.core.dispatchSafely { it.onCommandPostInvoke(core, this.koCommand, !success) }
         }
 
     suspend fun execute(){
-        if(!this.event.isFromGuild && this.koCommand.command.guildOnly)return this.core.dispatchSafely { it.onGuildOnlyInvoke(this.koCommand) }
+        if(!this.event.isFromGuild && this.koCommand.command.guildOnly)return this.core.dispatchSafely { it.onGuildOnlyInvoke(core, this.koCommand) }
 
         if(koCommand.cooldown != null){
             koCommand.cooldown.forEach {
@@ -41,7 +41,7 @@ class RunCommand(
                 if(entityId != null){
                     if(CooldownProvider.isOnCooldown(entityId, it.bucket, this.koCommand)){
                         val time = CooldownProvider.getCooldownTime(entityId, it.bucket, this.koCommand)/1000
-                        return core.dispatchSafely { t -> t.onCommandCooldown(this.koCommand, time) }
+                        return core.dispatchSafely { t -> t.onCommandCooldown(core, this.koCommand, time) }
                     }
                 }
             }
@@ -53,7 +53,7 @@ class RunCommand(
                     this.event.guild!!.selfMember.hasPermission(this.event.textChannel, it)
                 }
                 if(botCheck.isNotEmpty()){
-                    return core.dispatchSafely { it.onBotMissingPermissions(this.koCommand, botCheck) }
+                    return core.dispatchSafely { it.onBotMissingPermissions(core, this.koCommand, botCheck) }
                 }
             }
         }

@@ -29,20 +29,22 @@ class KoListener(
 ) {
 
     lateinit var language: LangManager;
+    lateinit var event: GenericEvent;
 
     init {
         GlobalScope.async { run(event) }
-        language = Language.getLangManager();
     }
 
-    suspend fun run(event: GenericEvent) {
-        when (event) {
-            is ReadyEvent -> OnReadyEvent.run(event, this)
-            is SlashCommandInteractionEvent -> OnSlashCommandEvent.run(event, this)
-            is MessageReceivedEvent -> OnMessageReceivedEvent.run(event, this)
-            is ButtonInteractionEvent -> OnButtonClickEvent.run(event, this)
-            is UserContextInteractionEvent -> OnUserContextInteractionEvent.run(event, this)
-            is MessageContextInteractionEvent -> OnMessageContextInteractionEvent.run(event, this)
+    suspend fun run(e: GenericEvent) {
+        event = e;
+        language = Language.getLangManager(e);
+        when (e) {
+            is ReadyEvent -> OnReadyEvent.run(e, this)
+            is SlashCommandInteractionEvent -> OnSlashCommandEvent.run(e, this)
+            is MessageReceivedEvent -> OnMessageReceivedEvent.run(e, this)
+            is ButtonInteractionEvent -> OnButtonClickEvent.run(e, this)
+            is UserContextInteractionEvent -> OnUserContextInteractionEvent.run(e, this)
+            is MessageContextInteractionEvent -> OnMessageContextInteractionEvent.run(e, this)
         }
     }
 

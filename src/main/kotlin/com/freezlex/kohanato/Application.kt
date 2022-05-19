@@ -1,6 +1,7 @@
 package com.freezlex.kohanato
 
 import com.freezlex.kohanato.core.KohanatoCore
+import mu.KotlinLogging
 
 /**
  * Main application launcher

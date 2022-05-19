@@ -5,19 +5,6 @@ import com.google.gson.JsonObject
 import java.util.*
 
 class LangManager(private val lang: String) {
-    private val internalLangCache = Cache.Builder().expireAfterWrite(6.hours).build<LangManager, LangFile>()
-
-    init {
-        refreshCacheLangFile(LangFile.load(lang))
-    }
-
-    private fun refreshCacheLangFile(langFile: LangFile): LangFile {
-        internalLangCache.put(this, langFile)
-        return langFile
-    }
-
-    private fun getLangFile(): LangFile = internalLangCache.get(this) ?: refreshCacheLangFile(LangFile.load(lang))
-
     /**
      * Get a [String] from the lang file
      * @param key [String] key
@@ -25,9 +12,9 @@ class LangManager(private val lang: String) {
      *
      * @return [String] value
      */
-    fun getString(key: LangKey, default: String): String = getString(key.toString(), default)
+    fun getString(obj: Any, func: String, key: String, default: String): String = getString(LangKey.keyBuilder(obj, func, key).toString(), default)
     private fun getString(key: String, default: String): String {
-        val langFile = getLangFile()
+        val langFile = LangFile.load(lang)
 
         fun createMissingKeys(): String {
             val missing = key.split(".")

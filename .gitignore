@@ -39,3 +39,6 @@ out/
 
 ### Kohanato env ###
 environment/*.dev
+
+### Ignore lang file atm ###
+/lang
