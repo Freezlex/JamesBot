@@ -37,7 +37,7 @@ class KoListener(
 
     suspend fun run(e: GenericEvent) {
         event = e;
-        language = Language.getLangManager(e);
+        language = Language.getLangManager(this);
         when (e) {
             is ReadyEvent -> OnReadyEvent.run(e, this)
             is SlashCommandInteractionEvent -> OnSlashCommandEvent.run(e, this)

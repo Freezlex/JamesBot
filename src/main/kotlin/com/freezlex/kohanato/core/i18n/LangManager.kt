@@ -2,9 +2,26 @@ package com.freezlex.kohanato.core.i18n
 
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import io.github.reactivecircus.cache4k.Cache
 import java.util.*
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 
 class LangManager(private val lang: String) {
+
+    private val cache = Cache.Builder().expireAfterWrite(12.hours).build<LangManager, LangFile>()
+
+    init{
+        refreshCacheLangFile(LangFile.load(lang))
+    }
+
+    private fun refreshCacheLangFile(langFile: LangFile): LangFile {
+        cache.put(this, langFile)
+        return langFile
+    }
+
+    private fun getLangFile(): LangFile = cache.get(this)?: refreshCacheLangFile(LangFile.load(lang))
+
     /**
      * Get a [String] from the lang file
      * @param key [String] key
@@ -14,7 +31,7 @@ class LangManager(private val lang: String) {
      */
     fun getString(obj: Any, func: String, key: String, default: String): String = getString(LangKey.keyBuilder(obj, func, key).toString(), default)
     private fun getString(key: String, default: String): String {
-        val langFile = LangFile.load(lang)
+        val langFile = getLangFile()
 
         fun createMissingKeys(): String {
             val missing = key.split(".")

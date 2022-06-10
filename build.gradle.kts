@@ -30,6 +30,7 @@ dependencies {
     implementation("com.google.code.gson:gson:$gsonVersion")
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
     implementation("ch.qos.logback", "logback-classic", "1.2.6")
+    implementation("io.github.reactivecircus.cache4k:cache4k:0.5.0")
 }
 
 tasks.withType<KotlinCompile> {

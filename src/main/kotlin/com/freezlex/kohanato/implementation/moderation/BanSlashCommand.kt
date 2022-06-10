@@ -1,4 +1,4 @@
-package com.freezlex.kohanato.commands.moderation
+package com.freezlex.kohanato.implementation.moderation
 
 import com.freezlex.kohanato.core.KoListener
 import com.freezlex.kohanato.core.commands.Categories
