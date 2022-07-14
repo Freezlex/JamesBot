@@ -2,8 +2,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val jdaVersion: String by project
 val jdaKtxVersion: String by project
-val slf4jVersion: String by project
 val gsonVersion: String by project
+val kotlinLogging: String by project
+val exposedVersion: String by project
+val mysqlVersion: String by project
 
 plugins {
     application
@@ -28,9 +30,14 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
     implementation("org.reflections:reflections:0.10.2")
     implementation("com.google.code.gson:gson:$gsonVersion")
-    implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
+    implementation("io.github.microutils:kotlin-logging-jvm:$kotlinLogging")
     implementation("ch.qos.logback", "logback-classic", "1.2.6")
-    implementation("io.github.reactivecircus.cache4k:cache4k:0.5.0")
+    implementation("io.github.reactivecircus.cache4k:cache4k:0.6.0")
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
+    implementation("mysql:mysql-connector-java:$mysqlVersion")
 }
 
 tasks.withType<KotlinCompile> {
