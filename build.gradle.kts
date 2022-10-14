@@ -25,19 +25,19 @@ repositories {
 }
 
 dependencies {
-    implementation("net.dv8tion:JDA:$jdaVersion")
-    implementation("com.github.minndevelopment:jda-ktx:$jdaKtxVersion")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.6.10")
-    implementation("org.reflections:reflections:0.10.2")
-    implementation("com.google.code.gson:gson:$gsonVersion")
-    implementation("io.github.microutils:kotlin-logging-jvm:$kotlinLogging")
+    implementation("net.dv8tion", "JDA", jdaVersion)
+    implementation("com.github.minndevelopment", "jda-ktx", jdaKtxVersion)
+    implementation("org.jetbrains.kotlin", "kotlin-reflect", "1.6.10")
+    implementation("org.reflections", "reflections", "0.10.2")
+    implementation("com.google.code.gson", "gson", gsonVersion)
+    implementation("io.github.microutils", "kotlin-logging-jvm", kotlinLogging)
     implementation("ch.qos.logback", "logback-classic", "1.2.6")
-    implementation("io.github.reactivecircus.cache4k:cache4k:0.6.0")
-    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
-    implementation("mysql:mysql-connector-java:$mysqlVersion")
+    implementation("io.github.reactivecircus.cache4k","cache4k","0.6.0")
+    implementation("org.jetbrains.exposed", "exposed-core", exposedVersion)
+    implementation("org.jetbrains.exposed", "exposed-dao", exposedVersion)
+    implementation("org.jetbrains.exposed", "exposed-jdbc", exposedVersion)
+    implementation("org.jetbrains.exposed", "exposed-java-time", exposedVersion)
+    implementation("mysql", "mysql-connector-java", mysqlVersion)
 }
 
 tasks.withType<KotlinCompile> {

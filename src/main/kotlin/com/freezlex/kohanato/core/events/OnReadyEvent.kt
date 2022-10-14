@@ -3,7 +3,7 @@ package com.freezlex.kohanato.core.events
 import com.freezlex.kohanato.core.KoListener
 import com.freezlex.kohanato.core.commands.KoCommands
 import com.freezlex.kohanato.core.logger
-import net.dv8tion.jda.api.events.ReadyEvent
+import net.dv8tion.jda.api.events.session.ReadyEvent
 
 object OnReadyEvent {
     fun run(event: ReadyEvent, core: KoListener){

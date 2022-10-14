@@ -1,5 +1,6 @@
 package com.freezlex.kohanato.core
 
+import com.freezlex.kohanato.core.cache.CacheManager
 import com.freezlex.kohanato.core.events.*
 import com.freezlex.kohanato.core.i18n.LangManager
 import com.freezlex.kohanato.core.i18n.Language
@@ -9,12 +10,12 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import mu.KotlinLogging
 import net.dv8tion.jda.api.events.GenericEvent
-import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
+import net.dv8tion.jda.api.events.session.ReadyEvent
 
 /**
  * Used to create new instances of JDA's DefaultShardManagerBuilder implementation.
@@ -29,6 +30,7 @@ class KoListener(
 ) {
 
     lateinit var language: LangManager;
+    var cache: CacheManager = CacheManager();
     lateinit var event: GenericEvent;
 
     init {

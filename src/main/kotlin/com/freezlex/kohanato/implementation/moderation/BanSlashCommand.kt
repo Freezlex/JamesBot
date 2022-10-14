@@ -11,6 +11,7 @@ import dev.minn.jda.ktx.interactions.components.danger
 import kotlinx.coroutines.withTimeoutOrNull
 import net.dv8tion.jda.api.entities.User
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
+import java.util.concurrent.TimeUnit
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
@@ -42,7 +43,8 @@ class BanSlashCommand: SlashCommand {
             val pressed = event.user.awaitButton(confirm) // await for user to click button
             pressed.deferEdit().queue() // Acknowledge the button press
             try{
-                event.guild?.ban(member, duration?.inWholeDays?.toInt() ?: 1, event.getOption("reason")?.asString?: "No reason provided")?.queue() // the button is pressed -> execute action
+                event.guild?.ban(member, duration?.inWholeDays?.toInt() ?: 1, TimeUnit.HOURS)?.reason(event.getOption("reason")?.asString?: "No reason provided")
+                    ?.queue() // the button is pressed -> execute action
                 reply.editOriginal("**${member.name}** has been banned for ${duration?.inWholeDays ?: "Undefined"} days.")
                     .setActionRow(confirm.asDisabled())
                     .queue()

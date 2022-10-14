@@ -5,7 +5,7 @@ import dev.minn.jda.ktx.events.awaitButton
 import dev.minn.jda.ktx.interactions.components.danger
 import dev.minn.jda.ktx.interactions.components.primary
 import kotlinx.coroutines.withTimeoutOrNull
-import net.dv8tion.jda.api.entities.Emoji
+import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.ExperimentalTime

@@ -1,9 +1,9 @@
 package com.freezlex.kohanato.core.commands.parser
 
-import net.dv8tion.jda.api.entities.Channel
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Role
 import net.dv8tion.jda.api.entities.User
+import net.dv8tion.jda.api.entities.channel.Channel
 import net.dv8tion.jda.api.interactions.commands.OptionType
 import kotlin.reflect.KType
 

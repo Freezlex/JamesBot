@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime
 
 object UserEntities: IntIdTable("users") {
-    val discordId = integer("user_id")
+    val discordId = long("user_id")
     val permbit = integer("user_perm_bit").default(0)
     val language = varchar("user_lang", 5).default("en-EN")
     val createdAt = datetime("created_at").defaultExpression(CurrentDateTime)

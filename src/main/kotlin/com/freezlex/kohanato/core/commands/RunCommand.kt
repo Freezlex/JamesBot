@@ -50,7 +50,7 @@ class RunCommand(
         if(this.event.isFromGuild){
             if(koCommand.command.botPermissions.isNotEmpty()){
                 val botCheck = koCommand.command.botPermissions.filterNot {
-                    this.event.guild!!.selfMember.hasPermission(this.event.textChannel, it)
+                    this.event.guild!!.selfMember.hasPermission(this.event.guildChannel, it)
                 }
                 if(botCheck.isNotEmpty()){
                     return core.dispatchSafely { it.onBotMissingPermissions(core, this.koCommand, botCheck) }
