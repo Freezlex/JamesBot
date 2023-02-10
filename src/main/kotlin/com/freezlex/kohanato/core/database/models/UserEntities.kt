@@ -8,17 +8,19 @@ import org.jetbrains.exposed.sql.javatime.CurrentDateTime
 import org.jetbrains.exposed.sql.javatime.datetime
 
 object UserEntities: IntIdTable("users") {
-    val discordId = long("user_id")
-    val permbit = integer("user_perm_bit").default(0)
-    val language = varchar("user_lang", 5).default("en-EN")
-    val createdAt = datetime("created_at").defaultExpression(CurrentDateTime)
+    val DiscordId = long("usr_user_id_val")
+    val Flag = integer("usr_flag_val").default(0)
+    val Language = varchar("usr_lang_val", 5).default("en-EN")
+    val CreatedAt = datetime("usr_created_at").defaultExpression(CurrentDateTime)
+    val CreatedBy = long("usr_created_by").default(ProcessHandle.current().pid())
 }
 
 class UserEntity(id: EntityID<Int>): IntEntity(id){
     companion object : IntEntityClass<UserEntity>(UserEntities)
 
-    var discordId by UserEntities.discordId
-    var perbit by UserEntities.permbit
-    var language by UserEntities.language
-    val createdAt by UserEntities.createdAt
+    var DiscordId by UserEntities.DiscordId
+    var Flag by UserEntities.Flag
+    var Language by UserEntities.Language
+    val CreatedAt by UserEntities.CreatedAt
+    val CreatedBy by UserEntities.CreatedBy
 }

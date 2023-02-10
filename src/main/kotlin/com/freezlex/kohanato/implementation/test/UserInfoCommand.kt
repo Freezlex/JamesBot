@@ -6,6 +6,7 @@ import com.freezlex.kohanato.core.commands.contextual.UserContextCommand
 import dev.minn.jda.ktx.messages.Embed
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent
+import java.sql.Timestamp
 import java.time.format.DateTimeFormatter
 
 class UserInfoCommand: UserContextCommand {
@@ -25,8 +26,8 @@ class UserInfoCommand: UserContextCommand {
             field("#️⃣ **| Discriminator :**", member.user.discriminator, true)
             field("\uD83C\uDD94 **| ID :**", member.user.id, true)
             field("\uD83C\uDFAB **| Roles :**", member.roles.joinToString(" ") { it.asMention }, false)
-            field("\uD83D\uDEAA **| Joined this guild :**", member.timeJoined.format(format), true)
-            field("\uD83D\uDCDD **| Account created :**", member.timeCreated.format(format), true)
+            field("\uD83D\uDEAA **| Joined this guild :**", "Joined this guild <t:${member.timeJoined.toEpochSecond()}:R>", true)
+            field("\uD83D\uDCDD **| Account created :**", "Joined discord <t:${member.timeCreated.toEpochSecond()}:R>", true)
         }).queue()
     }
 }

@@ -19,19 +19,15 @@ class CacheManager {
 
     private val cache = Cache.Builder().expireAfterWrite(10.minutes).build<String, ICache>()
 
-    init {
-
-    }
-
     private fun initCache(user: User): UserCache{
-        val data = transaction { UserEntity.find( UserEntities.discordId eq user.id.toLong()).firstOrNull() }
+        val data = transaction { UserEntity.find( UserEntities.DiscordId eq user.id.toLong()).firstOrNull() }
         val cache = if(data == null) return UserCache() else UserCache(data)
         this.cache.put(user.id, cache);
         return cache;
     }
 
     private fun initCache(guild: Guild): GuildCache{
-        val data = transaction { GuildEntity.find( UserEntities.discordId eq guild.id.toLong()).firstOrNull() }
+        val data = transaction { GuildEntity.find( UserEntities.DiscordId eq guild.id.toLong()).firstOrNull() }
         val cache = if(data == null) return GuildCache() else GuildCache(data)
         this.cache.put(guild.id, cache);
         return cache;

@@ -9,7 +9,7 @@ import mu.KotlinLogging
 fun main() {
     KohanatoCore()
         .defineOwners(306703362261254154)
-        .commandsPackage("com.freezlex.kohanato.commands")
+        .commandsPackage("com.freezlex.kohanato.implementation")
         .processByEnv()
         .launch()
 }

@@ -10,6 +10,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import mu.KotlinLogging
 import net.dv8tion.jda.api.events.GenericEvent
+import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent
@@ -47,6 +48,7 @@ class KoListener(
             is ButtonInteractionEvent -> OnButtonClickEvent.run(e, this)
             is UserContextInteractionEvent -> OnUserContextInteractionEvent.run(e, this)
             is MessageContextInteractionEvent -> OnMessageContextInteractionEvent.run(e, this)
+            is ModalInteractionEvent -> OnModalInteractionEvent.run(e, this)
         }
     }
 
